@@ -4,7 +4,8 @@ using System.Text;
 
 namespace NefariusCore
 {
-    class Invent
+    public class Invention
     {
+        public decimal Score { get; protected set; }
     }
 }
