@@ -13,8 +13,9 @@ namespace NefariusCore
         public GameAction Action { get; set; }
         public IEnumerable<Invention> PlayedInventions { get; protected set; }
 
-        public Player()
+        public Player(string pName)
         {
+            Name = pName;
             Inventions = new List<Invention>();
             PlayedInventions = new List<Invention>();
             Spies = new GameAction[] { GameAction.None, GameAction.None, GameAction.None, GameAction.None, GameAction.None };

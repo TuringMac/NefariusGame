@@ -1,5 +1,6 @@
 ﻿using NefariusCore;
 using System;
+using System.Collections.Generic;
 
 namespace NefariusApp
 {
@@ -8,22 +9,30 @@ namespace NefariusApp
         static Game game;
         static void Main(string[] args)
         {
-            Player[] players = new Player[6] {
-                new Player(), // 0
-                null,         // 1
-                new Player(), // 2
-                null,         // 3
-                new Player(), // 4
-                new Player()  // 5
-            };
+            LinkedList<Player> players = new LinkedList<Player>();
+            players.AddLast(new Player("Игорь"));
+            players.AddLast(new Player("Димас"));
+            players.AddLast(new Player("Серый"));
+            players.AddLast(new Player("Дыча"));
 
             game = new Game(players);
-            game.ChooseAction(players[0], GameAction.Research);
-            game.ChooseAction(players[2], GameAction.Spy);
-            game.ChooseAction(players[4], GameAction.Work);
-            game.ChooseAction(players[5], GameAction.Research);
+            game.StateChanged += Game_StateChanged;
+            game.Turning(players.First.Value, GameAction.Research);
+            game.Turning(players.First.Next.Value, GameAction.Spy);
+            game.Turning(players.First.Next.Next.Value, GameAction.Work);
+            game.Turning(players.First.Next.Next.Next.Value, GameAction.Research);
             // Сервак начинает игру т.к. сделали выбор
 
+        }
+
+        private static void Game_StateChanged(object sender, StateEventArgs e)
+        {
+            switch (e.State)
+            {
+                case GameState.Spying: game.Spying(); break;
+                case GameState.Research: game.Researching(); break;
+                case GameState.Work: game.Working(); break;
+            }
         }
     }
 }

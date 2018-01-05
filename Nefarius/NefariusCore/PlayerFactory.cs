@@ -8,7 +8,7 @@ namespace NefariusCore
     {
         public static Player CreatePlayer(string pName)
         {
-            return new Player();
+            return new Player(pName);
         }
     }
 }

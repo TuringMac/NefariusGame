@@ -7,10 +7,10 @@ namespace NefariusCore
 {
     public class Game
     {
-        GameState _State;
+        GameState _State = GameState.Init;
 
         Stack<Invention> InventDeck { get; set; } = new Stack<Invention>();
-        LinkedList<Player> PlayerList { get; set; } = new LinkedList<Player>();
+        LinkedList<Player> PlayerList { get; set; }
         GameState State
         {
             get
@@ -19,56 +19,43 @@ namespace NefariusCore
             }
             set
             {
-                if (value != _State)
+                if (_State != value)
                 {
-                    value = _State;
+                    _State = value;
                     if (StateChanged != null)
                         StateChanged(this, new StateEventArgs() { State = State });
                 }
             }
         }
 
-        public Game(Player[] pPlayers)
+        public Game(LinkedList<Player> pPlayers)
         {
-            if (pPlayers.Count() != 6)
-                throw new Exception("Wrong Player positions. Complete 6 places with 'null's");
-            if (pPlayers.Count(p => p != null) < 2)
+            if (pPlayers.Count < 2 || pPlayers.Count > 6)
                 throw new Exception("Wrong Player count. Game for 2 - 6 players. Invite more players");
 
+            PlayerList = pPlayers;
             DeckFiller.Fill(InventDeck);
-            State = GameState.Init;
+            State = GameState.Turning;
         }
 
-        public void Scoring()
+        /// <summary>
+        /// Выбирают действие на следующий ход
+        /// </summary>
+        /// <returns></returns>
+        public bool Turning(Player pPlayer, GameAction pAction)
         {
-            Player winner = null;
-            foreach (var player in PlayerList)
-            {
-                if (IsWinner(player))
-                {
-                    if (winner == null)
-                    {
-                        winner = player;
-                    }
-                    else
-                    {
-                        // 2 или более игрока набрали больше 20
-                        State++;
-                    }
-                }
-            }
-            if (winner != null)
-            {
-                // Победитель!
-                State = GameState.Win;
-            }
-            // Играем дальше
-            State++;
+            if (State != GameState.Turning)
+                throw new Exception("Турнинг только после инит или скоринга");
+
+            pPlayer.Action = pAction;
+            if (IsEverybodyTurned())
+                State++;
+            return true;
         }
 
         public void Spying() //TODO
         {
-            if (State != GameState.Scoring)
+            if (State != GameState.Spying)
                 throw new Exception("Spying after Scoring");
 
             // Если справа или слева от игрока со шпионом разыграли действия
@@ -83,14 +70,10 @@ namespace NefariusCore
             State++;
         }
 
-        /// <summary>
-        /// Установка шпиона
-        /// </summary>
-        /// <param name="pPlayer">Игрок</param>
-        /// <param name="pAction">Куда ставить шпиона</param>
-        /// <returns>Удалось ли поставить шпиона или нет</returns>
         public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
+            if (State != GameState.Spy)
+                throw new Exception("Spy after Spying");
             if (pPlayer.Action != GameAction.Spy)
                 return false;
 
@@ -108,59 +91,88 @@ namespace NefariusCore
                     break;
                 }
             }
+            pPlayer.Action = GameAction.None;
             if (IsEverybodyTurned())
                 State++;
             return true;
         }
 
-        /// <summary>
-        /// Розыгрыш изобретения
-        /// </summary>
-        /// <param name="pPlayer">Игрок</param>
-        /// <param name="pInvention">Разыгрываемое изобретение</param>
-        /// <returns>Разыграно ли</returns>
         public bool Invent(Player pPlayer, Invention pInvention)
         {
+            if (State != GameState.Invent)
+                throw new Exception("Invent after Spy");
+            if (pPlayer.Action != GameAction.Invent)
+                return false;
             if (!pPlayer.Inventions.Contains(pInvention))
                 throw new Exception("You haven't got this invention! Cheater?");
 
             var cur = PlayerList.First;
             /// TODO Сначала эффект на себя, потом по часовой стрелке
 
-            return pPlayer.Inventions.Contains(pInvention); //TODO
-        }
-
-        /// <summary>
-        /// Исследование
-        /// </summary>
-        /// <param name="pPlayer">Игрок</param>
-        /// <returns>Удалось ли</returns>
-        public bool Research(Player pPlayer)
-        {
-            pPlayer.Coins += 5;
-            pPlayer.Inventions.Append(InventDeck.Peek());
+            pPlayer.Action = GameAction.None;
+            if (IsEverybodyTurned())
+                State++;
             return true;
         }
 
-        /// <summary>
-        /// Работа
-        /// </summary>
-        /// <param name="pPlayer"></param>
-        /// <returns>Удалось ли</returns>
-        public bool Work(Player pPlayer)
+        public void Researching()
         {
-            pPlayer.Coins += 10;
-            return true;
+            if (State != GameState.Research)
+                throw new Exception("Researching after Invent");
+            foreach (var player in PlayerList)
+            {
+                if (player.Action != GameAction.Research)
+                    continue;
+
+                player.Coins += 5;
+                player.Inventions.Append(InventDeck.Peek());
+                player.Action = GameAction.None;
+            }
+            State++;
         }
 
-        /// <summary>
-        /// Выбирают действие на следующий ход
-        /// </summary>
-        /// <returns></returns>
-        public bool ChooseAction(Player pPlayer, GameAction pAction)
+        public void Working()
         {
-            pPlayer.Action = pAction;
-            return true;
+            if (State != GameState.Work)
+                throw new Exception("Working after Researching");
+            foreach (var player in PlayerList)
+            {
+                if (player.Action != GameAction.Work)
+                    continue;
+
+                player.Coins += 10;
+                player.Action = GameAction.None;
+            }
+            State++;
+        }
+
+        public void Scoring()
+        {
+            if (State != GameState.Scoring)
+                throw new Exception("Scoring after Working");
+            Player winner = null;
+            foreach (var player in PlayerList)
+            {
+                if (IsWinner(player))
+                {
+                    if (winner == null)
+                    {
+                        winner = player;
+                    }
+                    else
+                    {
+                        // 2 или более игрока набрали больше 20
+                        State = GameState.Turning;
+                    }
+                }
+            }
+            if (winner != null)
+            {
+                // Победитель!
+                State = GameState.Win;
+            }
+            // Играем дальше
+            State = GameState.Turning;
         }
 
         #region Events

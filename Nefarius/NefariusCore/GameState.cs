@@ -3,13 +3,13 @@
     public enum GameState
     {
         Init,
-        Scoring,
+        Turning,
         Spying,
         Spy,
         Invent,
         Research,
         Work,
-        Turning,
+        Scoring,
         Win
     }
 }
