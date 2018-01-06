@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace NefariusCore
 {
@@ -38,6 +39,37 @@ namespace NefariusCore
             State = GameState.Turning;
         }
 
+        public void Run()
+        {
+            Player winner = null;
+            while (!HasWinner())
+            {
+                foreach (var player in PlayerList)
+                {
+                    Turning(player, GameAction.None); //TODO
+                    Thread.Sleep(2000);
+                }
+
+                Spying();
+
+                foreach (var player in PlayerList.Where(p => p.Action == GameAction.Spy))
+                {
+                    SetSpy(player, GameAction.None, GameAction.Spy); //TODO
+                    Thread.Sleep(2000);
+                }
+
+                foreach (var player in PlayerList.Where(p => p.Action == GameAction.Invent))
+                {
+                    Invent(player, null); //TODO
+                    Thread.Sleep(2000);
+                }
+
+                Researching();
+
+                Working();
+            }
+        }
+
         /// <summary>
         /// Выбирают действие на следующий ход
         /// </summary>
@@ -60,7 +92,7 @@ namespace NefariusCore
 
             // Если справа или слева от игрока со шпионом разыграли действия
             var cur = PlayerList.First;
-            Player prev = cur.Previous.Value;
+            Player prev =
             Player next = cur.Next.Value;
             foreach (var spy in cur.Value.Spies)
             {
@@ -70,18 +102,18 @@ namespace NefariusCore
             State++;
         }
 
-        public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
+        public async void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
             if (State != GameState.Spy)
                 throw new Exception("Spy after Spying");
             if (pPlayer.Action != GameAction.Spy)
-                return false;
+                return;
 
             if (pDestSpyPosition == pSourceSpyPosition)
-                return false;
+                return;
 
             if (pPlayer.Spies.Count(s => s == pSourceSpyPosition) == 0) // Если нет шпионов в исходной позиции
-                return false;
+                return;
 
             for (int i = 0; i < pPlayer.Spies.Count(); i++)
             {
@@ -94,7 +126,7 @@ namespace NefariusCore
             pPlayer.Action = GameAction.None;
             if (IsEverybodyTurned())
                 State++;
-            return true;
+            return;
         }
 
         public bool Invent(Player pPlayer, Invention pInvention)
@@ -146,35 +178,6 @@ namespace NefariusCore
             State++;
         }
 
-        public void Scoring()
-        {
-            if (State != GameState.Scoring)
-                throw new Exception("Scoring after Working");
-            Player winner = null;
-            foreach (var player in PlayerList)
-            {
-                if (IsWinner(player))
-                {
-                    if (winner == null)
-                    {
-                        winner = player;
-                    }
-                    else
-                    {
-                        // 2 или более игрока набрали больше 20
-                        State = GameState.Turning;
-                    }
-                }
-            }
-            if (winner != null)
-            {
-                // Победитель!
-                State = GameState.Win;
-            }
-            // Играем дальше
-            State = GameState.Turning;
-        }
-
         #region Events
 
         public event EventHandler<StateEventArgs> StateChanged;
@@ -222,6 +225,26 @@ namespace NefariusCore
                 score += invent.Score;
             }
             return score >= 20;
+        }
+
+        bool HasWinner()
+        {
+            bool winner = false;
+            foreach (var player in PlayerList)
+            {
+                if (IsWinner(player))
+                {
+                    if (winner) // 2 or more winners
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        winner = true;
+                    }
+                }
+            }
+            return winner;
         }
 
         #endregion Methods

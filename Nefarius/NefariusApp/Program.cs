@@ -27,6 +27,7 @@ namespace NefariusApp
 
         private static void Game_StateChanged(object sender, StateEventArgs e)
         {
+            //Clients.All.broadcastState(e.State);
             switch (e.State)
             {
                 case GameState.Spying: game.Spying(); break;
