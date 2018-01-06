@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NefariusCore
 {
@@ -39,16 +40,11 @@ namespace NefariusCore
             State = GameState.Turning;
         }
 
-        public void Run()
+        public async void RunAsync()
         {
-            Player winner = null;
             while (!HasWinner())
             {
-                foreach (var player in PlayerList)
-                {
-                    Turning(player, GameAction.None); //TODO
-                    Thread.Sleep(2000);
-                }
+                await Turning();
 
                 Spying();
 
@@ -74,15 +70,18 @@ namespace NefariusCore
         /// Выбирают действие на следующий ход
         /// </summary>
         /// <returns></returns>
-        public bool Turning(Player pPlayer, GameAction pAction)
+        public async Task<IEnumerable<Player>> Turning()
         {
-            if (State != GameState.Turning)
-                throw new Exception("Турнинг только после инит или скоринга");
+            var getUserTasks = new List<Task<Player>>();
 
-            pPlayer.Action = pAction;
-            if (IsEverybodyTurned())
-                State++;
-            return true;
+            foreach (var player in PlayerList)
+            {
+                getUserTasks.Add(player.TurnAsync());
+                //Turning(player, GameAction.None); //TODO
+                //Thread.Sleep(2000);
+            }
+
+            return await Task.WhenAll(getUserTasks);
         }
 
         public void Spying() //TODO
@@ -92,7 +91,7 @@ namespace NefariusCore
 
             // Если справа или слева от игрока со шпионом разыграли действия
             var cur = PlayerList.First;
-            Player prev =
+            Player prev = null;
             Player next = cur.Next.Value;
             foreach (var spy in cur.Value.Spies)
             {

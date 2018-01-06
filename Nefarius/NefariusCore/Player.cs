@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NefariusCore
 {
@@ -19,6 +22,14 @@ namespace NefariusCore
             Inventions = new List<Invention>();
             PlayedInventions = new List<Invention>();
             Spies = new GameAction[] { GameAction.None, GameAction.None, GameAction.None, GameAction.None, GameAction.None };
+        }
+
+        public async Task<Player> TurnAsync()
+        {
+            int delay = new Random().Next(1000, 3000);
+            Thread.Sleep(delay);
+            Debug.WriteLine("Player: " + Name + " turned after: " + delay);
+            return this;
         }
     }
 }
