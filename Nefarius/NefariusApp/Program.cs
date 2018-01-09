@@ -17,7 +17,7 @@ namespace NefariusApp
 
             game = new Game(players);
             game.StateChanged += Game_StateChanged;
-            game.RunAsync();
+            game.Run();
             // Сервак начинает игру т.к. сделали выбор
 
         }

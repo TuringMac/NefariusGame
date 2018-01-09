@@ -40,11 +40,11 @@ namespace NefariusCore
             State = GameState.Turning;
         }
 
-        public async void RunAsync()
+        public void Run()
         {
             while (!HasWinner())
             {
-                await Turning();
+                var TurnedPlayers = TurningAsync();
 
                 Spying();
 
@@ -70,13 +70,13 @@ namespace NefariusCore
         /// Выбирают действие на следующий ход
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Player>> Turning()
+        public async Task<Task> TurningAsync()
         {
-            var getUserTasks = new List<Task<Player>>();
+            var getUserTasks = new List<Task>();
 
             foreach (var player in PlayerList)
             {
-                getUserTasks.Add(player.TurnAsync());
+                getUserTasks.Add(Task.Run(()=>player.Turn()));
                 //Turning(player, GameAction.None); //TODO
                 //Thread.Sleep(2000);
             }
@@ -101,7 +101,7 @@ namespace NefariusCore
             State++;
         }
 
-        public async void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
+        public void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
             if (State != GameState.Spy)
                 throw new Exception("Spy after Spying");

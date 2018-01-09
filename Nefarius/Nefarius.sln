@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NefariusCore", "NefariusCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NefariusApp", "NefariusApp\NefariusApp.csproj", "{4172D40A-DD80-4C51-9965-BAD2741F306A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NefariusWebApp", "NefariusWebApp\NefariusWebApp.csproj", "{8F4B68E9-FD22-46A1-950E-480AA6725AF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
