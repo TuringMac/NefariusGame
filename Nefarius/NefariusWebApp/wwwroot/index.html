@@ -13,8 +13,8 @@
 
     <script src="js/signalr-client-1.0.0-alpha2-final.min.js"></script>
     <script>
-        let hubUrl = 'http://localhost:61343/game';
-        let httpConnection = new signalR.HttpConnection(hubUrl);
+        let hubUrl = '/game';
+        let httpConnection = new signalR.HttpConnection(hubUrl, { transport: signalR.TransportType.LongPolling });
         let hubConnection = new signalR.HubConnection(httpConnection);
 
         hubConnection.on("Send", function (data) {

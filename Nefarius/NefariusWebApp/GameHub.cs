@@ -8,9 +8,14 @@ namespace NefariusWebApp
 {
     public class GameHub : Hub
     {
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} joined");
+        }
+
         public async Task Send(string message)
         {
-            await this.Clients.All.InvokeAsync("Send", message);
+            await Clients.All.InvokeAsync("Send", message);
         }
     }
 }
