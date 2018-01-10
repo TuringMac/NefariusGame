@@ -15,6 +15,15 @@ namespace NefariusCore
         public GameAction[] Spies { get; protected set; }
         public GameAction Action { get; set; }
         public IEnumerable<Invention> PlayedInventions { get; protected set; }
+        public string ID { get; set; } //TODO Model should not know about signalr ids
+
+        public Player Short
+        {
+            get
+            {
+                return new Player(Name);
+            }
+        }
 
         public Player(string pName)
         {

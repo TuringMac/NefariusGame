@@ -6,8 +6,16 @@
 </head>
 <body>
     <div id="inputForm">
-        <input type="text" id="message" />
-        <input type="button" id="sendBtn" value="Отправить" />
+        <input type="text" id="name" />
+        <input type="button" id="btnJoin" value="Войти" />
+        <input type="button" id="btnBegin" value="Начать игру" />
+    </div>
+    <div id="action">
+        <input type="button" id="btnAct0" value="Не выбрано" />
+        <input type="button" id="btnAct1" value="Шпионаж" />
+        <input type="button" id="btnAct2" value="Изобретение" />
+        <input type="button" id="btnAct3" value="Исследование" />
+        <input type="button" id="btnAct4" value="Работа" />
     </div>
     <div id="chatroom"></div>
 
@@ -26,15 +34,51 @@
 
         });
 
+        hubConnection.on("PlayerJoined", function (data) {
+            let elem = document.createElement("p");
+            elem.appendChild(document.createTextNode(data+" вошел в игру"));
+            let firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+        });
+
+        hubConnection.on("StateChanged", function (data) {
+            let elem = document.createElement("p");
+            elem.appendChild(document.createTextNode(data));
+            let firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+        });
+
         hubConnection.on("AskTurn", function (data) {
 
             // suspend thread, lol
 
         });
 
-        document.getElementById("sendBtn").addEventListener("click", function (e) {
-            let message = document.getElementById("message").value;
-            hubConnection.invoke("Send", message);
+        // ------------------------------------------------------------------------
+
+        document.getElementById("btnJoin").addEventListener("click", function (e) {
+            let name = document.getElementById("name").value;
+            hubConnection.invoke("Join", name);
+        });
+
+        document.getElementById("btnBegin").addEventListener("click", function (e) {
+            hubConnection.invoke("Begin");
+        });
+
+        document.getElementById("btnAct0").addEventListener("click", function (e) {
+            hubConnection.invoke("Turn", 0);
+        });
+        document.getElementById("btnAct1").addEventListener("click", function (e) {
+            hubConnection.invoke("Turn", 1);
+        });
+        document.getElementById("btnAct2").addEventListener("click", function (e) {
+            hubConnection.invoke("Turn", 2);
+        });
+        document.getElementById("btnAct3").addEventListener("click", function (e) {
+            hubConnection.invoke("Turn", 3);
+        });
+        document.getElementById("btnAct4").addEventListener("click", function (e) {
+            hubConnection.invoke("Turn", 4);
         });
 
         hubConnection.start();

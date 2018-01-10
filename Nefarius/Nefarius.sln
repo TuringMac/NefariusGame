@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NefariusCore", "NefariusCore\NefariusCore.csproj", "{7E258FA6-1797-4C43-964D-D4DEA622CAB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NefariusCore", "NefariusCore\NefariusCore.csproj", "{7E258FA6-1797-4C43-964D-D4DEA622CAB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NefariusApp", "NefariusApp\NefariusApp.csproj", "{4172D40A-DD80-4C51-9965-BAD2741F306A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NefariusWebApp", "NefariusWebApp\NefariusWebApp.csproj", "{8F4B68E9-FD22-46A1-950E-480AA6725AF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NefariusWebApp", "NefariusWebApp\NefariusWebApp.csproj", "{8F4B68E9-FD22-46A1-950E-480AA6725AF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{7E258FA6-1797-4C43-964D-D4DEA622CAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E258FA6-1797-4C43-964D-D4DEA622CAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E258FA6-1797-4C43-964D-D4DEA622CAB4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4172D40A-DD80-4C51-9965-BAD2741F306A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F4B68E9-FD22-46A1-950E-480AA6725AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU

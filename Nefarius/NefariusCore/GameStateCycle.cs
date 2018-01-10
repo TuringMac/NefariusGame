@@ -7,6 +7,13 @@ namespace NefariusCore
 {
     public class GameStateCycle : Game
     {
+        public static GameStateCycle _Game = null;
+        public static GameStateCycle GetInstance()
+        {
+            if (_Game == null) _Game = new GameStateCycle();
+            return _Game;
+        }
+
         GameState _State = GameState.Init;
 
         GameState State
@@ -26,8 +33,21 @@ namespace NefariusCore
             }
         }
 
-        public GameStateCycle(LinkedList<Player> pPlayer)
-            : base(pPlayer)
+        public GameStateCycle()
+            : base(new LinkedList<Player>())
+        {
+
+        }
+
+        public void AddPlayer(Player pPlayer)
+        {
+            if (State != GameState.Init)
+                throw new Exception("Game already starts");
+
+            PlayerList.AddLast(pPlayer);
+        }
+
+        public void StartGame()
         {
             State = GameState.Turning;
         }

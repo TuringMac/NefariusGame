@@ -9,13 +9,12 @@ namespace NefariusApp
         static GameStateCycle game;
         static void Main(string[] args)
         {
-            LinkedList<Player> players = new LinkedList<Player>();
-            players.AddLast(new Player("Игорь"));
-            players.AddLast(new Player("Димас"));
-            players.AddLast(new Player("Серый"));
-            players.AddLast(new Player("Дыча"));
+            game = new GameStateCycle();
+            game.AddPlayer(new Player("Игорь"));
+            game.AddPlayer(new Player("Димас"));
+            game.AddPlayer(new Player("Серый"));
+            game.AddPlayer(new Player("Дыча"));
 
-            game = new GameStateCycle(players);
             game.StateChanged += Game_StateChanged;
             game.Turning(players.First.Value, GameAction.Research);
             game.Turning(players.First.Next.Value, GameAction.Spy);

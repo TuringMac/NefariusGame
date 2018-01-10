@@ -10,12 +10,12 @@ namespace NefariusCore
     public class Game
     {
         Stack<Invention> InventDeck { get; set; } = new Stack<Invention>();
-        protected LinkedList<Player> PlayerList { get; set; }
+        public LinkedList<Player> PlayerList { get; private set; }
 
         public Game(LinkedList<Player> pPlayers)
         {
             if (pPlayers.Count < 2 || pPlayers.Count > 6)
-                throw new Exception("Wrong Player count. Game for 2 - 6 players. Invite more players");
+                ;// throw new Exception("Wrong Player count. Game for 2 - 6 players. Invite more players"); //TODO
 
             PlayerList = pPlayers;
             DeckFiller.Fill(InventDeck);
