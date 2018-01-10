@@ -6,7 +6,7 @@ namespace NefariusApp
 {
     class Program
     {
-        static Game game;
+        static GameStateCycle game;
         static void Main(string[] args)
         {
             LinkedList<Player> players = new LinkedList<Player>();
@@ -15,9 +15,12 @@ namespace NefariusApp
             players.AddLast(new Player("Серый"));
             players.AddLast(new Player("Дыча"));
 
-            game = new Game(players);
+            game = new GameStateCycle(players);
             game.StateChanged += Game_StateChanged;
-            game.Run();
+            game.Turning(players.First.Value, GameAction.Research);
+            game.Turning(players.First.Next.Value, GameAction.Spy);
+            game.Turning(players.First.Next.Next.Value, GameAction.Work);
+            game.Turning(players.First.Next.Next.Next.Value, GameAction.Research);
             // Сервак начинает игру т.к. сделали выбор
 
         }

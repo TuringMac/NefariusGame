@@ -24,11 +24,12 @@ namespace NefariusCore
             Spies = new GameAction[] { GameAction.None, GameAction.None, GameAction.None, GameAction.None, GameAction.None };
         }
 
-        public void Turn()
+        public Player Turn()
         {
             int delay = new Random().Next(500, 1000);
             Thread.Sleep(delay);
             Debug.WriteLine("Player: " + Name + " turned after: " + delay);
+            return this;
         }
     }
 }

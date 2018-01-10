@@ -26,6 +26,12 @@
 
         });
 
+        hubConnection.on("AskTurn", function (data) {
+
+            // suspend thread, lol
+
+        });
+
         document.getElementById("sendBtn").addEventListener("click", function (e) {
             let message = document.getElementById("message").value;
             hubConnection.invoke("Send", message);
