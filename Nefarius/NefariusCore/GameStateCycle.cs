@@ -37,7 +37,7 @@ namespace NefariusCore
         }
 
         public GameStateCycle()
-            : base(new LinkedList<Player>())
+            : base(new List<Player>())
         {
 
         }
@@ -47,7 +47,7 @@ namespace NefariusCore
             if (State != GameState.Init)
                 throw new Exception("Game already starts");
 
-            PlayerList.AddLast(pPlayer);
+            PlayerList.Add(pPlayer);
         }
 
         public void StartGame()
@@ -116,19 +116,42 @@ namespace NefariusCore
             if (!pPlayer.Inventions.Contains(pInvention))
                 throw new Exception("You haven't got this invention! Cheater?");
 
-            var cur = PlayerList.First;
-            /// TODO Сначала эффект на себя, потом по часовой стрелке
+            pPlayer.CurrentInvention = pInvention;
+            foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
+            {
+                pPlayer.EffectStack.Push(effect);
+            }
 
             pPlayer.Action = GameAction.None;
+
             if (IsEverybodyTurned())
                 State++;
             return true;
         }
 
+        public void Inventing()
+        {
+            if (State != GameState.Inventing)
+                throw new Exception("Inventing after Invent");
+            foreach (var player in PlayerList) // Эффекты по часовой стрелке
+            {
+                foreach (var inventor in PlayerList) //TODO Reverse
+                {
+                    if (inventor.CurrentInvention == null) continue;
+
+                    foreach (var effect in inventor.CurrentInvention.OtherEffectList)
+                    {
+                        player.EffectStack.Push(effect);
+                    }
+                }
+            }
+            State++;
+        }
+
         public override void Researching()
         {
             if (State != GameState.Research)
-                throw new Exception("Researching after Invent");
+                throw new Exception("Researching after Inventing");
 
             base.Researching();
 

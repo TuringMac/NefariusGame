@@ -16,13 +16,15 @@ namespace NefariusCore
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
         public ICollection<Invention> PlayedInventions { get; protected set; }
+        public Stack<Effect> EffectStack { get; protected set; } //TODO make queue
 
         #endregion Public
 
         #region Private
         internal ICollection<Invention> Inventions { get; set; }
         internal GameAction Action { get; set; }
-        public object ID { get; set; } //TODO Model should not know about signalr ids
+        internal Invention CurrentInvention { get; set; }
+        public string ID { get; set; } //TODO Model should not know about signalr ids
 
         #endregion Private
 

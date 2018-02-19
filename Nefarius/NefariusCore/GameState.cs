@@ -7,6 +7,7 @@
         Spying,
         Spy,
         Invent,
+        Inventing,
         Research,
         Work,
         Scoring,

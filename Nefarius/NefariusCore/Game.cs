@@ -10,9 +10,9 @@ namespace NefariusCore
     public class Game
     {
         Stack<Invention> InventDeck { get; set; } = new Stack<Invention>();
-        public LinkedList<Player> PlayerList { get; private set; }
+        public List<Player> PlayerList { get; private set; }
 
-        public Game(LinkedList<Player> pPlayers)
+        public Game(List<Player> pPlayers)
         {
             if (pPlayers.Count < 2 || pPlayers.Count > 6)
                 ;// throw new Exception("Wrong Player count. Game for 2 - 6 players. Invite more players"); //TODO
@@ -66,24 +66,23 @@ namespace NefariusCore
             return;
         }
 
-        public virtual void Spying() //TODO
+        public virtual void Spying()
         {
-            /*
             // Если справа или слева от игрока со шпионом разыграли действия
-            var cur = PlayerList.First;
-            Player prev = null;
-            Player next = cur.Next.Value;
-            foreach (var spy in cur.Value.Spies)
+            for (int i = 0; i < PlayerList.Count; i++)
             {
-                if (spy == prev.Action || spy == next.Action)
-                    cur.Value.Coins += 1; // По монетке за шпиона
-            }
-            */
-            foreach(Player player in PlayerList)
-            {
-                foreach(int spy in player.Spies)
+                int prev = i - 1;
+                int next = i + 1;
+
+                if (prev < 0) prev = PlayerList.Count - 1;
+                if (next > PlayerList.Count - 1) next = 0;
+
+                foreach (var spy in PlayerList[i].Spies)
                 {
-                    player.Coins++;
+                    if (spy == PlayerList[prev].Action)
+                        PlayerList[i].Coins++;
+                    if (spy == PlayerList[next].Action)
+                        PlayerList[i].Coins++;
                 }
             }
         }
