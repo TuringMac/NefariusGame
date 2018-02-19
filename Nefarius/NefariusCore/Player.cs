@@ -9,21 +9,22 @@ namespace NefariusCore
 {
     public class Player
     {
+        #region Public
+
         public string Name { get; set; } = "";
         public decimal Coins { get; set; } = 10;
-        public IEnumerable<Invention> Inventions { get; protected set; }
         public GameAction[] Spies { get; protected set; }
-        public GameAction Action { get; set; }
-        public IEnumerable<Invention> PlayedInventions { get; protected set; }
-        public string ID { get; set; } //TODO Model should not know about signalr ids
+        public decimal InventionCount { get { return Inventions.Count; } }
+        public ICollection<Invention> PlayedInventions { get; protected set; }
 
-        public Player Short
-        {
-            get
-            {
-                return new Player(Name);
-            }
-        }
+        #endregion Public
+
+        #region Private
+        internal ICollection<Invention> Inventions { get; set; }
+        internal GameAction Action { get; set; }
+        public object ID { get; set; } //TODO Model should not know about signalr ids
+
+        #endregion Private
 
         public Player(string pName)
         {

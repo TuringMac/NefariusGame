@@ -9,43 +9,13 @@ namespace NefariusWebApp
 {
     public class GameHub : Hub
     {
-        GameStateCycle _Game = null;
+        private readonly GameTicker _gameTicker;
 
-        public GameHub()
-        {
-            _Game = GameStateCycle.GetInstance();
-            _Game.StateChanged += Game_StateChanged;
-        }
+        public GameHub() : this(GameTicker.Instance) { }
 
-        private void Game_StateChanged(object sender, StateEventArgs e)
+        GameHub(GameTicker pGameTicker)
         {
-            switch (e.State)
-            {
-                case GameState.Turning:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, делайте ход"); //TODO передавать состояние, а не сообщение
-                    break;
-                case GameState.Spying:
-                    _Game.Spying();
-                    Clients.All.InvokeAsync("StateChanged", "Расчитываем доход от шпионства");
-                    break;
-                case GameState.Spy:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, выставляйте шпионов"); //TODO разные сообщения в зависимости от хода пользователя
-                    break;
-                case GameState.Invent:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, показывайте изобретения"); //TODO разные сообщения в зависимости от хода пользователя
-                    break;
-                case GameState.Research:
-                    _Game.Researching();
-                    Clients.All.InvokeAsync("StateChanged", "Раздаем изобретения и монеты");
-                    break;
-                case GameState.Work:
-                    _Game.Working();
-                    Clients.All.InvokeAsync("StateChanged", "Выдаем зарплату");
-                    break;
-                case GameState.Win:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, у нас Победитель!");
-                    break;
-            }
+            _gameTicker = pGameTicker;
         }
 
         public async Task Join(string pName)
@@ -54,13 +24,14 @@ namespace NefariusWebApp
             {
                 ID = Context.ConnectionId
             };
-            _Game.AddPlayer(player);
+            _gameTicker.Game.AddPlayer(player);
+            if (Clients != null) _gameTicker.Clients = Clients;
             await Clients.All.InvokeAsync("PlayerJoined", player.Name);
         }
 
         public void Begin()
         {
-            _Game.StartGame();
+            _gameTicker.Game.StartGame();
         }
 
         public void Turn(decimal pAction)
@@ -76,12 +47,12 @@ namespace NefariusWebApp
                 default: throw new Exception("Wrong action");
             }
             var player = GetPlayer(Context.ConnectionId);
-            _Game.Turning(player, action);
+            _gameTicker.Game.Turning(player, action);
         }
 
         Player GetPlayer(string id)
         {
-            foreach (var player in _Game.PlayerList)
+            foreach (var player in _gameTicker.Game.PlayerList)
             {
                 if (string.Equals(player.ID, id))
                     return player;

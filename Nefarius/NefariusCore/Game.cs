@@ -68,6 +68,7 @@ namespace NefariusCore
 
         public virtual void Spying() //TODO
         {
+            /*
             // Если справа или слева от игрока со шпионом разыграли действия
             var cur = PlayerList.First;
             Player prev = null;
@@ -76,6 +77,14 @@ namespace NefariusCore
             {
                 if (spy == prev.Action || spy == next.Action)
                     cur.Value.Coins += 1; // По монетке за шпиона
+            }
+            */
+            foreach(Player player in PlayerList)
+            {
+                foreach(int spy in player.Spies)
+                {
+                    player.Coins++;
+                }
             }
         }
 

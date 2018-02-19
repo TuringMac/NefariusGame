@@ -23,6 +23,7 @@
     <script>
         let hubUrl = '/game';
         let httpConnection = new signalR.HttpConnection(hubUrl, { transport: signalR.TransportType.LongPolling });
+        //let httpConnection = new signalR.HttpConnection(hubUrl); // For Kestrel
         let hubConnection = new signalR.HubConnection(httpConnection);
 
         hubConnection.on("Send", function (data) {
