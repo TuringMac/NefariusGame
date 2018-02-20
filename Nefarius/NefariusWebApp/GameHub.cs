@@ -48,6 +48,7 @@ namespace NefariusWebApp
             }
             var player = GetPlayer(Context.ConnectionId);
             _gameTicker.Game.Turning(player, action);
+            //Clients.Client(Context.ConnectionId).updatePlayer(player);
         }
 
         Player GetPlayer(string id)

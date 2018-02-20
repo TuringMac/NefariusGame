@@ -89,6 +89,9 @@ namespace NefariusCore
             }
         }
 
+        /// <summary>
+        /// Собирает эффекты разыгранных изобретений и применяет их на игроках
+        /// </summary>
         public virtual void Inventing()
         {
             foreach (var player in PlayerList) // Эффекты по часовой стрелке
