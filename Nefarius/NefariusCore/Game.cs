@@ -9,7 +9,7 @@ namespace NefariusCore
 {
     public class Game
     {
-        Stack<Invention> InventDeck { get; set; } = new Stack<Invention>();
+        public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public List<Player> PlayerList { get; private set; }
 
         public Game(List<Player> pPlayers)
@@ -40,6 +40,8 @@ namespace NefariusCore
                     //Invent(player, null); //TODO
                     Thread.Sleep(2000);
                 }
+
+                Inventing();
 
                 Researching();
 
@@ -83,6 +85,27 @@ namespace NefariusCore
                         PlayerList[i].Coins++;
                     if (spy == PlayerList[next].Action)
                         PlayerList[i].Coins++;
+                }
+            }
+        }
+
+        public virtual void Inventing()
+        {
+            foreach (var player in PlayerList) // Эффекты по часовой стрелке
+            {
+                foreach (var inventor in PlayerList) //TODO Reverse
+                {
+                    if (inventor.CurrentInvention == null) continue;
+
+                    foreach (var effect in inventor.CurrentInvention.OtherEffectList)
+                    {
+                        player.EffectQueue.Enqueue(effect);
+                    }
+                }
+                while (player.EffectQueue.Count > 0)
+                {
+                    var eff = player.EffectQueue.Dequeue();
+                    eff.Apply(player);
                 }
             }
         }

@@ -119,7 +119,7 @@ namespace NefariusCore
             pPlayer.CurrentInvention = pInvention;
             foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
             {
-                pPlayer.EffectStack.Push(effect);
+                pPlayer.EffectQueue.Enqueue(effect);
             }
 
             pPlayer.Action = GameAction.None;
@@ -129,22 +129,13 @@ namespace NefariusCore
             return true;
         }
 
-        public void Inventing()
+        public override void Inventing()
         {
             if (State != GameState.Inventing)
                 throw new Exception("Inventing after Invent");
-            foreach (var player in PlayerList) // Эффекты по часовой стрелке
-            {
-                foreach (var inventor in PlayerList) //TODO Reverse
-                {
-                    if (inventor.CurrentInvention == null) continue;
 
-                    foreach (var effect in inventor.CurrentInvention.OtherEffectList)
-                    {
-                        player.EffectStack.Push(effect);
-                    }
-                }
-            }
+            base.Inventing();
+
             State++;
         }
 
@@ -197,12 +188,12 @@ namespace NefariusCore
             return true;
         }
 
-        bool CheckEverybodyDoSpy()
+        bool CheckEverybodyDoSpy() //TODO
         {
             return true;
         }
 
-        bool CheckEverybodyDoInvent()
+        bool CheckEverybodyDoInvent() //TODO
         {
             return true;
         }
