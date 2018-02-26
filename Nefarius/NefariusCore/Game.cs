@@ -10,6 +10,7 @@ namespace NefariusCore
     public class Game
     {
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
+        public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
         public List<Player> PlayerList { get; private set; }
 
         public Game(List<Player> pPlayers)
@@ -19,6 +20,7 @@ namespace NefariusCore
 
             PlayerList = pPlayers;
             DeckFiller.Fill(InventDeck);
+            DeckFiller.FillColorDeck(ColorDeck);
         }
 
         public void Run()
@@ -59,7 +61,7 @@ namespace NefariusCore
 
             foreach (var player in PlayerList)
             {
-                getUserTasks.Add(Task.Run(() => player.Turn()));
+                //getUserTasks.Add(Task.Run(() => player.Turn()));
                 //Turning(player, GameAction.None); //TODO
                 //Thread.Sleep(2000);
             }

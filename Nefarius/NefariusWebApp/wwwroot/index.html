@@ -26,33 +26,12 @@
         //let httpConnection = new signalR.HttpConnection(hubUrl); // For Kestrel
         let hubConnection = new signalR.HubConnection(httpConnection);
 
-        hubConnection.on("Send", function (data) {
-
-            let elem = document.createElement("p");
-            elem.appendChild(document.createTextNode(data));
-            let firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
-
+        hubConnection.on("PlayerData", function (data) {
+            //TODO получаем полную информацию по нашему игроку
         });
 
-        hubConnection.on("PlayerJoined", function (data) {
-            let elem = document.createElement("p");
-            elem.appendChild(document.createTextNode(data+" вошел в игру"));
-            let firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
-        });
-
-        hubConnection.on("StateChanged", function (data) {
-            let elem = document.createElement("p");
-            elem.appendChild(document.createTextNode(data));
-            let firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
-        });
-
-        hubConnection.on("AskTurn", function (data) {
-
-            // suspend thread, lol
-
+        hubConnection.on("GameData", function (data) {
+            //TODO получаем состояние игры и короткие данные обо всех игроках
         });
 
         // ------------------------------------------------------------------------

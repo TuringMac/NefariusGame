@@ -13,17 +13,12 @@ namespace NefariusCore
     {
         #region Public
 
-        [DataMember]
         public string ID { get; set; } //TODO Model should not know about signalr ids
-        [DataMember]
+        public PlayerColor Color { get; set; }
         public string Name { get; set; } = "";
-        [DataMember]
         public decimal Coins { get; set; } = 10;
-        [DataMember]
         public GameAction[] Spies { get; protected set; }
-        [DataMember]
         public decimal InventionCount { get { return Inventions.Count; } }
-        [DataMember]
         public ICollection<Invention> PlayedInventions { get; protected set; }
         public Queue<Effect> EffectQueue { get; protected set; }
 
@@ -50,6 +45,7 @@ namespace NefariusCore
             return new
             {
                 ID,
+                Color,
                 Name,
                 Coins,
                 Spies,
@@ -57,14 +53,6 @@ namespace NefariusCore
                 PlayedInventions,
                 EffectQueue
             };
-        }
-
-        public Player Turn()
-        {
-            int delay = new Random().Next(500, 1000);
-            Thread.Sleep(delay);
-            Debug.WriteLine("Player: " + Name + " turned after: " + delay);
-            return this;
         }
     }
 }

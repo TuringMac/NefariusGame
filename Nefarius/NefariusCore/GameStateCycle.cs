@@ -19,13 +19,13 @@ namespace NefariusCore
 
         GameState _State = GameState.Init;
 
-        GameState State
+        public GameState State
         {
             get
             {
                 return _State;
             }
-            set
+            private set
             {
                 if (_State != value)
                 {
@@ -46,7 +46,7 @@ namespace NefariusCore
         {
             if (State != GameState.Init)
                 throw new Exception("Game already starts");
-
+            pPlayer.Color = ColorDeck.Pop();
             PlayerList.Add(pPlayer);
         }
 
@@ -70,7 +70,7 @@ namespace NefariusCore
                 State++;
         }
 
-        public override void Spying() //TODO
+        public override void Spying()
         {
             if (State != GameState.Spying)
                 throw new Exception("Spying after Scoring");
@@ -98,6 +98,7 @@ namespace NefariusCore
                 if (pPlayer.Spies[i] == pSourceSpyPosition)
                 {
                     pPlayer.Spies[i] = pDestSpyPosition;
+                    //TODO взымать плату
                     break;
                 }
             }

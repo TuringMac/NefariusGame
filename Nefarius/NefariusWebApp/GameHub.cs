@@ -18,7 +18,7 @@ namespace NefariusWebApp
             _gameTicker = pGameTicker;
         }
 
-        public async Task Join(string pName)
+        public void Join(string pName)
         {
             var player = new Player(pName)
             {
@@ -26,7 +26,7 @@ namespace NefariusWebApp
             };
             _gameTicker.Game.AddPlayer(player);
             if (Clients != null) _gameTicker.Clients = Clients;
-            await Clients.All.InvokeAsync("PlayerJoined", player.Name);
+            _gameTicker.BroadcastGame();
         }
 
         public void Begin()
@@ -48,7 +48,7 @@ namespace NefariusWebApp
             }
             var player = GetPlayer(Context.ConnectionId);
             _gameTicker.Game.Turning(player, action);
-            //Clients.Client(Context.ConnectionId).updatePlayer(player);
+            Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
         }
 
         Player GetPlayer(string id)

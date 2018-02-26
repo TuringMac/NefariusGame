@@ -13,5 +13,15 @@ namespace NefariusWebApp
         {
             _Player = pPlayer;
         }
+
+        public void GameData(dynamic data)
+        {
+
+        }
+
+        public void PlayerData(dynamic data)
+        {
+
+        }
     }
 }

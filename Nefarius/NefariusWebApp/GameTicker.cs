@@ -27,28 +27,28 @@ namespace NefariusWebApp
             switch (e.State)
             {
                 case GameState.Turning:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, делайте ход"); //TODO передавать состояние, а не сообщение
+                    BroadcastGame();
                     break;
                 case GameState.Spying:
-                    Clients.All.InvokeAsync("StateChanged", "Расчитываем доход от шпионства");
                     _Game.Spying();
+                    BroadcastGame();
                     break;
                 case GameState.Spy:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, выставляйте шпионов"); //TODO разные сообщения в зависимости от хода пользователя
+                    BroadcastGame();
                     break;
                 case GameState.Invent:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, показывайте изобретения"); //TODO разные сообщения в зависимости от хода пользователя
+                    BroadcastGame();
                     break;
                 case GameState.Research:
                     _Game.Researching();
-                    Clients.All.InvokeAsync("StateChanged", "Раздаем изобретения и монеты");
+                    BroadcastGame();
                     break;
                 case GameState.Work:
                     _Game.Working();
-                    Clients.All.InvokeAsync("StateChanged", "Выдаем зарплату");
+                    BroadcastGame();
                     break;
                 case GameState.Win:
-                    Clients.All.InvokeAsync("StateChanged", "Господа, у нас Победитель!");
+                    BroadcastGame();
                     break;
             }
         }
@@ -67,14 +67,13 @@ namespace NefariusWebApp
             set;
         }
 
-        public IEnumerable<Player> GetAllStocks()
+        public void BroadcastGame()
         {
-            throw new NotImplementedException();
-        }
-
-        private void BroadcastState(Player stock)
-        {
-            throw new NotImplementedException();
+            Clients.All.InvokeAsync("StateChanged", new { players = _Game.PlayerList.Select(player => player.GetPlayerShort()), state = _Game.State });
+            foreach (var player in _Game.PlayerList)
+            {
+                Clients.Client(player.ID).InvokeAsync("PlayerData", player); //TODO may be exception if player disconnected
+            }
         }
     }
 }
