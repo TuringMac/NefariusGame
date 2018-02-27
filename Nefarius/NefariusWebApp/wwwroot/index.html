@@ -1,67 +1,78 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <title>Nefarius Game</title>
-</head>
-<body>
-    <div id="inputForm">
-        <input type="text" id="name" />
-        <input type="button" id="btnJoin" value="Войти" />
-        <input type="button" id="btnBegin" value="Начать игру" />
-    </div>
-    <div id="action">
-        <input type="button" id="btnAct0" value="Не выбрано" />
-        <input type="button" id="btnAct1" value="Шпионаж" />
-        <input type="button" id="btnAct2" value="Изобретение" />
-        <input type="button" id="btnAct3" value="Исследование" />
-        <input type="button" id="btnAct4" value="Работа" />
-    </div>
-    <div id="chatroom"></div>
-
+    <meta charset="UTF-8">
+    <title>Nefarius</title>
+    <link rel="stylesheet" href="css/game.css">
     <script src="js/signalr-client-1.0.0-alpha2-final.min.js"></script>
-    <script>
-        let hubUrl = '/game';
-        let httpConnection = new signalR.HttpConnection(hubUrl, { transport: signalR.TransportType.LongPolling });
-        //let httpConnection = new signalR.HttpConnection(hubUrl); // For Kestrel
-        let hubConnection = new signalR.HubConnection(httpConnection);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+</head>
 
-        hubConnection.on("PlayerData", function (data) {
-            //TODO получаем полную информацию по нашему игроку
-        });
+<body ng-app="nefarius" ng-controller="hub">
+    <div class="view">
+        <div class="rulse"></div>
+        <div class="players">
+            <center>
+                <ng-repeat ng-repeat="_enemy in enemys" ng-include="'templates/enemy.html'">
+                </ng-repeat>
+            </center>
+        </div>
 
-        hubConnection.on("GameData", function (data) {
-            //TODO получаем состояние игры и короткие данные обо всех игроках
-        });
 
-        // ------------------------------------------------------------------------
-
-        document.getElementById("btnJoin").addEventListener("click", function (e) {
-            let name = document.getElementById("name").value;
-            hubConnection.invoke("Join", name);
-        });
-
-        document.getElementById("btnBegin").addEventListener("click", function (e) {
-            hubConnection.invoke("Begin");
-        });
-
-        document.getElementById("btnAct0").addEventListener("click", function (e) {
-            hubConnection.invoke("Turn", 0);
-        });
-        document.getElementById("btnAct1").addEventListener("click", function (e) {
-            hubConnection.invoke("Turn", 1);
-        });
-        document.getElementById("btnAct2").addEventListener("click", function (e) {
-            hubConnection.invoke("Turn", 2);
-        });
-        document.getElementById("btnAct3").addEventListener("click", function (e) {
-            hubConnection.invoke("Turn", 3);
-        });
-        document.getElementById("btnAct4").addEventListener("click", function (e) {
-            hubConnection.invoke("Turn", 4);
-        });
-
-        hubConnection.start();
-    </script>
+        <div class="gametable">
+            <table>
+                <tr>
+                    <td><img src="sprites/INVENT.png" alt=""></td>
+                    <td><img src="sprites/WORK.png" alt=""></td>
+                </tr>
+                <tr>
+                    <td><img src="sprites/SPY.png" alt=""></td>
+                    <td><img src="sprites/STUDY.png" alt=""></td>
+                </tr>
+            </table>
+        </div>
+        <footer>
+            <table class="player-controls">
+                <tr>
+                    <td class="col-1">
+                        <div class="inventions"></div>
+                    </td>
+                    <td class="col-2">
+                        <div class="player-data" ng-style="{'background-color': colors[player.color]}">
+                            <center>
+                                <div ng-if="!enemys.length">
+                                    <label for="">Введи имя: <input type="text" ng-model="player.name"></label>
+                                    <button ng-click="join(player.name)">join</button>
+                                </div>
+                                <ul class="info" ng-if="enemys.length">
+                                    <li><center>{{player.name}}</center></li>
+                                    <li>Score: {{player.Coins}}</li>
+                                    <li>Money: {{player.Coins}}</li>
+                                    <li>Cards: {{player.Cards.length}}</li>
+                                    <li>Spy: {{player.Spies}}</li>
+                                    <li>GameStae: {{currentGameState}}</li>
+                                    <li><center><button ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</button></center></li>
+                                    <li><center><button ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</button></center></li>
+                                </ul>
+                            </center>
+                        </div>
+                    </td>
+                    <td class="col-3">
+                        <div class="turns">
+                            <center>
+                                <div class="action action-spy" ng-class="{'active' : turnSelected == 1}" ng-click="turnSelected = 1"></div>
+                                <div class="action action-invent" ng-class="{'active' : turnSelected == 2}" ng-click="turnSelected = 2"></div>
+                                <div class="action action-research" ng-class="{'active' : turnSelected == 3}" ng-click="turnSelected = 3"></div>
+                                <div class="action action-work" ng-class="{'active' : turnSelected == 4}" ng-click="turnSelected = 4"></div>
+                            </center>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </footer>
+    </div>
+    <script src="js/game.js"></script>
 </body>
+
 </html>
