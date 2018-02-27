@@ -81,7 +81,7 @@ namespace NefariusCore
             if (CheckEverybodyDoSpy())
             {
                 State++;
-                if(CheckEverybodyDoInvent())
+                if (CheckEverybodyDoInvent())
                 {
                     State++;
                 }
@@ -166,6 +166,19 @@ namespace NefariusCore
             base.Working();
 
             State++;
+        }
+
+        public override bool Scoring()
+        {
+            if (State != GameState.Scoring)
+                throw new Exception("Scoring after Working");
+
+            bool isWin = base.Scoring();
+            if (isWin)
+                State++;
+            else
+                State = GameState.Turning;
+            return isWin;
         }
 
         #region Events

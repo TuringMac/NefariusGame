@@ -19,14 +19,14 @@ namespace NefariusCore
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
         public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
-        public ICollection<Invention> PlayedInventions { get; protected set; }
-        public Queue<Effect> EffectQueue { get; protected set; }
+        public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
+        public Queue<Effect> EffectQueue { get; protected set; } = new Queue<Effect>();
 
         #endregion Public
 
         #region Private
 
-        internal ICollection<Invention> Inventions { get; set; }
+        internal ICollection<Invention> Inventions { get; set; } = new List<Invention>();
         internal GameAction Action { get; set; }
         internal Invention CurrentInvention { get; set; }
 
@@ -35,8 +35,6 @@ namespace NefariusCore
         public Player(string pName)
         {
             Name = pName;
-            Inventions = new List<Invention>();
-            PlayedInventions = new List<Invention>();
             Spies = new GameAction[] { GameAction.None, GameAction.None, GameAction.None, GameAction.None, GameAction.None };
         }
 

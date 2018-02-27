@@ -140,6 +140,32 @@ namespace NefariusCore
             }
         }
 
+        public virtual bool Scoring() // True to win, false to continue game
+        {
+            Player winner = null;
+            foreach (var player in PlayerList)
+            {
+                if (player.Score >= 20)
+                {
+                    if (winner != null) // Когда более одного 
+                    {
+                        if (winner.Score == player.Score)
+                        {
+                            return false;
+                        }
+                        else if (winner.Score < player.Score)
+                            winner = player;
+                    }
+                    else
+                        winner = player;
+                }
+            }
+            if (winner == null) // Когда ниодного
+                return false;
+            else
+                return true;
+        }
+
         #region Methods
 
         bool IsWinner(Player pPlayer)

@@ -30,8 +30,8 @@ namespace NefariusWebApp
                     BroadcastGame();
                     break;
                 case GameState.Spying:
-                    _Game.Spying();
                     BroadcastGame();
+                    _Game.Spying();
                     break;
                 case GameState.Spy:
                     BroadcastGame();
@@ -40,15 +40,20 @@ namespace NefariusWebApp
                     BroadcastGame();
                     break;
                 case GameState.Inventing:
+                    BroadcastGame();
                     _Game.Inventing();
                     break;
                 case GameState.Research:
-                    _Game.Researching();
                     BroadcastGame();
+                    _Game.Researching();
                     break;
                 case GameState.Work:
-                    _Game.Working();
                     BroadcastGame();
+                    _Game.Working();
+                    break;
+                case GameState.Scoring:
+                    BroadcastGame();
+                    _Game.Scoring();
                     break;
                 case GameState.Win:
                     BroadcastGame();
