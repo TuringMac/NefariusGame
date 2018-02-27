@@ -50,9 +50,14 @@ namespace NefariusCore
             PlayerList.Add(pPlayer);
         }
 
-        public void StartGame()
+        public override void StartGame()
         {
-            State = GameState.Turning;
+            if (State != GameState.Init)
+                throw new Exception("Start after Init");
+
+            base.StartGame();
+
+            State++;
         }
 
         /// <summary>
