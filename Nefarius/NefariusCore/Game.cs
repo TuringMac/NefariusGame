@@ -25,6 +25,8 @@ namespace NefariusCore
 
         public void Run()
         {
+            StartGame();
+
             while (!HasWinner())
             {
                 var TurnedPlayers = TurningAsync();
@@ -48,6 +50,18 @@ namespace NefariusCore
                 Researching();
 
                 Working();
+            }
+        }
+
+        public virtual void StartGame()
+        {
+            foreach (var player in PlayerList)
+            {
+                player.Coins = 10;
+                for (int i = 0; i < 2; i++) // Каждому по 2 карты
+                {
+                    player.Inventions.Add(InventDeck.Pop());
+                }
             }
         }
 
@@ -122,8 +136,8 @@ namespace NefariusCore
                 if (player.Action != GameAction.Research)
                     continue;
 
-                player.Coins += 5;
-                player.Inventions.Append(InventDeck.Peek());
+                player.Coins += 2;
+                player.Inventions.Add(InventDeck.Pop());
                 player.Action = GameAction.None;
             }
         }
@@ -135,7 +149,7 @@ namespace NefariusCore
                 if (player.Action != GameAction.Work)
                     continue;
 
-                player.Coins += 10;
+                player.Coins += 4;
                 player.Action = GameAction.None;
             }
         }

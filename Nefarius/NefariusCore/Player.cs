@@ -15,7 +15,7 @@ namespace NefariusCore
         public string ID { get; set; } //TODO Model should not know about signalr ids
         public PlayerColor Color { get; set; }
         public string Name { get; set; } = "";
-        public decimal Coins { get; set; } = 10;
+        public decimal Coins { get; set; } = 0;
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
         public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
