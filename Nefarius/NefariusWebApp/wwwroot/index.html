@@ -36,7 +36,16 @@
             <table class="player-controls">
                 <tr>
                     <td class="col-1">
-                        <div class="inventions"></div>
+                        <div class="inventions">
+                            <center>
+                                <div class="action" ng-repeat="_invent in player.inventions">
+                                    <ul>
+                                        <li>Name : {{_invent.name}}</li>
+                                        <li>Score : {{_invent.Score}}</li>
+                                    </ul>
+                                </div>
+                            </center>
+                        </div>
                     </td>
                     <td class="col-2">
                         <div class="player-data" ng-style="{'background-color': colors[player.color]}">

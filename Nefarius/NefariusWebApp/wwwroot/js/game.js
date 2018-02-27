@@ -44,7 +44,6 @@ app.controller("hub",function($scope){
         
         $scope.playerJoined = true;
         hubConnection.invoke("Join", name);
-        $scope.$apply();
     }
     
     hubConnection.on("PlayerData", function (data) {

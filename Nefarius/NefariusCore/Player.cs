@@ -26,9 +26,9 @@ namespace NefariusCore
 
         #region Private
 
-        internal ICollection<Invention> Inventions { get; set; } = new List<Invention>();
-        internal GameAction Action { get; set; }
-        internal Invention CurrentInvention { get; set; }
+        public ICollection<Invention> Inventions { get; set; } = new List<Invention>(); // TODO internal + dataContract
+        public GameAction Action { get; set; } // TODO internal + dataContract
+        public Invention CurrentInvention { get; set; } // TODO internal + dataContract
 
         #endregion Private
 
