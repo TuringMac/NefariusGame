@@ -39,6 +39,9 @@ namespace NefariusWebApp
                 case GameState.Invent:
                     BroadcastGame();
                     break;
+                case GameState.Inventing:
+                    _Game.Inventing();
+                    break;
                 case GameState.Research:
                     _Game.Researching();
                     BroadcastGame();
