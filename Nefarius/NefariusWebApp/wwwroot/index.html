@@ -14,7 +14,7 @@
         <div class="rulse"></div>
         <div class="players">
             <center>
-                <ng-repeat ng-repeat="_enemy in enemys" ng-include="'templates/enemy.html'">
+                <ng-repeat ng-repeat="_enemy in enemys | filter: {id : '!' + player.id}: true" ng-include="'templates/enemy.html'">
                 </ng-repeat>
             </center>
         </div>
@@ -41,16 +41,16 @@
                     <td class="col-2">
                         <div class="player-data" ng-style="{'background-color': colors[player.color]}">
                             <center>
-                                <div ng-if="!enemys.length">
+                                <div ng-if="!playerJoined">
                                     <label for="">Введи имя: <input type="text" ng-model="player.name"></label>
                                     <button ng-click="join(player.name)">join</button>
                                 </div>
-                                <ul class="info" ng-if="enemys.length">
+                                <ul class="info" ng-if="playerJoined">
                                     <li><center>{{player.name}}</center></li>
-                                    <li>Score: {{player.Coins}}</li>
-                                    <li>Money: {{player.Coins}}</li>
-                                    <li>Cards: {{player.Cards.length}}</li>
-                                    <li>Spy: {{player.Spies}}</li>
+                                    <li>Score: {{player.score}}</li>
+                                    <li>Money: {{player.coins}}</li>
+                                    <li>Cards: {{player.inventionCount}}</li>
+                                    <li>Spy: {{player.spies.length}}</li>
                                     <li>GameStae: {{currentGameState}}</li>
                                     <li><center><button ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</button></center></li>
                                     <li><center><button ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</button></center></li>

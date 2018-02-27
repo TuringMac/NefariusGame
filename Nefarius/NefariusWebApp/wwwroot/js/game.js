@@ -29,7 +29,8 @@ app.controller("hub",function($scope){
         8 : "Scoring",
         9 : "Win"
     }
-    $scope.currentGameState
+    $scope.currentGameState = 0;
+    $scope.playerJoined = false;
     
     
     $scope.enemys = [];
@@ -40,7 +41,10 @@ app.controller("hub",function($scope){
     $scope.join = function(name){
         if(!name)
             return;
+        
+        $scope.playerJoined = true;
         hubConnection.invoke("Join", name);
+        $scope.$apply();
     }
     
     hubConnection.on("PlayerData", function (data) {
