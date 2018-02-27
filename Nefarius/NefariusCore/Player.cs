@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.Serialization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace NefariusCore
 {
-    [DataContract]
     public class Player
     {
         #region Public
@@ -19,6 +18,7 @@ namespace NefariusCore
         public decimal Coins { get; set; } = 10;
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
+        public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
         public ICollection<Invention> PlayedInventions { get; protected set; }
         public Queue<Effect> EffectQueue { get; protected set; }
 
@@ -49,6 +49,7 @@ namespace NefariusCore
                 Name,
                 Coins,
                 Spies,
+                Score,
                 InventionCount,
                 PlayedInventions,
                 EffectQueue
