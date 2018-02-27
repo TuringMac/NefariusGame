@@ -66,7 +66,7 @@ namespace NefariusCore
 
             pPlayer.Action = pAction;
 
-            if (IsEverybodyTurned())
+            if (CheckEverybodyDoAction())
                 State++;
         }
 
@@ -78,6 +78,14 @@ namespace NefariusCore
             base.Spying();
 
             State++;
+            if (CheckEverybodyDoSpy())
+            {
+                State++;
+                if(CheckEverybodyDoInvent())
+                {
+                    State++;
+                }
+            }
         }
 
         public void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
@@ -103,7 +111,7 @@ namespace NefariusCore
                 }
             }
             pPlayer.Action = GameAction.None;
-            if (IsEverybodyTurned())
+            if (CheckEverybodyDoSpy())
                 State++;
             return;
         }
@@ -125,7 +133,7 @@ namespace NefariusCore
 
             pPlayer.Action = GameAction.None;
 
-            if (IsEverybodyTurned())
+            if (CheckEverybodyDoInvent())
                 State++;
             return true;
         }
@@ -189,14 +197,14 @@ namespace NefariusCore
             return true;
         }
 
-        bool CheckEverybodyDoSpy() //TODO
+        bool CheckEverybodyDoSpy()
         {
-            return true;
+            return !PlayerList.Where(player => player.Action == GameAction.Spy).Any();
         }
 
-        bool CheckEverybodyDoInvent() //TODO
+        bool CheckEverybodyDoInvent()
         {
-            return true;
+            return !PlayerList.Where(player => player.Action == GameAction.Invent).Any();
         }
 
         #endregion Methods
