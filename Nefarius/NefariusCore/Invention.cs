@@ -17,9 +17,9 @@ namespace NefariusCore
         [DataMember]
         public decimal Score { get; set; }
         [DataMember]
-        public List<Effect> SelfEffectList { get; set; }
+        public List<Effect> SelfEffectList { get; set; } = new List<Effect>();
         [DataMember]
-        public List<Effect> OtherEffectList { get; set; }
+        public List<Effect> OtherEffectList { get; set; } = new List<Effect>();
 
         public Invention(string pName = "")
         {

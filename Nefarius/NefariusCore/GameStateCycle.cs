@@ -134,6 +134,7 @@ namespace NefariusCore
 
             pPlayer.CurrentInvention = pInvention;
             pPlayer.Inventions.Remove(pInvention);
+            pPlayer.PlayedInventions.Add(pInvention);
             pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
             foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
             {
