@@ -29,6 +29,14 @@ app.controller("hub",function($scope){
         8 : "Scoring",
         9 : "Win"
     }
+    
+    $scope.actions = [
+        {avatarInfo: 1, title: "Шпионаж", color: "#ff0000"},
+        {avatarInfo: 2, title: "Изобретение", color: "#00caff"},
+        {avatarInfo: 3, title: "Исследование", color: "#ffff00"},
+        {avatarInfo: 4, title: "Работа", color: "#5db700"}
+    ];
+    
     $scope.currentGameState = 0;
     $scope.playerJoined = false;
     
@@ -38,6 +46,13 @@ app.controller("hub",function($scope){
     $scope.player = {
         name: ""
     };
+    
+    $scope.selectAction = function(card){
+        turnSelected = card.avatarInfo;
+        $scope.actions.forEach(function(card){ card.active = false; });
+        card.active = true;
+    }
+    
     $scope.join = function(name){
         if(!name)
             return;

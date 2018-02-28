@@ -174,3 +174,37 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.card.active {
+    border: 5px solid black;
+}
+
+.card {
+    width: 130px;
+    height: 160px;
+    border-radius: 15px;
+    border: 1px solid #005787;
+    background-color: #00a4ff;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+}
+
+.card .avatar {
+    width: 110px;
+    height: 100px;
+    border-radius: 15px;
+    border: 1px solid #0083cc;
+    background-color: #00caff;
+}
+
+.card .avatar-info {
+    line-height: 100px;
+    font-weight: bold;
+    font-size: 3em;
+}
+
+.card .title {
+    color: black;
+    line-height: 70px;
+}
