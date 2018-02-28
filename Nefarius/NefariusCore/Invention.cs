@@ -11,7 +11,9 @@ namespace NefariusCore
         [DataMember]
         public string Name { get; private set; }
         [DataMember]
-        public decimal Score { get; protected set; }
+        public decimal Cost { get; set; }
+        [DataMember]
+        public decimal Score { get; set; }
         [DataMember]
         public List<Effect> SelfEffectList { get; set; }
         [DataMember]
