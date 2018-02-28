@@ -118,6 +118,8 @@ namespace NefariusCore
             pPlayer.Action = GameAction.None;
             if (CheckEverybodyDoSpy())
                 State++;
+            if (CheckEverybodyDoInvent()) //TODO Move this to Ticker event listener
+                State++;
             return;
         }
 

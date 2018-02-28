@@ -28,6 +28,10 @@ namespace NefariusWebApp
             {
                 case GameState.Turning:
                     BroadcastGame();
+                    //if (CheckEverybodyDoSpy())
+                    //    State++;
+                    //if (CheckEverybodyDoInvent())
+                    //    State++;
                     break;
                 case GameState.Spying:
                     BroadcastGame();
@@ -35,6 +39,8 @@ namespace NefariusWebApp
                     break;
                 case GameState.Spy:
                     BroadcastGame();
+                    //if (CheckEverybodyDoInvent())
+                    //    State++;
                     break;
                 case GameState.Invent:
                     BroadcastGame();
