@@ -3,15 +3,17 @@
     margin: 0px;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
+
 .rulse {
     position: absolute;
     right: -750px;
-    top:  30px;
+    top: 30px;
     width: 800px;
     height: 300px;
     transition: all .5s;
@@ -52,12 +54,15 @@ html, body {
 .action-spy {
     background-image: url("../sprites/SPY.png");
 }
+
 .action-invent {
     background-image: url("../sprites/INVENT.png");
 }
+
 .action-research {
     background-image: url("../sprites/STUDY.png");
 }
+
 .action-work {
     background-image: url("../sprites/WORK.png");
 }
@@ -118,6 +123,7 @@ html, body {
     list-style-type: none;
     text-align: left;
 }
+
 .gametable {
     position: absolute;
     top: 200px;
@@ -235,4 +241,61 @@ footer {
     background-color: #a5fff1;
     top: -10px;
     right: -10px;
+}
+
+.spy {
+    color: black;
+    font-size: 1.5em;
+    margin: 0 5px;
+}
+
+.spy-zone-selected {
+    background: rgba(128, 226, 244, 0.65);
+}
+
+.spy-zone {
+    position: relative;
+}
+
+
+.spy-zone [class*='enemy-spy-'],
+.spy-zone .spy-player {
+    position: absolute;
+    width: 25%;
+    height: 30px;
+}
+
+.spy-zone .spy-player {
+    top: 10px;
+    right: 10px;
+}
+
+.spy-zone .enemy-spy-0 {
+    top: 10px;
+    left: 10px;
+}
+
+.spy-zone .enemy-spy-1 {
+    top: 50px;
+    left: 10px;
+}
+
+.spy-zone .enemy-spy-2 {
+    top: 90px;
+    left: 10px;
+}
+
+.spy-zone .enemy-spy-3 {
+    top: 130px;
+    left: 10px;
+}
+
+.spy-zone .enemy-spy-4 {
+    top: 170px;
+    left: 10px;
+}
+
+.spy-zone .enemy-spy-5 {
+    top: 210px;
+    left: 10px;
 }

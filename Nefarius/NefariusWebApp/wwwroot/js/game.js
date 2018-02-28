@@ -1,4 +1,4 @@
-var app = new angular.module("nefarius", []);
+var app = new angular.module("nefarius", ['dnd']);
 
 let hubUrl = '/game';
 let httpConnection = new signalR.HttpConnection(hubUrl, {
@@ -39,7 +39,9 @@ app.controller("hub", function ($scope) {
     
     $scope.currentGameState = 0;
     $scope.playerJoined = false;
-
+    $scope.draggedSpy = null;
+    $scope.selectedZone = null;
+    $scope.values=[0,1,2,3];
 
     $scope.enemys = [];
     $scope.turnSelected = 0;
@@ -72,6 +74,20 @@ app.controller("hub", function ($scope) {
         $scope.playerJoined = true;
         hubConnection.invoke("Join", name);
     };
+    
+    $scope.selectZone = function(value){
+        $scope.selectedZone = value;
+    }
+    
+    $scope.selectSpyByDrag = function(spy){
+        $scope.draggedSpy = spy;
+    }
+    
+    $scope.onSpyDrop = function(spy,zone){
+        hubConnection.invoke("Spy", zone,spy);
+        $scope.draggedSpy = null;
+        $scope.selectedZone = null;
+    }
 
     hubConnection.on("PlayerData", function (data) {
         $scope.player = data;
