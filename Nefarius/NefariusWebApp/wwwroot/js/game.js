@@ -31,10 +31,10 @@ app.controller("hub", function ($scope) {
     }
     
     $scope.actions = [
-        {avatarInfo: 1, title: "Шпионаж", color: "#ff0000"},
-        {avatarInfo: 2, title: "Изобретение", color: "#00caff"},
-        {avatarInfo: 3, title: "Исследование", color: "#ffff00"},
-        {avatarInfo: 4, title: "Работа", color: "#5db700"}
+        {description: 1, name: "Шпионаж", color: "#ff0000"},
+        {description: 2, name: "Изобретение", color: "#00caff"},
+        {description: 3, name: "Исследование", color: "#ffff00"},
+        {description: 4, name: "Работа", color: "#5db700"}
     ];
     
     $scope.currentGameState = 0;
@@ -43,14 +43,26 @@ app.controller("hub", function ($scope) {
 
     $scope.enemys = [];
     $scope.turnSelected = 0;
+    $scope.inventSelected = 0;
     $scope.player = {
         name: ""
     };
     
     $scope.selectAction = function(card){
-        turnSelected = card.avatarInfo;
+        $scope.turnSelected = card.description;
         $scope.actions.forEach(function(card){ card.active = false; });
         card.active = true;
+    }
+    
+    $scope.selectInvent = function(card){
+        $scope.inventSelected = card;
+        $scope.player.inventions.forEach(function(card){ card.active = false; });
+        card.active = true;
+        
+    }
+    
+    $scope.applyInvent = function(){
+        hubConnection.invoke("Invent", $scope.inventSelected.id);
     }
     
     $scope.join = function(name){
@@ -75,6 +87,7 @@ app.controller("hub", function ($scope) {
     $scope.doTurn = function (turn) {
         hubConnection.invoke("Turn", turn);
     };
+    
 
     $scope.startGame = function () {
         hubConnection.invoke("Begin");

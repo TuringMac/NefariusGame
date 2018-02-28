@@ -1,10 +1,12 @@
 <div class="card" ng-class="{'active' : card.active}">
-    <center>
+    <center class="card-container">
         <div class="avatar" ng-style="{'background-color' : card.color}">
+            <div ng-show="card.cost" class="cost value">{{card.cost}}</div>
             <center class="avatar-info">
-                {{card.avatarInfo}}
+                {{card.description}}
             </center>
+            <div ng-show="card.score" class="score value">{{card.score}}</div>
         </div>
-        <h3 class="title">{{card.title}}</h3>
+        <h3 class="title">{{card.name | limitTo : 10}}</h3>
     </center>
 </div>

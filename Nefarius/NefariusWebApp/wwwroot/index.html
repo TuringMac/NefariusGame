@@ -38,13 +38,7 @@
                     <td class="col-1">
                         <div class="inventions">
                             <center>
-                                <div class="action" ng-repeat="_invent in player.inventions">
-                                    <ul>
-                                        <li>Name: {{_invent.name}}</li>
-                                        <li>Cost: {{_invent.Cost}}</li>
-                                        <li>Score: {{_invent.Score}}</li>
-                                    </ul>
-                                </div>
+                                <ng-repeat ng-repeat="card in player.inventions" ng-include="'templates/card.html'" ng-click="selectInvent(card)"></ng-repeat>
                             </center>
                         </div>
                     </td>
@@ -63,7 +57,8 @@
                                     <li>Spy: {{player.spies.length}}</li>
                                     <li>GameStae: {{currentGameState}}</li>
                                     <li><center><button ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</button></center></li>
-                                    <li><center><button ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected || player.action != null" ng-show="currentGameState != 'Init'">Закончить ход</button></center></li>
+                                    <li><center><button ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</button></center></li>
+                                    <li><center><button ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</button></center></li>
                                 </ul>
                             </center>
                         </div>
