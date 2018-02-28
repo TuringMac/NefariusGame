@@ -51,6 +51,20 @@ namespace NefariusWebApp
             Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
         }
 
+        public void Spy(decimal pTo, decimal pFrom = 0)
+        {
+            var player = GetPlayer(Context.ConnectionId);
+            _gameTicker.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom);
+            Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
+        }
+
+        public void Invent(decimal pInventID)
+        {
+            var player = GetPlayer(Context.ConnectionId);
+            _gameTicker.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
+            Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
+        }
+
         Player GetPlayer(string id)
         {
             foreach (var player in _gameTicker.Game.PlayerList)

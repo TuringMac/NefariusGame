@@ -133,6 +133,7 @@ namespace NefariusCore
                 throw new Exception("You haven't got enought coins");
 
             pPlayer.CurrentInvention = pInvention;
+            pPlayer.Inventions.Remove(pInvention);
             pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
             foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
             {

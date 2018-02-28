@@ -9,6 +9,8 @@ namespace NefariusCore
     public class Invention
     {
         [DataMember]
+        public decimal ID { get; set; }
+        [DataMember]
         public string Name { get; private set; }
         [DataMember]
         public decimal Cost { get; set; }
