@@ -9,18 +9,18 @@ namespace NefariusCore
         public static void Fill(Stack<Invention> pDeck)
         {
             List<Invention> inventions = new List<Invention>();
-            inventions.Add(new Invention("Палка тыкалка"));
-            inventions.Add(new Invention("Ботинки прыгуны"));
-            inventions.Add(new Invention("Яд со вкусом бессмертия"));
-            inventions.Add(new Invention("Монета счастливчика"));
-            inventions.Add(new Invention("Луч сытости"));
-            inventions.Add(new Invention("Беспроводной кабель"));
-            inventions.Add(new Invention("Сжатый вакуум"));
-            inventions.Add(new Invention("Удобрение"));
-            inventions.Add(new Invention("Плюмбус"));
-            inventions.Add(new Invention("Портальная пушка"));
-            inventions.Add(new Invention("Чернила для карандаша"));
-            inventions.Add(new Invention("Троллейбус из хлеба"));
+            inventions.Add(new Invention("Палка тыкалка") { Score = 2, Cost = 5 });
+            inventions.Add(new Invention("Ботинки прыгуны") { Score = 1, Cost = 2 });
+            inventions.Add(new Invention("Яд со вкусом бессмертия") { Score = 3, Cost = 7 });
+            inventions.Add(new Invention("Монета счастливчика") { Score = 8, Cost = 20 });
+            inventions.Add(new Invention("Луч сытости") { Score = 4, Cost = 10 });
+            inventions.Add(new Invention("Беспроводной кабель") { Score = 5, Cost = 12 });
+            inventions.Add(new Invention("Сжатый вакуум") { Score = 3, Cost = 7 });
+            inventions.Add(new Invention("Удобрение") { Score = 2, Cost = 5 });
+            inventions.Add(new Invention("Плюмбус") { Score = 1, Cost = 2 });
+            inventions.Add(new Invention("Портальная пушка") { Score = 6, Cost = 15 });
+            inventions.Add(new Invention("Чернила для карандаша") { Score = 4, Cost = 10 });
+            inventions.Add(new Invention("Троллейбус из хлеба") { Score = 0, Cost = 0 });
 
             pDeck.Clear();
             do

@@ -129,8 +129,11 @@ namespace NefariusCore
                 return false;
             if (!pPlayer.Inventions.Contains(pInvention))
                 throw new Exception("You haven't got this invention! Cheater?");
+            if (pPlayer.Coins < pInvention.Cost)
+                throw new Exception("You haven't got enought coins");
 
             pPlayer.CurrentInvention = pInvention;
+            pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
             foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
             {
                 pPlayer.EffectQueue.Enqueue(effect);
