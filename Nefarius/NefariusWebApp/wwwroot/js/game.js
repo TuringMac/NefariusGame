@@ -1,4 +1,4 @@
-var app = new angular.module("nefarius",[]);
+var app = new angular.module("nefarius", []);
 
 let hubUrl = '/game';
 let httpConnection = new signalR.HttpConnection(hubUrl, {
@@ -7,63 +7,63 @@ let httpConnection = new signalR.HttpConnection(hubUrl, {
 //let httpConnection = new signalR.HttpConnection(hubUrl); // For Kestrel
 let hubConnection = new signalR.HubConnection(httpConnection);
 
-app.controller("hub",function($scope){
+app.controller("hub", function ($scope) {
     $scope.colors = {
-        1:"Red",
-        2:"Yellow",
-        3:"Green",
-        4:"Blue",
-        5:"Purple",
-        6:"Brown"
-    }
-    
+        1: "#FF3F00",
+        2: "#FFC700",
+        3: "#00A000",
+        4: "#0000DD",
+        5: "#AA00AA",
+        6: "#AA6600"
+    };
+
     $scope.gameState = {
-        0 : "Init",
-        1 : "Turning",
-        2 : "Spying",
-        3 : "Spy",
-        4 : "Invent",
-        5 : "Inventing",
-        6 : "Research",
-        7 : "Work",
-        8 : "Scoring",
-        9 : "Win"
-    }
+        0: "Init",
+        1: "Turning",
+        2: "Spying",
+        3: "Spy",
+        4: "Invent",
+        5: "Inventing",
+        6: "Research",
+        7: "Work",
+        8: "Scoring",
+        9: "Win"
+    };
     $scope.currentGameState = 0;
     $scope.playerJoined = false;
-    
-    
+
+
     $scope.enemys = [];
     $scope.turnSelected = 0;
     $scope.player = {
         name: ""
     };
-    $scope.join = function(name){
-        if(!name)
+    $scope.join = function (name) {
+        if (!name)
             return;
-        
+
         $scope.playerJoined = true;
         hubConnection.invoke("Join", name);
-    }
-    
+    };
+
     hubConnection.on("PlayerData", function (data) {
         $scope.player = data;
         $scope.$apply();
     });
-    
+
     hubConnection.on("StateChanged", function (data) {
         $scope.enemys = data.players;
         $scope.currentGameState = $scope.gameState[data.state];
         $scope.$apply();
     });
-    
-    $scope.doTurn = function(turn){
+
+    $scope.doTurn = function (turn) {
         hubConnection.invoke("Turn", turn);
-    }
-    
-    $scope.startGame = function(){
+    };
+
+    $scope.startGame = function () {
         hubConnection.invoke("Begin");
-    }
+    };
 });
 
 //hubConnection.on("Send", function (data) {
