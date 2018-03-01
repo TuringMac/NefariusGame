@@ -6,6 +6,7 @@
     <title>Nefarius</title>
     <link rel="stylesheet" href="css/game.css">
     <link href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="js/signalr-client-1.0.0-alpha2-final.min.js"></script>
     <script src="js/angular.min.js"></script>
     <script src="js/angular-dnd.min.js"></script>
@@ -79,8 +80,14 @@
                         <div class="player-data" ng-style="{'background-color': colors[player.color]}">
                             <center>
                                 <div ng-if="!playerJoined">
-                                    <label for="">Введи имя: <input type="text" ng-model="player.name"></label>
-                                    <button ng-click="join(player.name)">join</button>
+                                    <div class="input-group col-md-12">
+                                        <input type="text" class="search-query form-control" ng-model="player.name" placeholder="Введи имя" ng-keypress="join(player.name,$event)" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="button" ng-click="join(player.name)">
+                                                <i class="fas fa-sign-in-alt"></i>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                                 <ul class="info" ng-if="playerJoined">
                                     <li>
@@ -91,14 +98,12 @@
                                     <li>Cards: {{player.inventionCount}}</li>
                                     <li>Spy: <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
                                     <li>GameStae: {{currentGameState}}</li>
-                                    <li>
-                                        <center><button ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</button></center>
-                                    </li>
-                                    <li>
-                                        <center><button ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</button></center>
-                                    </li>
-                                    <li>
-                                        <center><button ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</button></center>
+                                    <li class="player-actions">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
+                                            <a class="btn btn-default" ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</a>
+                                            <a class="btn btn-default" ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</a>
+                                        </div>
                                     </li>
                                 </ul>
                             </center>

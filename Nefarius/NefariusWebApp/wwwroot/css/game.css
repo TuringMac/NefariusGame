@@ -122,6 +122,8 @@ body {
 .enemy .info {
     list-style-type: none;
     text-align: left;
+    color: white;
+    font-weight: bold;
 }
 
 .gametable {
@@ -165,9 +167,10 @@ body {
     background-color: rebeccapurple;
     border: 5px solid brown;
     border-radius: 10px;
-    height: 180px;
+    height: 200px;
     padding: 10px;
     color: white;
+    font-weight: bold;
 }
 
 .player-data ul {
@@ -181,11 +184,11 @@ footer {
     width: 100%;
 }
 
-.card.active {
+.nefarius-card.active {
     border: 5px solid black;
 }
 
-.card {
+.nefarius-card {
     width: 130px;
     height: 160px;
     border-radius: 15px;
@@ -196,12 +199,12 @@ footer {
     padding: 10px;
 }
 
-.card .card-container {
+.nefarius-card .card-container {
     position: relative;
 }
 
-.card .avatar {
-    width: 110px;
+.nefarius-card .avatar {
+    width: 100px;
     height: 100px;
     border-radius: 15px;
     border: 1px solid #0083cc;
@@ -209,18 +212,20 @@ footer {
     position: relative;
 }
 
-.card .avatar-info {
+.nefarius-card .avatar-info {
     line-height: 100px;
     font-weight: bold;
     font-size: 3em;
 }
 
-.card .title {
+.nefarius-card .title {
     color: black;
-    line-height: 70px;
+    line-height: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
-.card .value {
+.nefarius-card .value {
     border-radius: 50%;
     height: 30px;
     width: 30px;
@@ -231,13 +236,13 @@ footer {
     border: 1px solid black;
 }
 
-.card .cost {
+.nefarius-card .cost {
     background-color: yellow;
     top: -10px;
     left: -10px;
 }
 
-.card .score {
+.nefarius-card .score {
     background-color: #a5fff1;
     top: -10px;
     right: -10px;
@@ -298,4 +303,8 @@ footer {
 .spy-zone .enemy-spy-5 {
     top: 210px;
     left: 10px;
+}
+
+.player-actions {
+    line-height: 56px;
 }

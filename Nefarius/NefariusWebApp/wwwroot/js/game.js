@@ -67,8 +67,8 @@ app.controller("hub", function ($scope) {
         hubConnection.invoke("Invent", $scope.inventSelected.id);
     }
     
-    $scope.join = function(name){
-        if(!name)
+    $scope.join = function(name,evt){
+        if(!name || (evt && evt.keyCode != 13))
             return;
 
         $scope.playerJoined = true;
