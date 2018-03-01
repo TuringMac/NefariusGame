@@ -23,101 +23,58 @@
         </div>
 
         <div class="gametable">
-            <table>
-                <tr>
-                    <td ng-init="value=1;bg='sprites/SPY.png'" class="spy-zone" ng-class="{'spy-zone-selected' : selectedZone == value}" dnd-on-drop="onSpyDrop(draggedSpy, value)" dnd-droppable="true" dnd-on-dragenter="selectZone(value)">
-                        <div ng-repeat="_enemy in enemys | filter: {id : '!' + player.id}: true" class="enemy-spy-{{$index}}">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[_enemy.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in _enemy.spies | filter: value track by $index"></i>
-                        </div>
-                        <img ng-src="{{bg}}" alt="">
-                        <div class="spy-player">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[player.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: value track by $index"></i>
-                        </div>
-                    </td>
-                    <td ng-init="value=2;bg='sprites/INVENT.png'" class="spy-zone" ng-class="{'spy-zone-selected' : selectedZone == value}" dnd-on-drop="onSpyDrop(draggedSpy, value)" dnd-droppable="true" dnd-on-dragenter="selectZone(value)">
-                        <div ng-repeat="_enemy in enemys | filter: {id : '!' + player.id}: true" class="enemy-spy-{{$index}}">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[_enemy.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in _enemy.spies | filter: value track by $index"></i>
-                        </div>
-                        <img ng-src="{{bg}}" alt="">
-                        <div class="spy-player">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[player.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: value track by $index"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td ng-init="value=3;bg='sprites/STUDY.png'" class="spy-zone" ng-class="{'spy-zone-selected' : selectedZone == value}" dnd-on-drop="onSpyDrop(draggedSpy, value)" dnd-droppable="true" dnd-on-dragenter="selectZone(value)">
-                        <div ng-repeat="_enemy in enemys | filter: {id : '!' + player.id}: true" class="enemy-spy-{{$index}}">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[_enemy.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in _enemy.spies | filter: value track by $index"></i>
-                        </div>
-                        <img ng-src="{{bg}}" alt="">
-                        <div class="spy-player">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[player.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: value track by $index"></i>
-                        </div>
-                    </td>
-                    <td ng-init="value=4;bg='sprites/WORK.png'" class="spy-zone" ng-class="{'spy-zone-selected' : selectedZone == value}" dnd-on-drop="onSpyDrop(draggedSpy, value)" dnd-droppable="true" dnd-on-dragenter="selectZone(value)">
-                        <div ng-repeat="_enemy in enemys | filter: {id : '!' + player.id}: true" class="enemy-spy-{{$index}}">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[_enemy.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in _enemy.spies | filter: value track by $index"></i>
-                        </div>
-                        <img ng-src="{{bg}}" alt="">
-                        <div class="spy-player">
-                            <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[player.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: value track by $index"></i>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <ng-repeat ng-include="'templates/spy-zone.html'" ng-repeat="_zone in spyZones"></ng-repeat>
         </div>
         <footer>
-            <table class="player-controls">
-                <tr>
-                    <td class="col-1">
-                        <div class="inventions">
-                            <center>
-                                <ng-repeat ng-repeat="card in player.inventions" ng-include="'templates/card.html'" ng-click="selectInvent(card)"></ng-repeat>
-                            </center>
-                        </div>
-                    </td>
-                    <td class="col-2">
-                        <div class="player-data" ng-style="{'background-color': colors[player.color]}">
-                            <center>
-                                <div ng-if="!playerJoined">
-                                    <div class="input-group col-md-12">
-                                        <input type="text" class="search-query form-control" ng-model="player.name" placeholder="Введи имя" ng-keypress="join(player.name,$event)" />
-                                        <span class="input-group-btn">
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="inventions">
+                        <center>
+                            <ng-repeat ng-repeat="card in player.inventions" ng-include="'templates/card.html'" ng-click="selectInvent(card)"></ng-repeat>
+                        </center>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="player-data" ng-style="{'background-color': colors[player.color]}">
+                        <center>
+                            <div ng-if="!playerJoined">
+                                <div class="input-group col-md-12">
+                                    <input type="text" class="search-query form-control" ng-model="player.name" placeholder="Введи имя" ng-keypress="join(player.name,$event)" />
+                                    <span class="input-group-btn">
                                             <button class="btn btn-danger" type="button" ng-click="join(player.name)">
                                                 <i class="fas fa-sign-in-alt"></i>
                                             </button>
                                         </span>
-                                    </div>
                                 </div>
-                                <ul class="info" ng-if="playerJoined">
-                                    <li>
-                                        <center>{{player.name}}</center>
-                                    </li>
-                                    <li>Score: {{player.score}}</li>
-                                    <li>Money: {{player.coins}}</li>
-                                    <li>Cards: {{player.inventionCount}}</li>
-                                    <li>Spy: <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
-                                    <li>GameStae: {{currentGameState}}</li>
-                                    <li class="player-actions">
-                                        <div class="btn-group" role="group" aria-label="...">
-                                            <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
-                                            <a class="btn btn-default" ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</a>
-                                            <a class="btn btn-default" ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </center>
-                        </div>
-                    </td>
-                    <td class="col-3">
-                        <div class="turns">
-                            <center>
-                                <ng-repeat ng-repeat="card in actions" ng-include="'templates/card.html'" ng-click="selectAction(card)"></ng-repeat>
-                            </center>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+                            </div>
+                            <ul class="info" ng-if="playerJoined">
+                                <li>
+                                    <center>{{player.name}}</center>
+                                </li>
+                                <li>Score: {{player.score}}</li>
+                                <li>Money: {{player.coins}}</li>
+                                <li>Cards: {{player.inventionCount}}</li>
+                                <li>Spy: <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
+                                <li>GameStae: {{currentGameState}}</li>
+                                <li class="player-actions">
+                                    <div class="btn-group" role="group" aria-label="...">
+                                        <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
+                                        <a class="btn btn-default" ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</a>
+                                        <a class="btn btn-default" ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </center>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="turns">
+                        <center>
+                            <ng-repeat ng-repeat="card in actions" ng-include="'templates/card.html'" ng-click="selectAction(card)"></ng-repeat>
+                        </center>
+                    </div>
+                </div>
+            </div>
         </footer>
     </div>
     <script src="js/game.js"></script>

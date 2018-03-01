@@ -182,6 +182,7 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+    padding: 10px;
 }
 
 .nefarius-card.active {
@@ -260,6 +261,11 @@ footer {
 
 .spy-zone {
     position: relative;
+    text-align: center;
+}
+
+.spy-zone img.zone-bg {
+    width: 30%;
 }
 
 
