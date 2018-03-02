@@ -13,6 +13,8 @@ namespace NefariusCore
         [DataMember]
         public string Name { get; private set; }
         [DataMember]
+        public string Description { get; set; }
+        [DataMember]
         public decimal Cost { get; set; }
         [DataMember]
         public decimal Score { get; set; }
@@ -27,3 +29,20 @@ namespace NefariusCore
         }
     }
 }
+/*
+{
+    "ID": ,
+    "Name": "",
+    "Description": "",
+    "Cost": ,
+    "Score": ,
+    "SelfEffectList": [
+      {
+        "direction": "",
+        "item": "",
+        "count": ""
+      }
+    ],
+    "OtherEffectList": []
+  },
+*/
