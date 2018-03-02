@@ -37,6 +37,13 @@ app.controller("hub", function ($scope) {
         {description: 4, name: "Работа", color: "#5db700"}
     ];
     
+    $scope.spyZones = [
+        {bg: 'sprites/SPY.png', value: 1},
+        {bg: 'sprites/INVENT.png', value: 2},
+        {bg: 'sprites/STUDY.png', value: 3},
+        {bg: 'sprites/WORK.png', value: 4},
+    ]
+    
     $scope.currentGameState = 0;
     $scope.playerJoined = false;
     $scope.draggedSpy = null;
@@ -67,8 +74,8 @@ app.controller("hub", function ($scope) {
         hubConnection.invoke("Invent", $scope.inventSelected.id);
     }
     
-    $scope.join = function(name){
-        if(!name)
+    $scope.join = function(name,evt){
+        if(!name || (evt && evt.keyCode != 13))
             return;
 
         $scope.playerJoined = true;
