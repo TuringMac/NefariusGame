@@ -28,10 +28,6 @@ namespace NefariusWebApp
             {
                 case GameState.Turning:
                     BroadcastGame();
-                    //if (CheckEverybodyDoSpy())
-                    //    State++;
-                    //if (CheckEverybodyDoInvent())
-                    //    State++;
                     break;
                 case GameState.Spying:
                     BroadcastGame();
@@ -39,11 +35,13 @@ namespace NefariusWebApp
                     break;
                 case GameState.Spy:
                     BroadcastGame();
-                    //if (CheckEverybodyDoInvent())
-                    //    State++;
+                    if (_Game.CheckEverybodyDoSpy())
+                        _Game.State++;
                     break;
                 case GameState.Invent:
                     BroadcastGame();
+                    if (_Game.CheckEverybodyDoInvent())
+                        _Game.State++;
                     break;
                 case GameState.Inventing:
                     BroadcastGame();
@@ -83,7 +81,7 @@ namespace NefariusWebApp
 
         public void BroadcastGame()
         {
-            Clients.All.InvokeAsync("StateChanged", new { players = _Game.PlayerList.Select(player => player.GetPlayerShort()), state = _Game.State });
+            Clients.All.InvokeAsync("StateChanged", new { players = _Game.PlayerList.Select(player => player.GetPlayerShort()), state = _Game.State, move = _Game.Move });
             foreach (var player in _Game.PlayerList)
             {
                 Clients.Client(player.ID).InvokeAsync("PlayerData", player); //TODO may be exception if player disconnected

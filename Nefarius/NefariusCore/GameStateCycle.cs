@@ -26,7 +26,7 @@ namespace NefariusCore
             {
                 return _State;
             }
-            private set
+            set
             {
                 if (_State != value)
                 {
@@ -96,14 +96,6 @@ namespace NefariusCore
             base.Spying();
 
             State++;
-            if (CheckEverybodyDoSpy())
-            {
-                State++;
-                if (CheckEverybodyDoInvent())
-                {
-                    State++;
-                }
-            }
         }
 
         public void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
@@ -145,8 +137,6 @@ namespace NefariusCore
             if (CheckEverybodyDoSpy())
             {
                 State++;
-                if (CheckEverybodyDoInvent()) //TODO Move this to Ticker event listener
-                    State++;
             }
 
             return;
@@ -262,12 +252,12 @@ namespace NefariusCore
             return true;
         }
 
-        bool CheckEverybodyDoSpy()
+        public bool CheckEverybodyDoSpy()
         {
             return !PlayerList.Where(player => player.Action == GameAction.Spy).Any();
         }
 
-        bool CheckEverybodyDoInvent()
+        public bool CheckEverybodyDoInvent()
         {
             return !PlayerList.Where(player => player.Action == GameAction.Invent).Any();
         }
