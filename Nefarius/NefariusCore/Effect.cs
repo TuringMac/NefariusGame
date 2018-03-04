@@ -115,7 +115,7 @@ namespace NefariusCore
                     else
                     {
                         decimal n = 0;
-                        if (decimal.TryParse(count, out n))
+                        if (!decimal.TryParse(count, out n))
                             throw new Exception("Bad effect");
 
                         DropCoins(pPlayer, n);
