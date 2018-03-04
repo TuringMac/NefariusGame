@@ -12,6 +12,7 @@ namespace NefariusCore
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
         public List<Player> PlayerList { get; private set; }
+        public decimal Move { get; set; } = 0;
 
         public Game(List<Player> pPlayers)
         {
@@ -63,6 +64,7 @@ namespace NefariusCore
                     player.Inventions.Add(InventDeck.Pop());
                 }
             }
+            Move = 1;
         }
 
         /// <summary>
@@ -165,6 +167,7 @@ namespace NefariusCore
                     {
                         if (winner.Score == player.Score)
                         {
+                            Move++;
                             return false;
                         }
                         else if (winner.Score < player.Score)
@@ -175,7 +178,10 @@ namespace NefariusCore
                 }
             }
             if (winner == null) // Когда ниодного
+            {
+                Move++;
                 return false;
+            }
             else
                 return true;
         }
