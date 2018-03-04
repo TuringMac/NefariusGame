@@ -21,6 +21,8 @@ namespace NefariusCore
         public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
         public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
         public Queue<Effect> EffectQueue { get; protected set; } = new Queue<Effect>();
+        public decimal InventionToDropCount { get; set; } = 0;
+        public decimal SpyToDropCount { get; set; } = 0;
 
         #endregion Public
 

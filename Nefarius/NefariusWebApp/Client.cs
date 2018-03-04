@@ -23,5 +23,20 @@ namespace NefariusWebApp
         {
 
         }
+
+        public void DropInvention(decimal pCount)
+        {
+
+        }
+
+        public void DropSpy(decimal pCount)
+        {
+
+        }
+
+        public void SetSpy(decimal pCount)
+        {
+
+        }
     }
 }

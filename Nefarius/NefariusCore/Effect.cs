@@ -144,19 +144,23 @@ namespace NefariusCore
                 {
                     if (string.Equals(count, "spy"))
                     {
-
+                        DropInvention(pPlayer, spyCount);
                     }
                     else if (string.Equals(count, "invented"))
                     {
-
+                        DropInvention(pPlayer, playedinvCount);
                     }
                     else if (string.Equals(count, "inventions"))
                     {
-
+                        DropInvention(pPlayer, invCount);
                     }
                     else
                     {
-                        decimal.TryParse(count, out decimal n);
+                        decimal n = 0;
+                        if (!decimal.TryParse(count, out n))
+                            throw new Exception("Bad effect");
+
+                        DropInvention(pPlayer, n);
                     }
                 }
                 else
@@ -172,6 +176,14 @@ namespace NefariusCore
                 pPlayer.Coins = 0;
             else
                 pPlayer.Coins -= dropCount;
+        }
+
+        void DropInvention(Player pPlayer, decimal dropCount)
+        {
+            if (pPlayer.Inventions.Count < dropCount)
+                dropCount = pPlayer.Inventions.Count;
+
+            pPlayer.InventionToDropCount += dropCount;
         }
     }
 }

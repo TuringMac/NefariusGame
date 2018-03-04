@@ -98,29 +98,29 @@ namespace NefariusCore
             State++;
         }
 
-        public void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
+        public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
             if (State != GameState.Spy)
             {
                 Debug.WriteLine("Spy after Spying");
-                return;
+                return false;
             }
             if (pPlayer.Action != GameAction.Spy)
             {
                 Debug.WriteLine("Шпионаж не в свой ход");
-                return;
+                return false;
             }
 
             if (pDestSpyPosition == pSourceSpyPosition)
             {
                 Debug.WriteLine("Исходная позиция шпиона совпадает с конечной");
-                return;
+                return false;
             }
 
             if (pPlayer.Spies.Count(s => s == pSourceSpyPosition) == 0) // Если нет шпионов в исходной позиции
             {
                 Debug.WriteLine("Нет шпиона в исходной позиции");
-                return;
+                return false;
             }
 
             for (int i = 0; i < pPlayer.Spies.Count(); i++)
@@ -133,36 +133,30 @@ namespace NefariusCore
                 }
             }
 
-            pPlayer.Action = GameAction.None;
-            if (CheckEverybodyDoSpy())
-            {
-                State++;
-            }
-
-            return;
+            return true;
         }
 
-        public void Invent(Player pPlayer, Invention pInvention)
+        public bool Invent(Player pPlayer, Invention pInvention)
         {
             if (State != GameState.Invent)
             {
                 Debug.WriteLine("Invent after Spy");
-                return;
+                return false;
             }
             if (pPlayer.Action != GameAction.Invent)
             {
                 Debug.WriteLine("Изобретение не в свой ход");
-                return;
+                return false;
             }
             if (!pPlayer.Inventions.Contains(pInvention))
             {
                 Debug.WriteLine("You haven't got this invention! Cheater?");
-                return;
+                return false;
             }
             if (pPlayer.Coins < pInvention.Cost)
             {
                 Debug.WriteLine("You haven't got enought coins");
-                return;
+                return false;
             }
 
             pPlayer.CurrentInvention = pInvention;
@@ -174,10 +168,7 @@ namespace NefariusCore
                 pPlayer.EffectQueue.Enqueue(effect);
             }
 
-            pPlayer.Action = GameAction.None;
-
-            if (CheckEverybodyDoInvent())
-                State++;
+            return true;
         }
 
         public override void Inventing()
@@ -187,7 +178,8 @@ namespace NefariusCore
 
             base.Inventing();
 
-            State++;
+            if (CheckEverybodyApplyEffects())
+                State++;
         }
 
         public override void Researching()
@@ -260,6 +252,13 @@ namespace NefariusCore
         public bool CheckEverybodyDoInvent()
         {
             return !PlayerList.Where(player => player.Action == GameAction.Invent).Any();
+        }
+
+        public bool CheckEverybodyApplyEffects()
+        {
+            bool hasNonDroppedInv = PlayerList.Where(player => player.InventionToDropCount > 0).Any();
+            bool hasNonDroppedSpy = PlayerList.Where(player => player.SpyToDropCount > 0).Any();
+            return !hasNonDroppedSpy && !hasNonDroppedInv;
         }
 
         #endregion Methods

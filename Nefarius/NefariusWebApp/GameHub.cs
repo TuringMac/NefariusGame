@@ -64,15 +64,46 @@ namespace NefariusWebApp
         public void Spy(decimal pTo, decimal pFrom = 0)
         {
             var player = GetPlayer(Context.ConnectionId);
-            _gameTicker.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom);
+            if (player.SpyToDropCount > 0)
+            {
+                if (pTo != 0 || pFrom == 0) // Если шпион переставляется из нуля или на действие, то это ошибка
+                {
+                    Debug.WriteLine("Нужно отозвать шпиона, а не переставить");
+                    return;
+                }
+                else if (_gameTicker.Game.SetSpy(player, GameAction.None, (GameAction)pFrom))
+                {
+                    player.SpyToDropCount--;
+                    if (_gameTicker.Game.CheckEverybodyApplyEffects())
+                        _gameTicker.Game.State++;
+                }
+            }
+            else
+            {
+                if (_gameTicker.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom))
+                    player.Action = GameAction.None;
+            }
             Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
+            if (_gameTicker.Game.CheckEverybodyDoSpy())
+            {
+                _gameTicker.Game.State++;
+            }
         }
 
         public void Invent(decimal pInventID)
         {
             var player = GetPlayer(Context.ConnectionId);
-            _gameTicker.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
+            if (_gameTicker.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID)))
+                player.Action = GameAction.None;
+
             Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
+            if (_gameTicker.Game.CheckEverybodyDoInvent())
+                _gameTicker.Game.State++;
+        }
+
+        public void DropInvention(decimal InventionID)
+        {
+
         }
 
         Player GetPlayer(string id)
