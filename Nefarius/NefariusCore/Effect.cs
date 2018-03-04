@@ -125,19 +125,23 @@ namespace NefariusCore
                 {
                     if (string.Equals(count, "spy"))
                     {
-
+                        DropSpy(pPlayer, spyCount);
                     }
                     else if (string.Equals(count, "invented"))
                     {
-
+                        DropSpy(pPlayer, playedinvCount);
                     }
                     else if (string.Equals(count, "inventions"))
                     {
-
+                        DropSpy(pPlayer, invCount);
                     }
                     else
                     {
-                        decimal.TryParse(count, out decimal n);
+                        decimal n = 0;
+                        if (!decimal.TryParse(count, out n))
+                            throw new Exception("Bad effect");
+
+                        DropSpy(pPlayer, n);
                     }
                 }
                 else if (string.Equals(item, "invention"))
@@ -184,6 +188,15 @@ namespace NefariusCore
                 dropCount = pPlayer.Inventions.Count;
 
             pPlayer.InventionToDropCount += dropCount;
+        }
+
+        void DropSpy(Player pPlayer, decimal dropCount)
+        {
+            var spyCount = pPlayer.Spies.Where(s => s > 0).Count();
+            if (spyCount < dropCount)
+                dropCount = spyCount;
+
+            pPlayer.SpyToDropCount += dropCount;
         }
     }
 }
