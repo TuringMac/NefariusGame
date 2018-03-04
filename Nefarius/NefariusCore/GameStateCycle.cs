@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -45,7 +46,11 @@ namespace NefariusCore
         public void AddPlayer(Player pPlayer)
         {
             if (State != GameState.Init)
-                throw new Exception("Game already starts");
+            {
+                Debug.WriteLine("Game already starts");
+                return;
+            }
+
             pPlayer.Color = ColorDeck.Pop();
             PlayerList.Add(pPlayer);
         }
@@ -53,7 +58,10 @@ namespace NefariusCore
         public override void StartGame()
         {
             if (State != GameState.Init)
-                throw new Exception("Start after Init");
+            {
+                Debug.WriteLine("Start after Init");
+                return;
+            }
 
             base.StartGame();
 
@@ -67,7 +75,10 @@ namespace NefariusCore
         public void Turning(Player pPlayer, GameAction pAction)
         {
             if (State != GameState.Turning)
-                throw new Exception("Turning after Working");
+            {
+                Debug.WriteLine("Turning after Working");
+                return;
+            }
 
             pPlayer.Action = pAction;
 
@@ -78,7 +89,9 @@ namespace NefariusCore
         public override void Spying()
         {
             if (State != GameState.Spying)
+            {
                 throw new Exception("Spying after Scoring");
+            }
 
             base.Spying();
 
@@ -96,25 +109,38 @@ namespace NefariusCore
         public void SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
             if (State != GameState.Spy)
-                throw new Exception("Spy after Spying");
-            if (pPlayer.Action != GameAction.Spy)
+            {
+                Debug.WriteLine("Spy after Spying");
                 return;
+            }
+            if (pPlayer.Action != GameAction.Spy)
+            {
+                Debug.WriteLine("Шпионаж не в свой ход");
+                return;
+            }
 
             if (pDestSpyPosition == pSourceSpyPosition)
+            {
+                Debug.WriteLine("Исходная позиция шпиона совпадает с конечной");
                 return;
+            }
 
             if (pPlayer.Spies.Count(s => s == pSourceSpyPosition) == 0) // Если нет шпионов в исходной позиции
+            {
+                Debug.WriteLine("Нет шпиона в исходной позиции");
                 return;
+            }
 
             for (int i = 0; i < pPlayer.Spies.Count(); i++)
             {
                 if (pPlayer.Spies[i] == pSourceSpyPosition)
                 {
-                    pPlayer.Spies[i] = pDestSpyPosition;
                     //TODO взымать плату
+                    pPlayer.Spies[i] = pDestSpyPosition;
                     break;
                 }
             }
+
             pPlayer.Action = GameAction.None;
             if (CheckEverybodyDoSpy())
             {
@@ -122,20 +148,32 @@ namespace NefariusCore
                 if (CheckEverybodyDoInvent()) //TODO Move this to Ticker event listener
                     State++;
             }
-            
+
             return;
         }
 
-        public bool Invent(Player pPlayer, Invention pInvention)
+        public void Invent(Player pPlayer, Invention pInvention)
         {
             if (State != GameState.Invent)
-                throw new Exception("Invent after Spy");
+            {
+                Debug.WriteLine("Invent after Spy");
+                return;
+            }
             if (pPlayer.Action != GameAction.Invent)
-                return false;
+            {
+                Debug.WriteLine("Изобретение не в свой ход");
+                return;
+            }
             if (!pPlayer.Inventions.Contains(pInvention))
-                throw new Exception("You haven't got this invention! Cheater?");
+            {
+                Debug.WriteLine("You haven't got this invention! Cheater?");
+                return;
+            }
             if (pPlayer.Coins < pInvention.Cost)
-                throw new Exception("You haven't got enought coins");
+            {
+                Debug.WriteLine("You haven't got enought coins");
+                return;
+            }
 
             pPlayer.CurrentInvention = pInvention;
             pPlayer.Inventions.Remove(pInvention);
@@ -150,7 +188,6 @@ namespace NefariusCore
 
             if (CheckEverybodyDoInvent())
                 State++;
-            return true;
         }
 
         public override void Inventing()
