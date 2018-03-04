@@ -2,6 +2,7 @@
 using NefariusCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,10 +35,19 @@ namespace NefariusWebApp
             _gameTicker.Game.StartGame();
         }
 
-        public void Turn(decimal pAction)
+        public void Turn(decimal? pAction) //TODO use Nullable<GameAction>
         {
+            decimal userAction = 0;
+            if (pAction.HasValue)
+                userAction = pAction.Value;
+            else
+            {
+                Debug.WriteLine("Wrong Action from client");
+                return;
+            }
+
             var action = GameAction.None;
-            switch (pAction)
+            switch (userAction)
             {
                 case 0: action = GameAction.None; break;
                 case 1: action = GameAction.Spy; break;
