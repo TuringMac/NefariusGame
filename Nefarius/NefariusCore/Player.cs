@@ -23,6 +23,7 @@ namespace NefariusCore
         public Queue<Effect> EffectQueue { get; protected set; } = new Queue<Effect>();
         public decimal InventionToDropCount { get; set; } = 0;
         public decimal SpyToDropCount { get; set; } = 0;
+        public decimal SpyToSetCount { get; set; } = 0;
 
         #endregion Public
 

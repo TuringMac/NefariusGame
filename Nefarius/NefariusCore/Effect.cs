@@ -16,7 +16,9 @@ namespace NefariusCore
         [DataMember]
         public string count { get; set; } // fixed("1","2","3")/"spy"/"invented"/"inventions"
 
-        public void Apply(Player pPlayer)
+        bool suspendUserActions = true;
+
+        public void Apply(Player pPlayer) //TODO refactor! mb strategy
         {
             int spyCount = pPlayer.Spies.Where(s => s != 0).Count(); // Число выставленных шпионов
             int invCount = pPlayer.Inventions.Count();
@@ -51,19 +53,23 @@ namespace NefariusCore
                 {
                     if (string.Equals(count, "spy"))
                     {
-
+                        SetSpy(pPlayer, spyCount);
                     }
                     else if (string.Equals(count, "invented"))
                     {
-
+                        SetSpy(pPlayer, playedinvCount);
                     }
                     else if (string.Equals(count, "inventions"))
                     {
-
+                        SetSpy(pPlayer, invCount);
                     }
                     else
                     {
-                        decimal.TryParse(count, out decimal n);
+                        decimal n = 0;
+                        if (!decimal.TryParse(count, out n))
+                            throw new Exception("Bad effect");
+
+                        SetSpy(pPlayer, n);
                     }
                 }
                 else if (string.Equals(item, "invention"))
@@ -184,6 +190,8 @@ namespace NefariusCore
 
         void DropInvention(Player pPlayer, decimal dropCount)
         {
+            if (suspendUserActions) return;
+
             if (pPlayer.Inventions.Count < dropCount)
                 dropCount = pPlayer.Inventions.Count;
 
@@ -192,11 +200,24 @@ namespace NefariusCore
 
         void DropSpy(Player pPlayer, decimal dropCount)
         {
+            if (suspendUserActions) return;
+
             var spyCount = pPlayer.Spies.Where(s => s > 0).Count();
             if (spyCount < dropCount)
                 dropCount = spyCount;
 
             pPlayer.SpyToDropCount += dropCount;
+        }
+
+        void SetSpy(Player pPlayer, decimal setCount)
+        {
+            if (suspendUserActions) return;
+
+            var spyCount = pPlayer.Spies.Where(s => s == 0).Count();
+            if (setCount > spyCount)
+                setCount = spyCount;
+
+            pPlayer.SpyToSetCount += setCount;
         }
     }
 }
@@ -204,4 +225,6 @@ namespace NefariusCore
  * получить/отдать
  * монету/шпиона/карту
  * фиксированное количиство/по числу шпионов/по числу созданных изобретений/по числу изобретений в руке
+ * 
+ * 3 монеты за каждое изобретение в руке (46)
 */
