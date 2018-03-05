@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -51,7 +52,19 @@ namespace NefariusCore
 
         static bool ValidateInventions(ICollection<Invention> pInventions)
         {
+            Debug.WriteLine("Start validating deck");
             bool result = true;
+            for (int i = 1; i < pInventions.Count + 1; i++)
+            {
+                try
+                {
+                    pInventions.Single(inv => inv.ID == i);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Card ID:{i} {ex.Message}");
+                }
+            }
             foreach (var inv in pInventions)
             {
                 if (string.IsNullOrWhiteSpace(inv.Description))
@@ -75,6 +88,7 @@ namespace NefariusCore
                     }
                 }
             }
+            Debug.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
             return result;
         }
     }
