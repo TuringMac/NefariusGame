@@ -59,7 +59,7 @@ namespace NefariusCore
             foreach (var player in PlayerList)
             {
                 player.Coins = 10;
-                for (int i = 0; i < 2; i++) // Каждому по 2 карты
+                for (int i = 0; i < 3; i++) // Каждому по 3 карты
                 {
                     player.Inventions.Add(InventDeck.Pop());
                 }

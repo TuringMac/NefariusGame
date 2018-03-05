@@ -45,4 +45,6 @@ namespace NefariusCore
     ],
     "OtherEffectList": []
   },
+
+    Score by invented (45)
 */
