@@ -383,7 +383,13 @@ footer {
 .invention-card .title,
 .invention-card .description {
     word-break: keep-all;
+    white-space: normal;
     font-size: 11px;
+}
+
+.invention-card .title {
+    text-align: left;
+    font-weight: bold;
 }
 
 .invention-card .avatar {
@@ -395,13 +401,9 @@ footer {
     font-size: 2em;
 }
 
-.invention-card .effect-arrow {
-    font-size: 15px;
-}
-
+.invention-card .effect-arrow,
 .invention-card .effect-icon {
-    width: 20px;
-    height: 20px;
+    font-size: 1.2em;
 }
 
 .wordart {
