@@ -1,0 +1,57 @@
+<div class="invention-card nefarius-card" ng-class="{'active' : card.active}" ng-app="nefarius">
+    <div class="row title-container">
+        <div class="col-xs-3">
+            <div class="cost">{{_invent.cost}}</div>
+        </div>
+        <div class="col-xs-9 text-center">
+            <p class="title">{{_invent.name}}</p>
+        </div>
+    </div>
+    <div class="row avatar-container">
+        <div class="col-xs-12">
+            <div class="avatar"></div>
+        </div>
+    </div>
+    <div class="row description-container">
+        <div class="col-xs-12">
+            <p class="text-info description">
+                {{_invent.description}}
+            </p>
+        </div>
+    </div>
+    <div class="row effects-container">
+        <div class="col-xs-3">
+            <div class="score wordart rainbow"><span class="text">{{_invent.score}}</span></div>
+        </div>
+        <div class="col-xs-9">
+            <div class="row" ng-show="_invent.selfEffectList.length">
+                <div class="col-xs-12" ng-init="_selfGet = (_invent.selfEffectList | filter: {direction: 'get'})" ng-show="_selfGet.length">
+                    <i class="fas fa-long-arrow-alt-down text-success effect-arrow"></i> <i class="fas fa-plus"></i>
+                     <ng-repeat  ng-repeat="_effect in _selfGet">
+                         <i class="fas fa-dollar-sign" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}">{{  (!parseInt(_effect.count)) ? _effect.count : '' }}</i> {{ (parseInt(_effect.count)) ? '/' : '' }} <i class="fas fa-dollar-sign" ng-if="parseInt(_effect.count)" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
+                     </ng-repeat>
+                </div>
+                <div class="col-xs-12" ng-init="_selfDrop = (_invent.selfEffectList | filter: {direction: 'drop'})" ng-show="_selfDrop.length">
+                    <i class="fas fa-long-arrow-alt-down text-success effect-arrow"></i> <i class="fas fa-minus"></i>
+                     <ng-repeat  ng-repeat="_effect in _selfDrop">
+                         <i class="fas fa-dollar-sign" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}">{{  (!parseInt(_effect.count)) ? _effect.count : '' }}</i> {{ (parseInt(_effect.count)) ? '/' : '' }} <i class="fas fa-dollar-sign" ng-if="parseInt(_effect.count)" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
+                     </ng-repeat>
+                </div>
+            </div>
+            <div class="row" ng-show="_invent.otherEffectList.length">
+                <div class="col-xs-12" ng-init="_otherGet = (_invent.otherEffectList | filter: {direction: 'get'})" ng-show="_otherGet.length">
+                    <i class="fas fa-long-arrow-alt-up text-danger effect-arrow"></i> <i class="fas fa-plus"></i>
+                     <ng-repeat  ng-repeat="_effect in _otherGet">
+                         <i class="fas fa-dollar-sign" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}">{{  (!parseInt(_effect.count)) ? _effect.count : '' }}</i> {{ (parseInt(_effect.count)) ? '/' : '' }} <i class="fas fa-dollar-sign" ng-if="parseInt(_effect.count)" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
+                     </ng-repeat>
+                </div>
+                <div class="col-xs-12" ng-init="_otherDrop = (_invent.otherEffectList | filter: {direction: 'drop'})" ng-show="_otherDrop.length">
+                    <i class="fas fa-long-arrow-alt-up text-danger effect-arrow"></i> <i class="fas fa-minus"></i>
+                     <ng-repeat  ng-repeat="_effect in _otherDrop">
+                         <i class="fas fa-dollar-sign" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}">{{  (!parseInt(_effect.count)) ? _effect.count : '' }}</i> {{ (parseInt(_effect.count)) ? '/' : '' }} <i class="fas fa-dollar-sign" ng-if="parseInt(_effect.count)" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
+                     </ng-repeat>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

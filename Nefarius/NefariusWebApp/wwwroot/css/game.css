@@ -34,7 +34,7 @@ body {
     background: #fff38c;
     border: 5px solid #7f3300;
     border-radius: 30px;
-    height: 200px;
+    height: 230px;
 }
 
 .action {
@@ -167,7 +167,7 @@ body {
     background-color: rebeccapurple;
     border: 5px solid brown;
     border-radius: 10px;
-    height: 200px;
+    height: 230px;
     padding: 10px;
     color: white;
     font-weight: bold;
@@ -185,26 +185,31 @@ footer {
     padding: 10px;
 }
 
-.nefarius-card.active {
+.nefarius-card {
+    width: 154px;
+    height: 200px;
+    border-radius: 15px;
+    border: 1px solid #005787;
+    display: inline-block;
+}
+
+.action-card.active {
     border: 5px solid black;
 }
 
-.nefarius-card {
-    width: 130px;
-    height: 160px;
-    border-radius: 15px;
-    border: 1px solid #005787;
+.action-card {
     background-color: #00a4ff;
     display: inline-block;
     margin: 10px;
     padding: 10px;
+    display: inline-block;
 }
 
-.nefarius-card .card-container {
+.action-card .card-container {
     position: relative;
 }
 
-.nefarius-card .avatar {
+.action-card .avatar {
     width: 100px;
     height: 100px;
     border-radius: 15px;
@@ -213,20 +218,20 @@ footer {
     position: relative;
 }
 
-.nefarius-card .avatar-info {
+.action-card .avatar-info {
     line-height: 100px;
     font-weight: bold;
     font-size: 3em;
 }
 
-.nefarius-card .title {
+.action-card .title {
     color: black;
     line-height: 10px;
     font-size: 1.2em;
     font-weight: bold;
 }
 
-.nefarius-card .value {
+.action-card .value {
     border-radius: 50%;
     height: 30px;
     width: 30px;
@@ -237,13 +242,13 @@ footer {
     border: 1px solid black;
 }
 
-.nefarius-card .cost {
+.action-card .cost {
     background-color: yellow;
     top: -10px;
     left: -10px;
 }
 
-.nefarius-card .score {
+.action-card .score {
     background-color: #a5fff1;
     top: -10px;
     right: -10px;
@@ -313,4 +318,93 @@ footer {
 
 .player-actions {
     line-height: 56px;
+}
+
+.invention-card .title-container {
+    height: 40px;
+}
+
+.invention-card .avatar-container {
+    height: 70px;
+}
+
+.invention-card .description-container {
+    height: 40px;
+}
+
+.invention-card .effects-container {
+    height: 50px;
+}
+
+.invention-card {
+    background-color: #ffffff;
+    display: inline-block;
+    margin: 10px;
+    padding: 5px;
+    font-size: 12px
+}
+
+.invention-card .cost {
+    background-color: yellow;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    border: 1px solid black;
+    display: inline-block;
+}
+
+.invention-card .title,
+.invention-card .description {
+    word-break: break-all;
+    font-size: 11px;
+}
+
+.invention-card .avatar {
+    border: 1px solid black;
+    height: 50px;
+}
+
+.invention-card .score {
+    font-size: 2em;
+}
+
+.invention-card .effect-arrow {
+    font-size: 15px;
+}
+
+.invention-card .effect-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.wordart {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wordart.rainbow {
+  transform: scale(1, 1.5);
+  -webkit-transform: scale(1, 1.5);
+  -moz-transform: scale(1, 1.5);
+  -o-transform: scale(1, 1.5);
+  -ms-transform: scale(1, 1.5);
+}
+
+.wordart.rainbow .text {
+  background: #32caf7; 
+  background: -webkit-linear-gradient(left, #272727, #32caf7);
+  background: -o-linear-gradient(left, #272727, #32caf7);
+  background: -moz-linear-gradient(left, #272727, #32caf7);
+  background: linear-gradient(to right, #272727, #32caf7); 
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

@@ -30,7 +30,7 @@
                 <div class="col-xs-5">
                     <div class="inventions">
                         <center>
-                            <ng-repeat ng-repeat="card in player.inventions" ng-include="'templates/card.html'" ng-click="selectInvent(card)"></ng-repeat>
+                            <ng-repeat ng-repeat="_invent in player.inventions" ng-include="'templates/invention.html'" ng-click="selectInvent(card)"></ng-repeat>
                         </center>
                     </div>
                 </div>
