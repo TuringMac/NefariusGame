@@ -19,6 +19,7 @@ namespace NefariusCore
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
         public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
+        public bool IsMoved { get { return Action != GameAction.None; } }
         public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
         public Queue<Effect> EffectQueue { get; protected set; } = new Queue<Effect>();
         public decimal InventionToDropCount { get; set; } = 0;
@@ -41,7 +42,7 @@ namespace NefariusCore
             Spies = new GameAction[] { GameAction.None, GameAction.None, GameAction.None, GameAction.None, GameAction.None };
         }
 
-        public dynamic GetPlayerShort()
+        public dynamic GetPlayerShort(bool pIsOpen = false)
         {
             return new
             {
@@ -53,7 +54,12 @@ namespace NefariusCore
                 Score,
                 InventionCount,
                 PlayedInventions,
-                EffectQueue
+                EffectQueue,
+                IsMoved,
+                Action = pIsOpen ? Action : GameAction.None,
+                InventionToDropCount,
+                SpyToDropCount,
+                SpyToSetCount
             };
         }
     }
