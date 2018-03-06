@@ -193,7 +193,7 @@ footer {
     display: inline-block;
 }
 
-.action-card.active {
+.nefarius-card.active {
     border: 5px solid black;
 }
 
@@ -325,11 +325,11 @@ footer {
 }
 
 .invention-card .avatar-container {
-    height: 70px;
+    height: 60px;
 }
 
 .invention-card .description-container {
-    height: 40px;
+    height: 50px;
 }
 
 .invention-card .effects-container {
@@ -358,7 +358,7 @@ footer {
 
 .invention-card .title,
 .invention-card .description {
-    word-break: break-all;
+    word-break: keep-all;
     font-size: 11px;
 }
 
