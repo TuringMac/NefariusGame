@@ -29,9 +29,7 @@
             <div class="row">
                 <div class="col-xs-5">
                     <div class="inventions">
-                        <center>
-                            <ng-repeat ng-repeat="_invent in player.inventions" ng-include="'templates/invention.html'" ng-click="selectInvent(_invent)"></ng-repeat>
-                        </center>
+                        <ng-repeat ng-repeat="_invent in player.inventions" ng-include="'templates/invention.html'" ng-click="selectInvent(_invent)"></ng-repeat>
                     </div>
                 </div>
                 <div class="col-xs-2">
