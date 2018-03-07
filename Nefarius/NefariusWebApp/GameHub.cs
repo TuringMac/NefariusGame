@@ -58,7 +58,7 @@ namespace NefariusWebApp
             }
             var player = GetPlayer(Context.ConnectionId);
             _gameTicker.Game.Turning(player, action);
-            Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
+            _gameTicker.BroadcastGame();
         }
 
         public void Spy(decimal pTo, decimal pFrom = 0)
