@@ -129,6 +129,11 @@ namespace NefariusCore
                     eff.Apply(player);
                 }
             }
+            foreach (var inventor in PlayerList)
+            {
+                if (inventor.CurrentInvention != null)
+                    inventor.CurrentInvention = null;
+            }
         }
 
         public virtual void Researching()
