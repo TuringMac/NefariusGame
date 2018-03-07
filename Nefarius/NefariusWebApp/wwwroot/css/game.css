@@ -113,34 +113,17 @@ body {
     width: 20%;
 }
 
-.enemy .columns-container {
-    padding: 10px;
-    background: #ecf0f1;
-    border: 2px solid #34495e;
+
+.enemy .selected-action {
+    text-align: center;
+    line-height: 110px;
+    font-size: 1.5em;
+    text-align: center;
 }
 
-.enemy .column {
-    min-height: 90px;
-    padding: 10px;
-    color: white;
-}
-
-.enemy .column1 {
-    width: 30%;
-    float: left;
-    background-image: url(../sprites/INVENT.png);
-    background-size: cover;
-}
-
-.enemy .column2 {
-    width: 50%;
-    float: right;
-}
-
-.enemy .clearfix {
-    height: 0px;
-    background: #e74c3c;
-    clear: both;
+.enemy .action-zone {
+    height: 100%;
+    padding-top: 25px;
 }
 
 .enemy .info {
@@ -433,4 +416,18 @@ footer {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
