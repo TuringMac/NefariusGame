@@ -120,7 +120,7 @@ namespace NefariusCore
 
                     foreach (var effect in inventor.CurrentInvention.OtherEffectList)
                     {
-                        player.EffectQueue.Enqueue(effect);
+                        player.EffectQueue.Enqueue(effect.Clone() as Effect);
                     }
                 }
                 while (player.EffectQueue.Count > 0)

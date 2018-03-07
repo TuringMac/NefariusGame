@@ -156,7 +156,7 @@ namespace NefariusCore
             if (pPlayer.Coins < pInvention.Cost)
             {
                 Debug.WriteLine("You haven't got enought coins");
-                return false;
+                return false; //TODO true но карта не разыгрывается
             }
 
             pPlayer.CurrentInvention = pInvention;
@@ -165,7 +165,7 @@ namespace NefariusCore
             pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
             foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
             {
-                pPlayer.EffectQueue.Enqueue(effect);
+                pPlayer.EffectQueue.Enqueue(effect.Clone() as Effect);
             }
 
             return true;

@@ -7,7 +7,7 @@ using System.Text;
 namespace NefariusCore
 {
     [DataContract]
-    public class Effect
+    public class Effect : ICloneable
     {
         [DataMember]
         public string direction { get; set; } // get/drop
@@ -218,6 +218,16 @@ namespace NefariusCore
                 setCount = spyCount;
 
             pPlayer.SpyToSetCount += setCount;
+        }
+
+        public object Clone() //TODO Clone with fixed values
+        {
+            return new Effect()
+            {
+                direction = direction,
+                item = item,
+                count = count
+            };
         }
     }
 }
