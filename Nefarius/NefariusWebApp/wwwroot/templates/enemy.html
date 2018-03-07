@@ -1,6 +1,7 @@
 <div class="enemy" ng-style="{'background-color': colors[_enemy.color]}">
-    <div class="col-xs-3">
-        <img src="../sprites/INVENT.png" alt="" style="width: 100%; margin-top: 50%;">
+    <div class="col-xs-3 action-zone">
+        <div class="loader" ng-show="!_enemy.isMoved"></div>
+        <div class="selected-action" ng-show="_enemy.isMoved">{{_enemy.action}}</div>
     </div>
     <div class="col-xs-9">
         <ul class="info">
