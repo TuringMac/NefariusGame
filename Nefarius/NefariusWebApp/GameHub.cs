@@ -83,8 +83,8 @@ namespace NefariusWebApp
                 if (_gameTicker.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom))
                     player.Action = GameAction.None;
             }
-            Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
-            if (_gameTicker.Game.CheckEverybodyDoSpy())
+            _gameTicker.BroadcastGame();
+            if (_gameTicker.Game.CheckEverybodyDoSpy() && _gameTicker.Game.State == GameState.Spy)
             {
                 _gameTicker.Game.State++;
             }
@@ -96,8 +96,8 @@ namespace NefariusWebApp
             if (_gameTicker.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID)))
                 player.Action = GameAction.None;
 
-            Clients.Client(Context.ConnectionId).InvokeAsync("PlayerData", player);
-            if (_gameTicker.Game.CheckEverybodyDoInvent())
+            _gameTicker.BroadcastGame();
+            if (_gameTicker.Game.CheckEverybodyDoInvent() && _gameTicker.Game.State == GameState.Invent)
                 _gameTicker.Game.State++;
         }
 
@@ -114,6 +114,17 @@ namespace NefariusWebApp
                     return player;
             }
             throw new Exception("Player not found");
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            if (_gameTicker.Game.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
+            {
+                Player p = GetPlayer(Context.ConnectionId);
+                Debug.Write("Player " + p.Name + " ");
+            }
+            Debug.WriteLine(Context.ConnectionId + " Lived");
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }
