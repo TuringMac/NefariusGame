@@ -121,48 +121,4 @@ app.controller("hub", function ($scope) {
     };
 });
 
-//hubConnection.on("Send", function (data) {
-//    let elem = document.createElement("p");
-//    elem.appendChild(document.createTextNode(data));
-//    let firstElem = document.getElementById("chatroom").firstChild;
-//    document.getElementById("chatroom").insertBefore(elem, firstElem);
-//});
-//hubConnection.on("PlayerJoined", function (data) {
-//    let elem = document.createElement("p");
-//    elem.appendChild(document.createTextNode(data + " вошел в игру"));
-//    let firstElem = document.getElementById("chatroom").firstChild;
-//    document.getElementById("chatroom").insertBefore(elem, firstElem);
-//});
-//hubConnection.on("StateChanged", function (data) {
-//    let elem = document.createElement("p");
-//    elem.appendChild(document.createTextNode(data));
-//    let firstElem = document.getElementById("chatroom").firstChild;
-//    document.getElementById("chatroom").insertBefore(elem, firstElem);
-//});
-//hubConnection.on("AskTurn", function (data) {
-//    // suspend thread, lol
-//});
-//// ------------------------------------------------------------------------
-//document.getElementById("btnJoin").addEventListener("click", function (e) {
-//    let name = document.getElementById("name").value;
-//    hubConnection.invoke("Join", name);
-//});
-//document.getElementById("btnBegin").addEventListener("click", function (e) {
-//    hubConnection.invoke("Begin");
-//});
-//document.getElementById("btnAct0").addEventListener("click", function (e) {
-//    hubConnection.invoke("Turn", 0);
-//});
-//document.getElementById("btnAct1").addEventListener("click", function (e) {
-//    hubConnection.invoke("Turn", 1);
-//});
-//document.getElementById("btnAct2").addEventListener("click", function (e) {
-//    hubConnection.invoke("Turn", 2);
-//});
-//document.getElementById("btnAct3").addEventListener("click", function (e) {
-//    hubConnection.invoke("Turn", 3);
-//});
-//document.getElementById("btnAct4").addEventListener("click", function (e) {
-//    hubConnection.invoke("Turn", 4);
-//});
 hubConnection.start();
