@@ -59,6 +59,7 @@
                                         <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
                                         <a class="btn btn-default" ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</a>
                                         <a class="btn btn-default" ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</a>
+                                        <a class="btn btn-default" ng-click="endGame()">Очистить стол</a>
                                     </div>
                                 </li>
                             </ul>

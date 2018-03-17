@@ -10,13 +10,13 @@ namespace NefariusWebApp
 {
     public class GameHub : Hub
     {
-        private readonly GameTicker _gameTicker;
+        private readonly Table _table;
 
-        public GameHub() : this(GameTicker.Instance) { }
+        public GameHub() : this(Table.Instance) { }
 
-        GameHub(GameTicker pGameTicker)
+        GameHub(Table pGameTicker)
         {
-            _gameTicker = pGameTicker;
+            _table = pGameTicker;
         }
 
         public void Join(string pName)
@@ -25,16 +25,23 @@ namespace NefariusWebApp
             {
                 ID = Context.ConnectionId
             };
-            _gameTicker.Game.AddPlayer(player);
-            if (Clients != null) _gameTicker.Clients = Clients;
-            _gameTicker.BroadcastGame();
+            _table.Game.AddPlayer(player);
+            if (Clients != null) _table.Clients = Clients;
+            _table.BroadcastGame();
         }
 
         public void Begin()
         {
             var player = GetPlayer(Context.ConnectionId);
             if (player != null)
-                _gameTicker.Game.StartGame();
+                _table.Begin();
+        }
+
+        public void End()
+        {
+            var player = GetPlayer(Context.ConnectionId);
+            if (player != null)
+                _table.End();
         }
 
         public void Turn(decimal? pAction) //TODO use Nullable<GameAction>
@@ -59,8 +66,8 @@ namespace NefariusWebApp
                 default: throw new Exception("Wrong action");
             }
             var player = GetPlayer(Context.ConnectionId);
-            _gameTicker.Game.Turning(player, action);
-            _gameTicker.BroadcastGame();
+            _table.Game.Turning(player, action);
+            _table.BroadcastGame();
         }
 
         public void Spy(decimal pTo, decimal pFrom = 0)
@@ -73,34 +80,34 @@ namespace NefariusWebApp
                     Debug.WriteLine("Нужно отозвать шпиона, а не переставить");
                     return;
                 }
-                else if (_gameTicker.Game.SetSpy(player, GameAction.None, (GameAction)pFrom))
+                else if (_table.Game.SetSpy(player, GameAction.None, (GameAction)pFrom))
                 {
                     player.SpyToDropCount--;
-                    if (_gameTicker.Game.CheckEverybodyApplyEffects())
-                        _gameTicker.Game.State++;
+                    if (_table.Game.CheckEverybodyApplyEffects())
+                        _table.Game.State++;
                 }
             }
             else
             {
-                if (_gameTicker.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom))
+                if (_table.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom))
                     player.Action = GameAction.None;
             }
-            _gameTicker.BroadcastGame();
-            if (_gameTicker.Game.CheckEverybodyDoSpy() && _gameTicker.Game.State == GameState.Spy)
+            _table.BroadcastGame();
+            if (_table.Game.CheckEverybodyDoSpy() && _table.Game.State == GameState.Spy)
             {
-                _gameTicker.Game.State++;
+                _table.Game.State++;
             }
         }
 
         public void Invent(decimal pInventID)
         {
             var player = GetPlayer(Context.ConnectionId);
-            if (_gameTicker.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID)))
+            if (_table.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID)))
                 player.Action = GameAction.None;
 
-            _gameTicker.BroadcastGame();
-            if (_gameTicker.Game.CheckEverybodyDoInvent() && _gameTicker.Game.State == GameState.Invent)
-                _gameTicker.Game.State++;
+            _table.BroadcastGame();
+            if (_table.Game.CheckEverybodyDoInvent() && _table.Game.State == GameState.Invent)
+                _table.Game.State++;
         }
 
         public void DropInvention(decimal InventionID)
@@ -110,17 +117,17 @@ namespace NefariusWebApp
 
         Player GetPlayer(string id)
         {
-            foreach (var player in _gameTicker.Game.PlayerList)
+            foreach (var player in _table.Game.PlayerList)
             {
                 if (string.Equals(player.ID, id))
                     return player;
             }
-            throw new Exception("Player not found");
+            return null;
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (_gameTicker.Game.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
+            if (_table.Game.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
             {
                 Player p = GetPlayer(Context.ConnectionId);
                 Debug.Write("Player " + p.Name + " ");

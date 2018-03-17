@@ -115,6 +115,10 @@ app.controller("hub", function ($scope) {
     $scope.startGame = function () {
         hubConnection.invoke("Begin");
     };
+
+    $scope.endGame = function () {
+        hubConnection.invoke("End");
+    };
 });
 
 //hubConnection.on("Send", function (data) {

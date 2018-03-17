@@ -8,17 +8,24 @@ using System.Threading.Tasks;
 
 namespace NefariusWebApp
 {
-    public class GameTicker
+    public class Table
     {
-        private readonly static Lazy<GameTicker> _instance = new Lazy<GameTicker>(() => new GameTicker());
+        private readonly static Lazy<Table> _instance = new Lazy<Table>(() => new Table());
 
         GameStateCycle _Game;
 
         public GameStateCycle Game { get { return _Game; } }
 
-        private GameTicker()
+        private Table()
         {
-            _Game = GameStateCycle.Instance;
+            Init();
+        }
+
+        void Init()
+        {
+            if (_Game != null)
+                _Game.StateChanged -= _Game_StateChanged;
+            _Game = new GameStateCycle();
             _Game.StateChanged += _Game_StateChanged;
         }
 
@@ -65,7 +72,7 @@ namespace NefariusWebApp
             }
         }
 
-        public static GameTicker Instance
+        public static Table Instance
         {
             get
             {
@@ -77,6 +84,17 @@ namespace NefariusWebApp
         {
             get;
             set;
+        }
+
+        public void Begin()
+        {
+            _Game.StartGame();
+        }
+
+        public void End()
+        {
+            Init();
+            BroadcastGame();
         }
 
         public void BroadcastGame()

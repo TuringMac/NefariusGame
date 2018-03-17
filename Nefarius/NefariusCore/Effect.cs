@@ -18,6 +18,7 @@ namespace NefariusCore
 
         bool suspendUserActions = true;
 
+        //TODO вынести метод наружу, в Table
         public void Apply(Player pPlayer) //TODO refactor! mb strategy
         {
             int spyCount = pPlayer.Spies.Where(s => s != 0).Count(); // Число выставленных шпионов
@@ -77,17 +78,17 @@ namespace NefariusCore
                     if (string.Equals(count, "spy"))
                     {
                         for (int i = 0; i < spyCount; i++)
-                            pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
+                            ;// pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
                     }
                     else if (string.Equals(count, "invented"))
                     {
                         for (int i = 0; i < playedinvCount; i++)
-                            pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
+                            ;// pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
                     }
                     else if (string.Equals(count, "inventions"))
                     {
                         for (int i = 0; i < invCount; i++)
-                            pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
+                            ;// pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
                     }
                     else
                     {
@@ -96,7 +97,7 @@ namespace NefariusCore
                             throw new Exception("Bad effect");
 
                         for (int i = 0; i < n; i++)
-                            pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
+                            ;// pPlayer.Inventions.Add(GameStateCycle.Instance.InventDeck.Pop());
                     }
                 }
                 else

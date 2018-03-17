@@ -8,16 +8,6 @@ namespace NefariusCore
 {
     public class GameStateCycle : Game
     {
-        public static GameStateCycle _Game = null;
-        public static GameStateCycle Instance
-        {
-            get
-            {
-                if (_Game == null) _Game = new GameStateCycle();
-                return _Game;
-            }
-        }
-
         GameState _State = GameState.Init;
 
         public GameState State
