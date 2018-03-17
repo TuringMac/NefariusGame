@@ -32,7 +32,9 @@ namespace NefariusWebApp
 
         public void Begin()
         {
-            _gameTicker.Game.StartGame();
+            var player = GetPlayer(Context.ConnectionId);
+            if (player != null)
+                _gameTicker.Game.StartGame();
         }
 
         public void Turn(decimal? pAction) //TODO use Nullable<GameAction>
