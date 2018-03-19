@@ -194,6 +194,7 @@ namespace NefariusCore
             if (pPlayer.Coins < pInvention.Cost)
             {
                 Debug.WriteLine("You haven't got enought coins");
+                pPlayer.Action = GameAction.None;
                 return true; //TODO true но карта не разыгрывается
             }
 
