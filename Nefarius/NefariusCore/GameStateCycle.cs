@@ -153,10 +153,6 @@ namespace NefariusCore
             pPlayer.Inventions.Remove(pInvention);
             pPlayer.PlayedInventions.Add(pInvention);
             pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
-            foreach (var effect in pPlayer.CurrentInvention.SelfEffectList) // Эффект на себя
-            {
-                pPlayer.EffectQueue.Enqueue(effect.Clone() as Effect);
-            }
 
             return true;
         }
@@ -246,9 +242,7 @@ namespace NefariusCore
 
         public bool CheckEverybodyApplyEffects()
         {
-            bool hasNonDroppedInv = PlayerList.Where(player => player.InventionToDropCount > 0).Any();
-            bool hasNonDroppedSpy = PlayerList.Where(player => player.SpyToDropCount > 0).Any();
-            return !hasNonDroppedSpy && !hasNonDroppedInv;
+            return !PlayerList.Where(player => player.EffectQueue.Any()).Any(); // Есть ли игроки у которых остались неразыгранные эффекты
         }
 
         #endregion Methods

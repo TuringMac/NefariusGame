@@ -112,27 +112,10 @@ namespace NefariusCore
         /// </summary>
         public virtual void Inventing()
         {
-            foreach (var player in PlayerList) // Эффекты по часовой стрелке
+            EffectManager.Assign(PlayerList);
+            foreach (var player in PlayerList)
             {
-                foreach (var inventor in PlayerList) //TODO Reverse
-                {
-                    if (inventor.CurrentInvention == null) continue;
-
-                    foreach (var effect in inventor.CurrentInvention.OtherEffectList)
-                    {
-                        player.EffectQueue.Enqueue(effect.Clone() as Effect);
-                    }
-                }
-                while (player.EffectQueue.Count > 0)
-                {
-                    var eff = player.EffectQueue.Dequeue();
-                    eff.Apply(player);
-                }
-            }
-            foreach (var inventor in PlayerList)
-            {
-                if (inventor.CurrentInvention != null)
-                    inventor.CurrentInvention = null;
+                while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
             }
         }
 
