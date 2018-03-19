@@ -22,9 +22,6 @@ namespace NefariusCore
         public bool IsMoved { get { return Action != GameAction.None; } }
         public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
         public Queue<Effect> EffectQueue { get; protected set; } = new Queue<Effect>();
-        public decimal InventionToDropCount { get; set; } = 0;
-        public decimal SpyToDropCount { get; set; } = 0;
-        public decimal SpyToSetCount { get; set; } = 0;
 
         #endregion Public
 
@@ -57,10 +54,15 @@ namespace NefariusCore
                 EffectQueue,
                 IsMoved,
                 Action = pIsOpen ? Action : GameAction.None,
-                InventionToDropCount,
-                SpyToDropCount,
-                SpyToSetCount
             };
+        }
+
+        public void DropCoins(decimal dropCount)
+        {
+            if (Coins - dropCount < 0)
+                Coins = 0;
+            else
+                Coins -= dropCount;
         }
     }
 }

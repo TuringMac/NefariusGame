@@ -86,6 +86,12 @@ namespace NefariusWebApp
             set;
         }
 
+        public void Join(Player pPlayer)
+        {
+            _Game.AddPlayer(pPlayer);
+            BroadcastGame();
+        }
+
         public void Begin()
         {
             _Game.StartGame();
@@ -97,7 +103,28 @@ namespace NefariusWebApp
             BroadcastGame();
         }
 
-        public void BroadcastGame()
+        public bool Turn(Player pPlayer, GameAction pAction)
+        {
+            var result = _Game.Turning(pPlayer, pAction);
+            BroadcastGame();
+            return result;
+        }
+
+        public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
+        {
+            var result = _Game.SetSpy(pPlayer, pDestSpyPosition, pSourceSpyPosition);
+            BroadcastGame();
+            return result;
+        }
+
+        public bool Invent(Player pPlayer, Invention pInvention)
+        {
+            var result = _Game.Invent(pPlayer, pInvention);
+            BroadcastGame();
+            return result;
+        }
+
+        void BroadcastGame()
         {
             Clients.All.InvokeAsync("StateChanged", new { players = _Game.PlayerList.Select(p => p.GetPlayerShort(_Game.State > GameState.Turning)), state = _Game.State, move = _Game.Move });
             foreach (var player in _Game.PlayerList)
