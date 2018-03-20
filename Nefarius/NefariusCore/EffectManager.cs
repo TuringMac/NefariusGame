@@ -119,15 +119,15 @@ namespace NefariusCore
                 {
                     if (string.Equals(eff.count, "spy"))
                     {
-                        DropCoins(pPlayer, spyCount);
+                        pPlayer.DropCoins(spyCount);
                     }
                     else if (string.Equals(eff.count, "invented"))
                     {
-                        DropCoins(pPlayer, playedinvCount);
+                        pPlayer.DropCoins(playedinvCount);
                     }
                     else if (string.Equals(eff.count, "inventions"))
                     {
-                        DropCoins(pPlayer, invCount);
+                        pPlayer.DropCoins(invCount);
                     }
                     else
                     {
@@ -135,7 +135,7 @@ namespace NefariusCore
                         if (!decimal.TryParse(eff.count, out n))
                             throw new Exception("Bad effect");
 
-                        DropCoins(pPlayer, n);
+                        pPlayer.DropCoins(n);
                     }
                     success = true;
                 }
@@ -178,14 +178,6 @@ namespace NefariusCore
             }
             else
                 return false;
-        }
-
-        static void DropCoins(Player pPlayer, decimal dropCount)
-        {
-            if (pPlayer.Coins - dropCount < 0)
-                pPlayer.Coins = 0;
-            else
-                pPlayer.Coins -= dropCount;
         }
     }
 }

@@ -25,9 +25,8 @@ namespace NefariusWebApp
             {
                 ID = Context.ConnectionId
             };
-            _table.Game.AddPlayer(player);
             if (Clients != null) _table.Clients = Clients;
-            _table.BroadcastGame();
+            _table.Join(player);
         }
 
         public void Begin()
@@ -55,64 +54,21 @@ namespace NefariusWebApp
                 return;
             }
 
-            var action = GameAction.None;
-            switch (userAction)
-            {
-                case 0: action = GameAction.None; break;
-                case 1: action = GameAction.Spy; break;
-                case 2: action = GameAction.Invent; break;
-                case 3: action = GameAction.Research; break;
-                case 4: action = GameAction.Work; break;
-                default: throw new Exception("Wrong action");
-            }
+            var action = (GameAction)userAction;
             var player = GetPlayer(Context.ConnectionId);
-            _table.Game.Turning(player, action);
-            _table.BroadcastGame();
+            _table.Turn(player, action);
         }
 
         public void Spy(decimal pTo, decimal pFrom = 0)
         {
             var player = GetPlayer(Context.ConnectionId);
-            if (player.SpyToDropCount > 0)
-            {
-                if (pTo != 0 || pFrom == 0) // Если шпион переставляется из нуля или на действие, то это ошибка
-                {
-                    Debug.WriteLine("Нужно отозвать шпиона, а не переставить");
-                    return;
-                }
-                else if (_table.Game.SetSpy(player, GameAction.None, (GameAction)pFrom))
-                {
-                    player.SpyToDropCount--;
-                    if (_table.Game.CheckEverybodyApplyEffects())
-                        _table.Game.State++;
-                }
-            }
-            else
-            {
-                if (_table.Game.SetSpy(player, (GameAction)pTo, (GameAction)pFrom))
-                    player.Action = GameAction.None;
-            }
-            _table.BroadcastGame();
-            if (_table.Game.CheckEverybodyDoSpy() && _table.Game.State == GameState.Spy)
-            {
-                _table.Game.State++;
-            }
+            _table.SetSpy(player, (GameAction)pTo, (GameAction)pFrom);
         }
 
         public void Invent(decimal pInventID)
         {
             var player = GetPlayer(Context.ConnectionId);
-            if (_table.Game.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID)))
-                player.Action = GameAction.None;
-
-            _table.BroadcastGame();
-            if (_table.Game.CheckEverybodyDoInvent() && _table.Game.State == GameState.Invent)
-                _table.Game.State++;
-        }
-
-        public void DropInvention(decimal InventionID)
-        {
-
+            _table.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
         }
 
         Player GetPlayer(string id)

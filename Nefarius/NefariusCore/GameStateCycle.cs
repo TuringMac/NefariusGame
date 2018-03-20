@@ -62,18 +62,19 @@ namespace NefariusCore
         /// Выбирают действие на следующий ход
         /// </summary>
         /// <returns></returns>
-        public void Turning(Player pPlayer, GameAction pAction)
+        public bool Turning(Player pPlayer, GameAction pAction)
         {
             if (State != GameState.Turning)
             {
                 Debug.WriteLine("Turning after Working");
-                return;
+                return false;
             }
 
             pPlayer.Action = pAction;
 
             if (CheckEverybodyDoAction())
                 State++;
+            return true;
         }
 
         public override void Spying()
@@ -90,7 +91,7 @@ namespace NefariusCore
 
         public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
-            if (State != GameState.Spy)
+            if (State != GameState.Spy && State != GameState.Inventing)
             {
                 Debug.WriteLine("Spy after Spying");
                 return false;
@@ -113,17 +114,64 @@ namespace NefariusCore
                 return false;
             }
 
-            for (int i = 0; i < pPlayer.Spies.Count(); i++)
+            bool isDrop = pSourceSpyPosition != GameAction.None && pDestSpyPosition == GameAction.None;
+            bool isSet = pSourceSpyPosition == GameAction.None && pDestSpyPosition != GameAction.None;
+
+            if (State == GameState.Spy)
             {
-                if (pPlayer.Spies[i] == pSourceSpyPosition)
+                if (isSet)
                 {
-                    //TODO взымать плату
-                    pPlayer.Spies[i] = pDestSpyPosition;
-                    break;
+                    for (int i = 0; i < pPlayer.Spies.Count(); i++)
+                    {
+                        if (pPlayer.Spies[i] == pSourceSpyPosition)
+                        {
+                            switch (pDestSpyPosition)
+                            {
+                                case GameAction.Spy: break;
+                                case GameAction.Invent:
+                                    if (pPlayer.Coins >= 2)
+                                        pPlayer.DropCoins(2);
+                                    else
+                                    {
+                                        Debug.WriteLine("Not enought coins to spy");
+                                        return false;
+                                    }
+                                    break;
+                                case GameAction.Research: break;
+                                case GameAction.Work:
+                                    if (pPlayer.Coins >= 1)
+                                        pPlayer.DropCoins(1);
+                                    else
+                                    {
+                                        Debug.WriteLine("Not enought coins to spy");
+                                        return false;
+                                    }
+                                    break;
+                            }
+                            pPlayer.Spies[i] = pDestSpyPosition;
+                            pPlayer.Action = GameAction.None;
+                            if (CheckEverybodyDoSpy())
+                                State++;
+                            return true;
+                        }
+                    }
+                    Debug.WriteLine("No spy in source location");
+                    return false;
+                }
+                else
+                {
+                    Debug.WriteLine("In Spy state only set spy");
+                    return false;
                 }
             }
-
-            return true;
+            else if (State == GameState.Inventing)
+            {
+                //TODO
+                if (CheckEverybodyApplyEffects())
+                    State++;
+                return true;
+            }
+            return false;
         }
 
         public bool Invent(Player pPlayer, Invention pInvention)
@@ -146,6 +194,7 @@ namespace NefariusCore
             if (pPlayer.Coins < pInvention.Cost)
             {
                 Debug.WriteLine("You haven't got enought coins");
+                pPlayer.Action = GameAction.None;
                 return true; //TODO true но карта не разыгрывается
             }
 
@@ -153,7 +202,10 @@ namespace NefariusCore
             pPlayer.Inventions.Remove(pInvention);
             pPlayer.PlayedInventions.Add(pInvention);
             pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
+            pPlayer.Action = GameAction.None;
 
+            if (CheckEverybodyDoInvent())
+                State++;
             return true;
         }
 
