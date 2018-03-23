@@ -21,9 +21,10 @@ namespace NefariusCore
             // Other effects second
             foreach (var player in pPlayerList) // Эффекты по часовой стрелке
             {
-                foreach (var inventor in pPlayerList) //TODO Reverse
+                foreach (var inventor in pPlayerList) //TODO Reverse?
                 {
                     if (inventor.CurrentInvention == null) continue;
+                    if (inventor == player) continue; // Self effect done before
 
                     foreach (var effect in inventor.CurrentInvention.OtherEffectList)
                     {
