@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -43,142 +44,104 @@ namespace NefariusCore
 
         public static bool Apply(Player pPlayer, Game pGame, bool suspendUserActions = true) //TODO refactor! mb strategy // TODO for debug
         {
+            if (pPlayer.EffectQueue.Count == 0) return true;
+
             Effect eff = pPlayer.EffectQueue.Peek();
-            bool success = false;
 
-            int spyCount = pPlayer.Spies.Where(s => s != 0).Count(); // Число выставленных шпионов
-            int invCount = pPlayer.Inventions.Count();
-            int playedinvCount = pPlayer.PlayedInventions.Count();
+            if (!eff.IsFormal)
+                FormalizeTop(pPlayer);
 
-            if (string.Equals(eff.direction, "get"))
+            if (eff.It == EffectItem.Coin)
             {
-                if (string.Equals(eff.item, "coin"))
+                if (eff.Dir == EffectDirection.Get)
                 {
-                    if (string.Equals(eff.count, "spy"))
-                    {
-                        pPlayer.Coins += spyCount;
-                    }
-                    else if (string.Equals(eff.count, "invented"))
-                    {
-                        pPlayer.Coins += playedinvCount;
-                    }
-                    else if (string.Equals(eff.count, "inventions"))
-                    {
-                        pPlayer.Coins += invCount;
-                    }
-                    else
-                    {
-                        decimal n = 0;
-                        if (!decimal.TryParse(eff.count, out n))
-                            throw new Exception("Bad effect count");
-
-                        pPlayer.Coins += n;
-                    }
-                    success = true;
+                    pPlayer.Coins += eff.Count;
                 }
-                else if (string.Equals(eff.item, "spy"))
+                else if (eff.Dir == EffectDirection.Drop)
                 {
-                    if (suspendUserActions)
-                        success = true;
-                    else
-                        success = false;
-                }
-                else if (string.Equals(eff.item, "invention"))
-                {
-                    if (string.Equals(eff.count, "spy"))
-                    {
-                        for (int i = 0; i < spyCount; i++)
-                            pPlayer.Inventions.Add(pGame.InventDeck.Pop());
-                    }
-                    else if (string.Equals(eff.count, "invented"))
-                    {
-                        for (int i = 0; i < playedinvCount; i++)
-                            pPlayer.Inventions.Add(pGame.InventDeck.Pop());
-                    }
-                    else if (string.Equals(eff.count, "inventions"))
-                    {
-                        for (int i = 0; i < invCount; i++)
-                            pPlayer.Inventions.Add(pGame.InventDeck.Pop());
-                    }
-                    else
-                    {
-                        decimal n = 0;
-                        if (!decimal.TryParse(eff.count, out n))
-                            throw new Exception("Bad effect");
-
-                        for (int i = 0; i < n; i++)
-                            pPlayer.Inventions.Add(pGame.InventDeck.Pop());
-                    }
-                    success = true;
+                    pPlayer.DropCoins(eff.Count);
                 }
                 else
-                    throw new Exception("Wrong effect item");
+                {
+                    Debug.WriteLine("Wrong direction");
+                }
             }
-            else if (string.Equals(eff.direction, "drop"))
+            else if (eff.It == EffectItem.Spy)
             {
-                if (string.Equals(eff.item, "coin"))
+                if (!suspendUserActions)
+                    return false;
+            }
+            else if (eff.It == EffectItem.Invention)
+            {
+                if (eff.Dir == EffectDirection.Get)
                 {
-                    if (string.Equals(eff.count, "spy"))
-                    {
-                        pPlayer.DropCoins(spyCount);
-                    }
-                    else if (string.Equals(eff.count, "invented"))
-                    {
-                        pPlayer.DropCoins(playedinvCount);
-                    }
-                    else if (string.Equals(eff.count, "inventions"))
-                    {
-                        pPlayer.DropCoins(invCount);
-                    }
-                    else
-                    {
-                        decimal n = 0;
-                        if (!decimal.TryParse(eff.count, out n))
-                            throw new Exception("Bad effect");
-
-                        pPlayer.DropCoins(n);
-                    }
-                    success = true;
+                    for (int i = 0; i < eff.Count; i++)
+                        pPlayer.Inventions.Add(pGame.InventDeck.Pop());
                 }
-                else if (string.Equals(eff.item, "spy"))
+                else if (eff.Dir == EffectDirection.Drop)
                 {
-                    if (spyCount == 0)
-                        success = true;
-                    else
-                    {
-                        if (suspendUserActions)
-                            success = true;
-                        else
-                            success = false;
-                    }
-                }
-                else if (string.Equals(eff.item, "invention"))
-                {
-                    if (invCount == 0)
-                    {
-                        success = true;
-                    }
-                    else
-                    {
-                        if (suspendUserActions)
-                            success = true;
-                        else
-                            success = false;
-                    }
+                    if (!suspendUserActions)
+                        return false;
                 }
                 else
-                    throw new Exception("Wrong effect item");
+                {
+                    Debug.WriteLine("Wrong direction");
+                }
             }
             else
-                throw new Exception("Wrong effect direction");
-
-            if (success)
             {
-                pPlayer.EffectQueue.Dequeue();
-                return true;
+                Debug.WriteLine("Wrong item");
+            }
+
+            pPlayer.EffectQueue.Dequeue();
+            FormalizeTop(pPlayer);
+            return true;
+        }
+
+        /// <summary>
+        /// Очередной эффект заполняется конкретными значениями
+        /// </summary>
+        /// <param name="pPlayer">Игрок</param>
+        /// <returns></returns>
+        static bool FormalizeTop(Player pPlayer)
+        {
+            if (pPlayer.EffectQueue.Count == 0) return true;
+
+            Effect eff = pPlayer.EffectQueue.Peek();
+            switch (eff.direction)
+            {
+                case "get": eff.Dir = EffectDirection.Get; break;
+                case "drop": eff.Dir = EffectDirection.Drop; break;
+                default: Debug.WriteLine("Wrong effect direction"); break;
+            }
+            switch (eff.item)
+            {
+                case "coin": eff.It = EffectItem.Coin; break;
+                case "spy": eff.It = EffectItem.Spy; break;
+                case "invention": eff.It = EffectItem.Invention; break;
+                default: Debug.WriteLine("Wrong effect item"); break;
+            }
+            if (string.Equals(eff.count, "spy"))
+            {
+                eff.Count = pPlayer.GetSpyCount();
+            }
+            else if (string.Equals(eff.count, "invented"))
+            {
+                eff.Count = pPlayer.GetPlayedInventionsCount();
+            }
+            else if (string.Equals(eff.count, "inventions"))
+            {
+                eff.Count = pPlayer.GetInventionsCount();
             }
             else
-                return false;
+            {
+                decimal n = 0;
+                if (!decimal.TryParse(eff.count, out n))
+                    Debug.WriteLine("Wrong effect count");
+
+                eff.Count = (int)n;
+            }
+            return true;
         }
     }
 }

@@ -15,6 +15,18 @@ namespace NefariusCore
         public string item { get; set; } // coin/spy/invention
         [DataMember]
         public string count { get; set; } // fixed("1","2","3")/"spy"/"invented"/"inventions"
+
+        public EffectDirection Dir { get; set; } = EffectDirection.None;
+        public EffectItem It { get; set; } = EffectItem.None;
+        public int Count { get; set; } = 0;
+
+        public bool IsFormal
+        {
+            get
+            {
+                return (Dir != EffectDirection.None) || (It != EffectItem.None) || (Count != 0);
+            }
+        }
     }
 }
 /*

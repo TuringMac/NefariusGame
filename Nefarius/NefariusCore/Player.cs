@@ -64,5 +64,20 @@ namespace NefariusCore
             else
                 Coins -= dropCount;
         }
+
+        public int GetSpyCount()
+        {
+            return Spies.Where(s => s != 0).Count();
+        }
+
+        public int GetInventionsCount()
+        {
+            return Inventions.Count();
+        }
+
+        public int GetPlayedInventionsCount()
+        {
+            return PlayedInventions.Count();
+        }
     }
 }
