@@ -65,6 +65,47 @@ namespace NefariusCore
                 Coins -= dropCount;
         }
 
+        public bool DropInvention(Invention pInvention)
+        {
+            if (!Inventions.Contains(pInvention))
+            {
+                Debug.WriteLine("You haven't got this invention! Cheater?");
+                return false;
+            }
+
+            CurrentInvention = pInvention;
+            Inventions.Remove(pInvention);
+
+            return true;
+        }
+
+        public bool PlayInvention(Invention pInvention)
+        {
+            if (Action != GameAction.Invent)
+            {
+                Debug.WriteLine("Изобретение не в свой ход");
+                return false;
+            }
+
+            if (Coins < pInvention.Cost)
+            {
+                Debug.WriteLine("You haven't got enought coins");
+                Action = GameAction.None;
+                return true; //TODO true но карта не разыгрывается
+            }
+
+            if (!DropInvention(pInvention))
+            {
+                return false;
+            }
+
+            PlayedInventions.Add(pInvention);
+            Coins -= CurrentInvention.Cost;
+            Action = GameAction.None;
+
+            return true;
+        }
+
         public int GetSpyCount()
         {
             return Spies.Where(s => s != 0).Count();

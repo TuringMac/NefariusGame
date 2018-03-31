@@ -119,6 +119,9 @@ namespace NefariusCore
 
             if (State == GameState.Spy)
             {
+                // Is set
+                // Has spy in source
+                // Has money to dest
                 if (isSet)
                 {
                     for (int i = 0; i < pPlayer.Spies.Count(); i++)
@@ -176,36 +179,27 @@ namespace NefariusCore
 
         public bool Invent(Player pPlayer, Invention pInvention)
         {
-            if (State != GameState.Invent)
+            if (State != GameState.Invent && State != GameState.Inventing)
             {
                 Debug.WriteLine("Invent after Spy");
                 return false;
             }
-            if (pPlayer.Action != GameAction.Invent)
+
+            if (State == GameState.Invent)
             {
-                Debug.WriteLine("Изобретение не в свой ход");
-                return false;
+                pPlayer.PlayInvention(pInvention);
+
+                if (CheckEverybodyDoInvent())
+                    State++;
             }
-            if (!pPlayer.Inventions.Contains(pInvention))
+            else if (State == GameState.Inventing)
             {
-                Debug.WriteLine("You haven't got this invention! Cheater?");
-                return false;
-            }
-            if (pPlayer.Coins < pInvention.Cost)
-            {
-                Debug.WriteLine("You haven't got enought coins");
-                pPlayer.Action = GameAction.None;
-                return true; //TODO true но карта не разыгрывается
+                pPlayer.DropInvention(pInvention);
+
+                if (CheckEverybodyApplyEffects())
+                    State++;
             }
 
-            pPlayer.CurrentInvention = pInvention;
-            pPlayer.Inventions.Remove(pInvention);
-            pPlayer.PlayedInventions.Add(pInvention);
-            pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
-            pPlayer.Action = GameAction.None;
-
-            if (CheckEverybodyDoInvent())
-                State++;
             return true;
         }
 
