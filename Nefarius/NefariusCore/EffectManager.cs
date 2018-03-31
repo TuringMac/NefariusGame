@@ -80,7 +80,12 @@ namespace NefariusCore
                 }
                 else if (eff.Dir == EffectDirection.Drop)
                 {
-                    if (!suspendUserActions)
+                    if (pPlayer.CurrentInvention != null) // Уменьшаем эффект при скинутой карте
+                    {
+                        eff.Count--;
+                        pPlayer.CurrentInvention = null;
+                    }
+                    if (pPlayer.GetInventionsCount() != 0 && eff.Count != 0) // Пользователь скинул все требуемые карты. Можно гасить эффект
                         return false;
                 }
                 else
