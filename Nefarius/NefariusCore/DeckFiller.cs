@@ -44,7 +44,7 @@ namespace NefariusCore
         static T PickRandom<T>(List<T> pItemsList)
         {
             Random rnd = new Random();
-            int i = rnd.Next(pItemsList.Count - 1); // Pick random color
+            int i = rnd.Next(pItemsList.Count); // Pick random color
             T result = pItemsList[i];
             pItemsList.RemoveAt(i);
             return result;
