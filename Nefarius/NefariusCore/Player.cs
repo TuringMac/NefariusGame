@@ -65,6 +65,66 @@ namespace NefariusCore
                 Coins -= dropCount;
         }
 
+        public bool SetSpy(GameAction pDestSpyPosition)
+        {
+            if (pDestSpyPosition == GameAction.None)
+            {
+                Debug.WriteLine("In Spy state only set spy");
+                return false;
+            }
+
+            // Has spy in source if(GetSpyCount()<5)
+            // Has money to dest
+            for (int i = 0; i < Spies.Count(); i++)
+            {
+                if (Spies[i] == GameAction.None)
+                {
+                    switch (pDestSpyPosition)
+                    {
+                        case GameAction.Spy: break;
+                        case GameAction.Invent:
+                            if (Coins >= 2)
+                                DropCoins(2);
+                            else
+                            {
+                                Debug.WriteLine("Not enought coins to spy");
+                                return false;
+                            }
+                            break;
+                        case GameAction.Research: break;
+                        case GameAction.Work:
+                            if (Coins >= 1)
+                                DropCoins(1);
+                            else
+                            {
+                                Debug.WriteLine("Not enought coins to spy");
+                                return false;
+                            }
+                            break;
+                    }
+                    Spies[i] = pDestSpyPosition;
+                    Action = GameAction.None;
+
+                    return true;
+                }
+            }
+            Debug.WriteLine("No spy in source location");
+            return false;
+        }
+
+        public bool DropSpy(GameAction pSourceSpyPosition)
+        {
+            for (int i = 0; i < Spies.Count(); i++)
+            {
+                if (Spies[i] == pSourceSpyPosition)
+                {
+                    Spies[i] = GameAction.None;
+                    break;
+                }
+            }
+            return true;
+        }
+
         public bool DropInvention(Invention pInvention)
         {
             if (!Inventions.Contains(pInvention))
