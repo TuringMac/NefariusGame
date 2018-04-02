@@ -33,7 +33,7 @@ namespace NefariusWebApp
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<GameHub>("game");
+                routes.MapHub<GameHub>("/game");
             });
         }
     }

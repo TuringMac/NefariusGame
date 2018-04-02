@@ -80,7 +80,7 @@ namespace NefariusWebApp
             }
         }
 
-        public IHubClients Clients
+        public IHubCallerClients Clients
         {
             get;
             set;
@@ -126,10 +126,10 @@ namespace NefariusWebApp
 
         void BroadcastGame()
         {
-            Clients.All.InvokeAsync("StateChanged", new { players = _Game.PlayerList.Select(p => p.GetPlayerShort(_Game.State > GameState.Turning)), state = _Game.State, move = _Game.Move });
+            Clients.All.SendAsync("StateChanged", new { players = _Game.PlayerList.Select(p => p.GetPlayerShort(_Game.State > GameState.Turning)), state = _Game.State, move = _Game.Move });
             foreach (var player in _Game.PlayerList)
             {
-                Clients.Client(player.ID).InvokeAsync("PlayerData", player); //TODO may be exception if player disconnected
+                Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
         }
     }
