@@ -96,11 +96,6 @@ namespace NefariusCore
                 Debug.WriteLine("Spy after Spying");
                 return false;
             }
-            if (pPlayer.Action != GameAction.Spy)
-            {
-                Debug.WriteLine("Шпионаж не в свой ход");
-                return false;
-            }
 
             if (pDestSpyPosition == pSourceSpyPosition)
             {
@@ -114,12 +109,23 @@ namespace NefariusCore
                 return false;
             }
 
-            //bool isDrop = pSourceSpyPosition != GameAction.None && pDestSpyPosition == GameAction.None;
+            bool isDrop = pSourceSpyPosition != GameAction.None && pDestSpyPosition == GameAction.None;
             bool isSet = pSourceSpyPosition == GameAction.None && pDestSpyPosition != GameAction.None;
 
             if (State == GameState.Spy)
             {
+                if (pPlayer.Action != GameAction.Spy)
+                {
+                    Debug.WriteLine("Шпионаж не в свой ход");
+                    return false;
+                }
+
                 var result = pPlayer.SetSpy(pDestSpyPosition);
+                if (result)
+                {
+                    pPlayer.Action = GameAction.None;
+                    pPlayer.CurrentSetSpy = GameAction.None;
+                }
                 if (CheckEverybodyDoSpy())
                     State++;
 
@@ -128,10 +134,12 @@ namespace NefariusCore
             else if (State == GameState.Inventing)
             {
                 //TODO Check top effect for drop spy requiring. Continue if not
-                if (isSet)
+                if (isSet && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Get)
                     pPlayer.SetSpy(pDestSpyPosition);
-                else
+                else if (isDrop && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Drop)
                     pPlayer.DropSpy(pSourceSpyPosition);
+                else // Move (not set, not drop)
+                    return false;
 
                 foreach (var player in PlayerList) // TODO Дублирует код из Inventing
                 {

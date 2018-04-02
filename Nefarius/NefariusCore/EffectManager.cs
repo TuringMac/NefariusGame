@@ -68,8 +68,30 @@ namespace NefariusCore
             }
             else if (eff.It == EffectItem.Spy)
             {
-                if (!suspendUserActions)
-                    return false;
+                if (eff.Dir == EffectDirection.Get)
+                {
+                    if (pPlayer.CurrentSetSpy != GameAction.None) // Уменьшаем эффект при скинутой карте
+                    {
+                        eff.Count--;
+                        pPlayer.CurrentSetSpy = GameAction.None;
+                    }
+                    if (pPlayer.Spies.Where(s => s == GameAction.None).Any() && eff.Count != 0) // Нет шпионов чтобы выставить. Можно гасить эффект
+                        return false;
+                }
+                else if (eff.Dir == EffectDirection.Drop)
+                {
+                    if (pPlayer.CurrentDropSpy != GameAction.None) // Уменьшаем эффект при скинутой карте
+                    {
+                        eff.Count--;
+                        pPlayer.CurrentDropSpy = GameAction.None;
+                    }
+                    if (pPlayer.Spies.Where(s => s != GameAction.None).Any() && eff.Count != 0) // Нет шпионов чтобы сбросить. Можно гасить эффект
+                        return false;
+                }
+                else
+                {
+                    Debug.WriteLine("Wrong direction");
+                }
             }
             else if (eff.It == EffectItem.Invention)
             {

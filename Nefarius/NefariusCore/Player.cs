@@ -30,6 +30,8 @@ namespace NefariusCore
         public ICollection<Invention> Inventions { get; set; } = new List<Invention>(); // TODO internal + dataContract
         public GameAction Action { get; set; } // TODO internal + dataContract
         public Invention CurrentInvention { get; set; } // TODO internal + dataContract
+        public GameAction CurrentSetSpy { get; set; }
+        public GameAction CurrentDropSpy { get; set; }
 
         #endregion Private
 
@@ -103,8 +105,7 @@ namespace NefariusCore
                             break;
                     }
                     Spies[i] = pDestSpyPosition;
-                    Action = GameAction.None;
-
+                    CurrentSetSpy = pDestSpyPosition;
                     return true;
                 }
             }
@@ -119,6 +120,7 @@ namespace NefariusCore
                 if (Spies[i] == pSourceSpyPosition)
                 {
                     Spies[i] = GameAction.None;
+                    CurrentDropSpy = pSourceSpyPosition;
                     break;
                 }
             }
