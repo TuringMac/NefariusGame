@@ -114,59 +114,30 @@ namespace NefariusCore
                 return false;
             }
 
-            bool isDrop = pSourceSpyPosition != GameAction.None && pDestSpyPosition == GameAction.None;
+            //bool isDrop = pSourceSpyPosition != GameAction.None && pDestSpyPosition == GameAction.None;
             bool isSet = pSourceSpyPosition == GameAction.None && pDestSpyPosition != GameAction.None;
 
             if (State == GameState.Spy)
             {
-                if (isSet)
-                {
-                    for (int i = 0; i < pPlayer.Spies.Count(); i++)
-                    {
-                        if (pPlayer.Spies[i] == pSourceSpyPosition)
-                        {
-                            switch (pDestSpyPosition)
-                            {
-                                case GameAction.Spy: break;
-                                case GameAction.Invent:
-                                    if (pPlayer.Coins >= 2)
-                                        pPlayer.DropCoins(2);
-                                    else
-                                    {
-                                        Debug.WriteLine("Not enought coins to spy");
-                                        return false;
-                                    }
-                                    break;
-                                case GameAction.Research: break;
-                                case GameAction.Work:
-                                    if (pPlayer.Coins >= 1)
-                                        pPlayer.DropCoins(1);
-                                    else
-                                    {
-                                        Debug.WriteLine("Not enought coins to spy");
-                                        return false;
-                                    }
-                                    break;
-                            }
-                            pPlayer.Spies[i] = pDestSpyPosition;
-                            pPlayer.Action = GameAction.None;
-                            if (CheckEverybodyDoSpy())
-                                State++;
-                            return true;
-                        }
-                    }
-                    Debug.WriteLine("No spy in source location");
-                    return false;
-                }
-                else
-                {
-                    Debug.WriteLine("In Spy state only set spy");
-                    return false;
-                }
+                var result = pPlayer.SetSpy(pDestSpyPosition);
+                if (CheckEverybodyDoSpy())
+                    State++;
+
+                return result;
             }
             else if (State == GameState.Inventing)
             {
-                //TODO
+                //TODO Check top effect for drop spy requiring. Continue if not
+                if (isSet)
+                    pPlayer.SetSpy(pDestSpyPosition);
+                else
+                    pPlayer.DropSpy(pSourceSpyPosition);
+
+                foreach (var player in PlayerList) // TODO Дублирует код из Inventing
+                {
+                    while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
+                }
+
                 if (CheckEverybodyApplyEffects())
                     State++;
                 return true;
@@ -176,36 +147,32 @@ namespace NefariusCore
 
         public bool Invent(Player pPlayer, Invention pInvention)
         {
-            if (State != GameState.Invent)
+            if (State != GameState.Invent && State != GameState.Inventing)
             {
                 Debug.WriteLine("Invent after Spy");
                 return false;
             }
-            if (pPlayer.Action != GameAction.Invent)
+
+            if (State == GameState.Invent)
             {
-                Debug.WriteLine("Изобретение не в свой ход");
-                return false;
+                pPlayer.PlayInvention(pInvention);
+
+                if (CheckEverybodyDoInvent())
+                    State++;
             }
-            if (!pPlayer.Inventions.Contains(pInvention))
+            else if (State == GameState.Inventing)
             {
-                Debug.WriteLine("You haven't got this invention! Cheater?");
-                return false;
-            }
-            if (pPlayer.Coins < pInvention.Cost)
-            {
-                Debug.WriteLine("You haven't got enought coins");
-                pPlayer.Action = GameAction.None;
-                return true; //TODO true но карта не разыгрывается
+                //TODO Check top effect for drop card requiring. Continue if not
+                pPlayer.DropInvention(pInvention);
+                foreach (var player in PlayerList) // TODO Дублирует код из Inventing
+                {
+                    while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
+                }
+
+                if (CheckEverybodyApplyEffects())
+                    State++;
             }
 
-            pPlayer.CurrentInvention = pInvention;
-            pPlayer.Inventions.Remove(pInvention);
-            pPlayer.PlayedInventions.Add(pInvention);
-            pPlayer.Coins -= pPlayer.CurrentInvention.Cost;
-            pPlayer.Action = GameAction.None;
-
-            if (CheckEverybodyDoInvent())
-                State++;
             return true;
         }
 
