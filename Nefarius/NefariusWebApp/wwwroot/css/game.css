@@ -431,3 +431,36 @@ footer {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.card-droper {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    height: 60%;
+    width: 60%;
+    background: rgba(160, 159, 159, 1);
+    border: 10px solid #524e4e;
+    border-radius: 30px;
+    padding: 5% 50px;
+}
+
+.overlay-over {
+    z-index: 1000;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.87);
+    z-index: 999;
+}
+
+.card-drop-title {
+    color: white;
+    font-weight: bold;
+}
+
+.angular-dnd-draggable-helper {
+    z-index: 1050;
+}

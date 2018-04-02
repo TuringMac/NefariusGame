@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="js/signalr-client-1.0.0-alpha2-final.min.js"></script>
     <script src="js/angular.min.js"></script>
-    <script src="js/angular-dnd.min.js"></script>
+    <script src="js/angular-dnd.js"></script>
 </head>
 
 <body ng-app="nefarius" ng-controller="hub">
@@ -25,11 +25,11 @@
         <div class="gametable">
             <ng-repeat ng-include="'templates/spy-zone.html'" ng-repeat="_zone in spyZones"></ng-repeat>
         </div>
-        <footer>
+        <footer ng-class="{'overlay-over' : cardDropEvent}">
             <div class="row">
                 <div class="col-xs-5">
-                    <div class="inventions">
-                        <ng-repeat ng-repeat="_invent in player.inventions" ng-include="'templates/invention.html'" ng-click="selectInvent(_invent)"></ng-repeat>
+                    <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop)" dnd-droppable="true">
+                        <ng-repeat ng-repeat="_invent in player.inventions" dnd-draggable="cardDropEvent" ng-include="'templates/invention.html'" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-click="selectInvent(_invent)"></ng-repeat>
                     </div>
                 </div>
                 <div class="col-xs-2">
@@ -75,6 +75,20 @@
                 </div>
             </div>
         </footer>
+    </div>
+    <div class="overlay" ng-show="cardDropEvent"></div>
+    <div class="card-droper overlay-over" ng-show="cardDropEvent">
+        <h1 class="text-center text-uppercase card-drop-title">Выбери карты для сброса ({{ dropedInvents.length }} / {{cardsToDrop}})</h1>
+        <br>
+        <br>
+        <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop,cardsToDrop)" dnd-droppable="true">
+            <ng-repeat ng-repeat="_invent in dropedInvents" dnd-draggable="cardDropEvent" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-include="'templates/invention.html'"></ng-repeat>
+        </div>
+        <br>
+        <br>
+        <div class="col-xs-12 text-center">
+            <a href="javascript:void(0)" class="btn btn-default" ng-click="applyDrop()">скинуть</a>
+        </div>
     </div>
     <script src="js/game.js"></script>
 </body>

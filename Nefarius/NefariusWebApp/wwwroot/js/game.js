@@ -48,7 +48,10 @@ app.controller("hub", function ($scope) {
     $scope.playerJoined = false;
     $scope.draggedSpy = null;
     $scope.selectedZone = null;
-    $scope.values=[0,1,2,3];
+    $scope.cardDropEvent = false;
+    $scope.inventSelectedForDrop = null;
+    $scope.dropedInvents = [];
+    $scope.cardsToDrop = 2;
 
     $scope.enemys = [];
     $scope.turnSelected = 0;
@@ -70,8 +73,8 @@ app.controller("hub", function ($scope) {
         
     }
     
-    $scope.applyInvent = function(){
-        hubConnection.invoke("Invent", $scope.inventSelected.id);
+    $scope.applyInvent = function(invent){
+        hubConnection.invoke("Invent", invent.id);
     }
     
     $scope.join = function(name,evt){
@@ -91,12 +94,63 @@ app.controller("hub", function ($scope) {
     }
     
     $scope.onSpyDrop = function(spy,zone){
+        if(spy == undefined || zone == undefined)
+            return;
+        
         hubConnection.invoke("Spy", zone,spy);
         $scope.draggedSpy = null;
         $scope.selectedZone = null;
     }
+    
+    $scope.onInventDrop = function(invent,count){
+        var _fromArr = $scope.player.inventions;
+        var _toArr = $scope.dropedInvents;
+        
+        if(!count){ // возврат в руку
+            _toArr = $scope.player.inventions;
+            _fromArr = $scope.dropedInvents;
+        }else if(_toArr.length + 1 > count){ // Если кидаем на сброс и превысили количество сбрасываемых карт
+            var _overInvent = _toArr.shift();
+            
+            _fromArr.push(_overInvent);
+        }
+        
+        _fromArr.splice($scope.player.inventions.indexOf(invent),1);
+        _toArr.push(invent);
+    }
+    
+    $scope.applyDrop = function(){
+        $scope.dropedInvents.forEach($scope.applyInvent);
+        $scope.cardDropEvent = false;
+    }
+    
+    $scope.activateInventDrop = function(count){
+        $scope.cardDropEvent = true;
+        $scope.inventSelectedForDrop = null;
+        $scope.dropedInvents = [];
+        $scope.cardsToDrop = count;
+    }
+    
+    $scope.tryEffect = function(effect){
+        if(effect.direction == "drop"){
+            switch(effect.item){
+                case "invention":
+                    $scope.activateInventDrop(effect.count);
+                    break;
+            }
+        }
+    }
+    
+    $scope.selectInventByDrag = function(invent){
+        $scope.inventSelectedForDrop = invent;
+    }
 
     hubConnection.on("PlayerData", function (data) {
+        console.log(data.effectQueue);
+        if(data.effectQueue.length){
+            debugger;
+            $scope.tryEffect(data.effectQueue[0]);
+        }
         $scope.player = data;
         $scope.$apply();
     });
