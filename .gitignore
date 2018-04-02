@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 
 Nefarius/NefariusWebApp/Data/inventions.json
+Nefarius/NefariusWebApp/Data/rules.json
