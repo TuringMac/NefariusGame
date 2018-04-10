@@ -4,8 +4,45 @@ let hubUrl = '/game';
 let httpConnection = new signalR.HttpConnection(hubUrl, {
     transport: signalR.TransportType.LongPolling
 });
-//let httpConnection = new signalR.HttpConnection(hubUrl); // For Kestrel
 let hubConnection = new signalR.HubConnection(httpConnection);
+
+//let hubConnection = new signalR.HubConnection(hubUrl, { transport: signalR.TransportType.WebSocket }); // For standalone
+
+hubConnection.start();
+
+//// Start the connection.
+//let hubConnection = startConnection(hubUrl)
+//.then(function (connection) {
+//    console.log('connection started');
+//    init();
+//})
+//.catch(error => {
+//    console.error(error.message);
+//});
+//// Starts a connection with transport fallback - if the connection cannot be started using
+//// the webSockets transport the function will fallback to the serverSentEvents transport and
+//// if this does not work it will try longPolling. If the connection cannot be started using
+//// any of the available transports the function will return a rejected Promise.
+//function startConnection(url, configureConnection) {
+//    return function start(transport) {
+//        console.log(`Starting connection using ${signalR.TransportType[transport]} transport`)
+//        var connection = new signalR.HubConnection(url, { transport: transport });
+//        if (configureConnection && typeof configureConnection === 'function') {
+//            configureConnection(connection);
+//        }
+//        return connection.start()
+//            .then(function () {
+//                return connection;
+//            })
+//            .catch(function (error) {
+//                console.log(`Cannot start the connection use ${signalR.TransportType[transport]} transport. ${error.message}`);
+//                if (transport !== signalR.TransportType.LongPolling) {
+//                    return start(transport + 1);
+//                }
+//                return Promise.reject(error);
+//            });
+//    }(signalR.TransportType.WebSockets);
+//}
 
 app.controller("hub", function ($scope) {
     $scope.colors = {
@@ -148,7 +185,6 @@ app.controller("hub", function ($scope) {
     hubConnection.on("PlayerData", function (data) {
         console.log(data.effectQueue);
         if(data.effectQueue.length){
-            debugger;
             $scope.tryEffect(data.effectQueue[0]);
         }
         $scope.player = data;
@@ -174,5 +210,3 @@ app.controller("hub", function ($scope) {
         hubConnection.invoke("End");
     };
 });
-
-hubConnection.start();
