@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="col-xs-5">
                     <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop)" dnd-droppable="true">
-                        <ng-repeat ng-repeat="_invent in player.inventions" dnd-draggable="cardDropEvent" ng-include="'templates/invention.html'" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-click="selectInvent(_invent)"></ng-repeat>
+                        <ng-repeat ng-repeat="_invent in player.inventions" dnd-draggable="cardDropEvent" ng-include="'templates/invention.html'" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-click="selectCard(_invent)"></ng-repeat>
                     </div>
                 </div>
                 <div class="col-xs-2">
@@ -64,8 +64,7 @@
                                 <li class="player-actions">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
-                                        <a class="btn btn-default" ng-click="doTurn(turnSelected)" ng-disabled="!turnSelected" ng-show="currentGameState != 'Init'">Закончить ход</a>
-                                        <a class="btn btn-default" ng-click="applyInvent(inventSelected)" ng-disabled="!inventSelected" ng-show="currentGameState == 'Invent' && turnSelected == 2">Применить изобретение</a>
+                                        <a class="btn btn-default" ng-click="doTurn(selectedCard)" ng-disabled="turnApllyed && selectedCard" ng-show="currentGameState != 'Init'">Закончить ход</a>
                                         <a class="btn btn-default" ng-click="endGame()">Очистить стол</a>
                                     </div>
                                 </li>
@@ -76,7 +75,7 @@
                 <div class="col-xs-5">
                     <div class="turns">
                         <center>
-                            <ng-repeat ng-repeat="card in actions" ng-include="'templates/card.html'" ng-click="selectAction(card)"></ng-repeat>
+                            <ng-repeat ng-repeat="card in actions" ng-include="'templates/card.html'" ng-click="selectCard(card)"></ng-repeat>
                         </center>
                     </div>
                 </div>

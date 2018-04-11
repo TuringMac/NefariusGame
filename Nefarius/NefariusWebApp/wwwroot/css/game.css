@@ -74,36 +74,6 @@ body {
     background: #b30000; 
 }
 
-.action {
-    display: inline-block;
-    margin: 10px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 160px;
-    width: 155px;
-}
-
-.action.active {
-    border: 2px solid red;
-}
-
-.action-spy {
-    background-image: url("../sprites/SPY.png");
-}
-
-.action-invent {
-    background-image: url("../sprites/INVENT.png");
-}
-
-.action-research {
-    background-image: url("../sprites/STUDY.png");
-}
-
-.action-work {
-    background-image: url("../sprites/WORK.png");
-}
-
 .players {
     position: absolute;
     top: 10px;
@@ -214,7 +184,9 @@ footer {
 }
 
 .nefarius-card.active {
-    border: 5px solid black;
+   -moz-box-shadow:    inset 0 0 20px #000000;
+   -webkit-box-shadow: inset 0 0 20px #000000;
+   box-shadow:         inset 0 0 20px #000000;
 }
 
 .action-card {

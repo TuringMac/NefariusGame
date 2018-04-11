@@ -69,22 +69,26 @@ app.controller("hub", function ($scope) {
         {
             description: 1,
             name: "Шпионаж",
-            color: "#ff0000"
+            color: "#ff0000",
+            type: "action"
         },
         {
             description: 2,
             name: "Изобретение",
-            color: "#00caff"
+            color: "#00caff",
+            type: "action"
         },
         {
             description: 3,
             name: "Исследование",
-            color: "#ffff00"
+            color: "#ffff00",
+            type: "action"
         },
         {
             description: 4,
             name: "Работа",
-            color: "#5db700"
+            color: "#5db700",
+            type: "action"
         }
     ];
 
@@ -130,13 +134,13 @@ app.controller("hub", function ($scope) {
                 $scope.waiting = true;
                 break;
             case "Spy":
-                if ($scope.turnSelected == 1) {
+                if ($scope.player.action == 1) {
                     msg = 'Поставь шпиона';
                     $scope.waiting = true;
                 }
                 break;
             case "Invent":
-                if ($scope.turnSelected == 2 && !$scope.inventSelected) {
+                if ($scope.player.action == 2 && !$scope.inventSelected) {
                     msg = 'Выбери изобретение';
                     $scope.waiting = true;
                 } else {
@@ -186,33 +190,15 @@ app.controller("hub", function ($scope) {
     
     function setDataValuesToDefault(){
         $scope.selectedZone = null;
+        $scope.selectedCard = null;
         $scope.cardDropEvent = false;
-        $scope.turnSelected = 0;
-        $scope.inventSelected = 0;
         $scope.turnApllyed = false;
     }
     
     setDataValuesToDefault();
 
-    $scope.selectAction = function (card) {
-        $scope.turnSelected = card.description;
-        $scope.actions.forEach(function (card) {
-            card.active = false;
-        });
-        card.active = true;
-    }
-
-    $scope.selectInvent = function (card) {
-        $scope.inventSelected = card;
-        $scope.player.inventions.forEach(function (card) {
-            card.active = false;
-        });
-        card.active = true;
-
-    }
-
-    $scope.applyInvent = function (invent) {
-        hubConnection.invoke("Invent", invent.id);
+    $scope.selectCard = function (card) {
+        $scope.selectedCard = card;
     }
 
     $scope.join = function (name, evt) {
@@ -258,7 +244,7 @@ app.controller("hub", function ($scope) {
     }
 
     $scope.applyDrop = function () {
-        $scope.dropedInvents.forEach($scope.applyInvent);
+        $scope.dropedInvents.forEach($scope.doTurn);
         $scope.cardDropEvent = false;
     }
 
@@ -300,15 +286,28 @@ app.controller("hub", function ($scope) {
             if ($scope.currentGameState == 'Turning') {
                 setDataValuesToDefault();
             }
+            if ($scope.currentGameState == 'Invent' && $scope.player.action == 2) {
+                setDataValuesToDefault();
+            }
             $scope.prevState = $scope.currentGameState;
         }
-
 
         $scope.$apply();
     });
 
-    $scope.doTurn = function (turn) {
-        hubConnection.invoke("Turn", turn);
+    $scope.doTurn = function (card) {
+        if(card.type && card.type == 'action'){
+            if($scope.currentGameState != 'Turning')
+                return;
+            
+            hubConnection.invoke("Turn", card.description);
+        }else{
+            if($scope.currentGameState != 'Invent')
+                return;
+            
+            hubConnection.invoke("Invent", card.id);
+        }
+        
         $scope.turnApllyed = true;
     };
 
