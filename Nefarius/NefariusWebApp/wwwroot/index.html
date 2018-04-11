@@ -53,7 +53,7 @@
                                 <li>Money: {{player.coins}}</li>
                                 <li>Cards: {{player.inventionCount}}</li>
                                 <li>Spy: <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
-                                <li>GameStae: {{currentGameState}}</li>
+                                <li>GameStae: {{getPlayerCurrentState()}} <div class="player-loader pull-rigth" nh-show="waiting"></div></li>
                                 <li class="player-actions">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
