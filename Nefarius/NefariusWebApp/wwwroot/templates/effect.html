@@ -1,0 +1,6 @@
+<div class="col-xs-12" ng-init="_effects = (effectsList | filter: {direction: dir})" ng-show="_effects.length">
+    <i class="fas fa-long-arrow-alt-{{(owner == 'self') ? 'down' : 'up'}} text-{{(owner == 'self') ? 'success' : 'danger'}} effect-arrow"></i> <i class="fas fa-{{(dir=='get') ? 'plus' : 'minus'}}"></i>
+    <ng-repeat ng-repeat="_e in _effects">
+        <i class="fas {{getEffectIcon(_e.item)}} effect-icon"> {{  (!secondPart(_e)) ? _e.count : '' }}</i> {{ (secondPart(_e)) ? '/' : '' }} <i class="fas {{getEffectIcon(_e.count)}} effect-icon"></i>
+    </ng-repeat>
+</div>

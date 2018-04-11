@@ -1,4 +1,4 @@
-<div class="action-card nefarius-card" ng-class="{'active' : card.active}">
+<div class="action-card nefarius-card" ng-class="{'active' : turnSelected == card.description}">
     <center class="card-container">
         <div class="avatar" ng-style="{'background-color' : card.color}">
             <div ng-show="card.cost" class="cost value">{{card.cost}}</div>

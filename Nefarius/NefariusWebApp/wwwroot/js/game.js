@@ -1,6 +1,6 @@
 var app = new angular.module("nefarius", ['dnd']);
 
-let hubUrl = '/game';
+let hubUrl = 'http://pc-citrgm06.vsegei.ru:2047/game';
 
 let hubConnection = new signalR.HubConnection(hubUrl);
 //let hubConnection = new signalR.HubConnection(hubUrl, { transport: signalR.TransportType.LongPolling }); // For Win7 IIS

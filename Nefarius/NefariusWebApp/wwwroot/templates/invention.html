@@ -25,32 +25,12 @@
         </div>
         <div class="col-xs-9">
             <div class="row" ng-show="_invent.selfEffectList.length">
-                <div class="col-xs-12" ng-init="_selfGet = (_invent.selfEffectList | filter: {direction: 'get'})" ng-show="_selfGet.length">
-                    <i class="fas fa-long-arrow-alt-down text-success effect-arrow"></i> <i class="fas fa-plus"></i>
-                     <ng-repeat  ng-repeat="_effect in _selfGet">
-                         <i class="fas fa-dollar-sign effect-icon" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}"> {{  (_effect.count.length == 1) ? _effect.count : '' }}</i> {{ (_effect.count.length != 1) ? '/' : '' }} <i class="fas fa-dollar-sign effect-icon" ng-if="_effect.count.length != 1" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
-                     </ng-repeat>
-                </div>
-                <div class="col-xs-12" ng-init="_selfDrop = (_invent.selfEffectList | filter: {direction: 'drop'})" ng-show="_selfDrop.length">
-                    <i class="fas fa-long-arrow-alt-down text-success effect-arrow"></i> <i class="fas fa-minus"></i>
-                     <ng-repeat  ng-repeat="_effect in _selfDrop">
-                         <i class="fas fa-dollar-sign effect-icon" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}"> {{  (_effect.count.length == 1) ? _effect.count : '' }}</i> {{ (_effect.count.length != 1) ? '/' : '' }} <i class="fas fa-dollar-sign effect-icon" ng-if="_effect.count.length != 1" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
-                     </ng-repeat>
-                </div>
+                <effect effects-list="_invent.selfEffectList" dir="'get'" owner="'self'"></effect>
+                <effect effects-list="_invent.selfEffectList" dir="'drop'" owner="'self'"></effect>
             </div>
             <div class="row" ng-show="_invent.otherEffectList.length">
-                <div class="col-xs-12" ng-init="_otherGet = (_invent.otherEffectList | filter: {direction: 'get'})" ng-show="_otherGet.length">
-                    <i class="fas fa-long-arrow-alt-up text-danger effect-arrow"></i> <i class="fas fa-plus"></i>
-                     <ng-repeat  ng-repeat="_effect in _otherGet">
-                         <i class="fas fa-dollar-sign effect-icon" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}"> {{  (_effect.count.length == 1) ? _effect.count : '' }}</i> {{ (_effect.count.length != 1) ? '/' : '' }} <i class="fas fa-dollar-sign effect-icon" ng-if="_effect.count.length != 1" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
-                     </ng-repeat>
-                </div>
-                <div class="col-xs-12" ng-init="_otherDrop = (_invent.otherEffectList | filter: {direction: 'drop'})" ng-show="_otherDrop.length">
-                    <i class="fas fa-long-arrow-alt-up text-danger effect-arrow"></i> <i class="fas fa-minus"></i>
-                     <ng-repeat  ng-repeat="_effect in _otherDrop">
-                         <i class="fas fa-dollar-sign effect-icon" ng-class="{'fa-dollar-sign' : _effect.item == 'coin','fa-male' : _effect.item == 'spy', 'fa-info': _effect.item == 'invention'}"> {{  (_effect.count.length == 1) ? _effect.count : '' }}</i> {{ (_effect.count.length != 1) ? '/' : '' }} <i class="fas fa-dollar-sign effect-icon" ng-if="_effect.count.length != 1" ng-class="{'fa-dollar-sign' : _effect.count == 'coin','fa-male' : _effect.count == 'spy', 'fa-info': (_effect.count == 'invented' || _effect.count == 'inventions')}"></i>
-                     </ng-repeat>
-                </div>
+                <effect effects-list="_invent.otherEffectList" dir="'get'" owner="'other'"></effect>
+                <effect effects-list="_invent.otherEffectList" dir="'drop'" owner="'other'"></effect>
             </div>
         </div>
     </div>

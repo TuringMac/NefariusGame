@@ -21,7 +21,14 @@
                 </ng-repeat>
             </center>
         </div>
-
+        <div class="effect-queu-container" ng-show="player.effectQueue.length">
+            <ul class="list-group overlay-over">
+                <li class="list-group-item active">Твои эффекты:</li>
+                <li class="list-group-item effect-queu-item" ng-repeat="_e in player.effectQueue">
+                    <effect effects-list="[_e]" dir="_e.direction" owner="'self'"></effect>
+                </li>
+            </ul>
+        </div>
         <div class="gametable">
             <ng-repeat ng-include="'templates/spy-zone.html'" ng-repeat="_zone in spyZones"></ng-repeat>
         </div>
@@ -53,7 +60,7 @@
                                 <li>Money: {{player.coins}}</li>
                                 <li>Cards: {{player.inventionCount}}</li>
                                 <li>Spy: <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
-                                <li>GameStae: {{getPlayerCurrentState()}} <div class="player-loader pull-rigth" nh-show="waiting"></div></li>
+                                <li>State: {{getPlayerCurrentState()}} <div class="player-loader pull-rigth" nh-show="waiting"></div></li>
                                 <li class="player-actions">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
@@ -91,6 +98,7 @@
         </div>
     </div>
     <script src="js/game.js"></script>
+    <script src="js/directives/effect.js"></script>
 </body>
 
 </html>

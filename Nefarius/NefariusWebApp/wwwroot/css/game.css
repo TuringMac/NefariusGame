@@ -39,6 +39,19 @@ body {
     white-space: nowrap;
 }
 
+
+.effect-queu-container {
+    position: absolute;
+    top: 200px;
+    left: 5%;
+    height: 500px;
+    width: 10%;
+}
+
+.effect-queu-item {
+    height: 40px;
+}
+
 /* width */
 ::-webkit-scrollbar {
     height: 8px;
