@@ -41,6 +41,12 @@ namespace NefariusCore
                 return;
             }
 
+            if (PlayerList.Count >= 6)
+            {
+                Debug.WriteLine("All seats are taken");
+                return;
+            }
+
             pPlayer.Color = ColorDeck.Pop();
             PlayerList.Add(pPlayer);
         }
