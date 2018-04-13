@@ -29,8 +29,9 @@
                 </li>
             </ul>
         </div>
-        <div class="gametable">
+        <div class="gametable" ng-class="{'msg' : hintPosition == 'table'}">
             <ng-repeat ng-include="'templates/spy-zone.html'" ng-repeat="_zone in spyZones"></ng-repeat>
+            <div class="msg-container" ng-show="hintPosition == 'table'">{{hintMsg}}</div>
         </div>
         <footer ng-class="{'overlay-over' : cardDropEvent}">
             <div class="row">
