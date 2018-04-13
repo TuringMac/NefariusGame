@@ -35,12 +35,13 @@
         <footer ng-class="{'overlay-over' : cardDropEvent}">
             <div class="row">
                 <div class="col-xs-5">
-                    <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop)" dnd-droppable="true">
+                    <div class="inventions" ng-class="{'msg' : hintPosition == 'inventions'}" dnd-on-drop="onInventDrop(inventSelectedForDrop)" dnd-droppable="cardDropEvent">
                         <ng-repeat ng-repeat="_invent in player.inventions" dnd-draggable="cardDropEvent" ng-include="'templates/invention.html'" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-click="selectCard(_invent)"></ng-repeat>
+                        <div class="msg-container" ng-show="hintPosition == 'inventions'">{{hintMsg}}</div>
                     </div>
                 </div>
-                <div class="col-xs-2">
-                    <div class="player-data" ng-style="{'background-color': colors[player.color]}">
+                <div class="col-xs-2 ">
+                    <div class="player-data" ng-style="{'background-color': colors[player.color]}" ng-init="_select = false" dnd-on-dragenter="_select = true" dnd-on-dragleave="_select = false" dnd-on-drop="onSpyDrop(draggedSpy,0); _select=false;" dnd-droppable="spyDropEvent" ng-class="{'player-spy-drop' : _select,'msg': hintPosition == 'player'}">
                         <center>
                             <div ng-if="!playerJoined">
                                 <div class="input-group col-md-12">
@@ -59,7 +60,7 @@
                                 <li>Score: {{player.score}}</li>
                                 <li>Money: {{player.coins}}</li>
                                 <li>Cards: {{player.inventionCount}}</li>
-                                <li>Spy: <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
+                                <li>Spy: <i class="fas fa-male spy" dnd-draggable="spyAddEvent" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
                                 <li>State: {{getPlayerCurrentState()}} <div class="player-loader pull-rigth" nh-show="waiting"></div></li>
                                 <li class="player-actions">
                                     <div class="btn-group" role="group" aria-label="...">
@@ -70,13 +71,15 @@
                                 </li>
                             </ul>
                         </center>
+                        <div class="msg-container" ng-show="hintPosition == 'player'">{{hintMsg}}</div>
                     </div>
                 </div>
                 <div class="col-xs-5">
-                    <div class="turns">
+                    <div class="turns" ng-class="{'msg' : hintPosition == 'actions'}">
                         <center>
                             <ng-repeat ng-repeat="card in actions" ng-include="'templates/card.html'" ng-click="selectCard(card)"></ng-repeat>
                         </center>
+                        <div class="msg-container" ng-show="hintPosition == 'actions'">{{hintMsg}}</div>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-<div class="spy-zone col-xs-6" ng-class="{'spy-zone-selected' : selectedZone == _zone.value}" dnd-on-drop="onSpyDrop(draggedSpy, _zone.value)" dnd-droppable="true" dnd-on-dragenter="selectZone(_zone.value)">
+<div class="spy-zone col-xs-6" ng-class="{'spy-zone-selected' : selectedZone == _zone.value}" dnd-on-drop="onSpyDrop(draggedSpy, _zone.value)" dnd-droppable="spyAddEvent" dnd-on-dragenter="selectZone(_zone.value)">
     <div ng-repeat="_enemy in enemys | filter: {id : '!' + player.id}: true" class="enemy-spy-{{$index}}">
         <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[_enemy.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in _enemy.spies | filter: _zone.value track by $index"></i>
     </div>

@@ -474,3 +474,26 @@ footer {
 .angular-dnd-draggable-helper {
     z-index: 1050;
 }
+
+.player-spy-drop {
+    background-color: rgba(121, 234, 165, 0.87) !important;
+}
+
+.msg {
+    border: 5px solid #67eb67;
+    overflow: visible;
+}
+
+.msg .msg-container {
+    position: absolute;
+    top: -25px;
+    left: 10%;
+    height: 30px;
+    width: 80%;
+    color: white;
+    font-weight: bold;
+    border: 5px solid #67eb67;
+    background: #67eb67;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
