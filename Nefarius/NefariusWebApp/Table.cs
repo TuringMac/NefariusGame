@@ -8,25 +8,24 @@ using System.Threading.Tasks;
 
 namespace NefariusWebApp
 {
-    public class Table
+    public class Table //TODO Move to Core
     {
-        private readonly static Lazy<Table> _instance = new Lazy<Table>(() => new Table());
+        public string TableName { get; private set; }
 
-        GameStateCycle _Game;
+        public GameStateCycle Game { get; set; }
 
-        public GameStateCycle Game { get { return _Game; } }
-
-        private Table()
+        internal Table(string pTableName)
         {
+            TableName = pTableName;
             Init();
         }
 
         void Init()
         {
-            if (_Game != null)
-                _Game.StateChanged -= _Game_StateChanged;
-            _Game = new GameStateCycle();
-            _Game.StateChanged += _Game_StateChanged;
+            if (Game != null)
+                Game.StateChanged -= _Game_StateChanged;
+            Game = new GameStateCycle();
+            Game.StateChanged += _Game_StateChanged;
         }
 
         private void _Game_StateChanged(object sender, StateEventArgs e)
@@ -38,45 +37,37 @@ namespace NefariusWebApp
                     break;
                 case GameState.Spying:
                     BroadcastGame();
-                    _Game.Spying();
+                    Game.Spying();
                     break;
                 case GameState.Spy:
                     BroadcastGame();
-                    if (_Game.CheckEverybodyDoSpy())
-                        _Game.State++;
+                    if (Game.CheckEverybodyDoSpy())
+                        Game.State++;
                     break;
                 case GameState.Invent:
                     BroadcastGame();
-                    if (_Game.CheckEverybodyDoInvent())
-                        _Game.State++;
+                    if (Game.CheckEverybodyDoInvent())
+                        Game.State++;
                     break;
                 case GameState.Inventing:
                     BroadcastGame();
-                    _Game.Inventing();
+                    Game.Inventing();
                     break;
                 case GameState.Research:
                     BroadcastGame();
-                    _Game.Researching();
+                    Game.Researching();
                     break;
                 case GameState.Work:
                     BroadcastGame();
-                    _Game.Working();
+                    Game.Working();
                     break;
                 case GameState.Scoring:
                     BroadcastGame();
-                    _Game.Scoring();
+                    Game.Scoring();
                     break;
                 case GameState.Win:
                     BroadcastGame();
                     break;
-            }
-        }
-
-        public static Table Instance
-        {
-            get
-            {
-                return _instance.Value;
             }
         }
 
@@ -88,13 +79,13 @@ namespace NefariusWebApp
 
         public void Join(Player pPlayer)
         {
-            _Game.AddPlayer(pPlayer);
+            Game.AddPlayer(pPlayer);
             BroadcastGame();
         }
 
         public void Begin()
         {
-            _Game.StartGame();
+            Game.StartGame();
         }
 
         public void End()
@@ -105,29 +96,29 @@ namespace NefariusWebApp
 
         public bool Turn(Player pPlayer, GameAction pAction)
         {
-            var result = _Game.Turning(pPlayer, pAction);
+            var result = Game.Turning(pPlayer, pAction);
             BroadcastGame();
             return result;
         }
 
         public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
-            var result = _Game.SetSpy(pPlayer, pDestSpyPosition, pSourceSpyPosition);
+            var result = Game.SetSpy(pPlayer, pDestSpyPosition, pSourceSpyPosition);
             BroadcastGame();
             return result;
         }
 
         public bool Invent(Player pPlayer, Invention pInvention)
         {
-            var result = _Game.Invent(pPlayer, pInvention);
+            var result = Game.Invent(pPlayer, pInvention);
             BroadcastGame();
             return result;
         }
 
         void BroadcastGame()
         {
-            Clients.All.SendAsync("StateChanged", new { players = _Game.PlayerList.Select(p => p.GetPlayerShort(_Game.State > GameState.Turning)), state = _Game.State, move = _Game.Move });
-            foreach (var player in _Game.PlayerList)
+            Clients.All.SendAsync("StateChanged", new { players = Game.PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turning)), state = Game.State, move = Game.Move });
+            foreach (var player in Game.PlayerList)
             {
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }

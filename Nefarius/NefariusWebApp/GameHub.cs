@@ -12,7 +12,7 @@ namespace NefariusWebApp
     {
         private readonly Table _table;
 
-        public GameHub() : this(Table.Instance) { }
+        public GameHub() : this(TableManager.GetTable("tbl1")) { }
 
         GameHub(Table pGameTicker)
         {

@@ -54,7 +54,7 @@ namespace NefariusCore
             }
         }
 
-        public virtual void StartGame()
+        public virtual bool StartGame()
         {
             foreach (var player in PlayerList)
             {
@@ -65,6 +65,7 @@ namespace NefariusCore
                 }
             }
             Move = 1;
+            return true;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace NefariusCore
             return;
         }
 
-        public virtual void Spying()
+        public virtual bool Spying()
         {
             // Если справа или слева от игрока со шпионом разыграли действия
             for (int i = 0; i < PlayerList.Count; i++)
@@ -105,21 +106,19 @@ namespace NefariusCore
                         PlayerList[i].Coins++;
                 }
             }
+            return true;
         }
 
         /// <summary>
         /// Собирает эффекты разыгранных изобретений и применяет их на игроках
         /// </summary>
-        public virtual void Inventing()
+        public virtual bool Inventing()
         {
             EffectManager.Assign(PlayerList);
-            foreach (var player in PlayerList)
-            {
-                while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
-            }
+            return ApplyEffects();
         }
 
-        public virtual void Researching()
+        public virtual bool Researching()
         {
             foreach (var player in PlayerList)
             {
@@ -130,9 +129,10 @@ namespace NefariusCore
                 player.Inventions.Add(InventDeck.Pop());
                 player.Action = GameAction.None;
             }
+            return true;
         }
 
-        public virtual void Working()
+        public virtual bool Working()
         {
             foreach (var player in PlayerList)
             {
@@ -142,6 +142,7 @@ namespace NefariusCore
                 player.Coins += 4;
                 player.Action = GameAction.None;
             }
+            return true;
         }
 
         public virtual bool Scoring() // True to win, false to continue game
@@ -204,6 +205,15 @@ namespace NefariusCore
                 }
             }
             return winner;
+        }
+
+        bool ApplyEffects()
+        {
+            foreach (var player in PlayerList)
+            {
+                while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
+            }
+            return !PlayerList.Where(pl => pl.EffectQueue.Any()).Any(); // Есть ли у кого ещё эффекты
         }
 
         #endregion Methods

@@ -51,17 +51,18 @@ namespace NefariusCore
             PlayerList.Add(pPlayer);
         }
 
-        public override void StartGame()
+        public override bool StartGame()
         {
             if (State != GameState.Init)
             {
                 Debug.WriteLine("Start after Init");
-                return;
+                return false;
             }
 
             base.StartGame();
 
             State++;
+            return true;
         }
 
         /// <summary>
@@ -83,16 +84,18 @@ namespace NefariusCore
             return true;
         }
 
-        public override void Spying()
+        public override bool Spying()
         {
             if (State != GameState.Spying)
             {
-                throw new Exception("Spying after Scoring");
+                Debug.WriteLine("Spying after Scoring");
+                return false;
             }
 
             base.Spying();
 
             State++;
+            return true;
         }
 
         public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
@@ -190,7 +193,7 @@ namespace NefariusCore
             return true;
         }
 
-        public override void Inventing()
+        public override bool Inventing()
         {
             if (State != GameState.Inventing)
                 throw new Exception("Inventing after Invent");
@@ -198,10 +201,14 @@ namespace NefariusCore
             base.Inventing();
 
             if (CheckEverybodyApplyEffects())
+            {
                 State++;
+                return true;
+            }
+            return false;
         }
 
-        public override void Researching()
+        public override bool Researching()
         {
             if (State != GameState.Research)
                 throw new Exception("Researching after Inventing");
@@ -209,9 +216,10 @@ namespace NefariusCore
             base.Researching();
 
             State++;
+            return true;
         }
 
-        public override void Working()
+        public override bool Working()
         {
             if (State != GameState.Work)
                 throw new Exception("Working after Researching");
@@ -219,6 +227,7 @@ namespace NefariusCore
             base.Working();
 
             State++;
+            return true;
         }
 
         public override bool Scoring()
