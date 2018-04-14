@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NefariusWebApp
 {
-    public class Table //TODO Move to Core
+    public class Table
     {
         public string TableName { get; private set; }
         public List<Player> PlayerList { get; private set; } = new List<Player>();
@@ -36,8 +36,17 @@ namespace NefariusWebApp
         public void Begin()
         {
             Game = new Game(PlayerList);
+            Game.PropertyChanged += Game_PropertyChanged;
             Game.Start();
             BroadcastGame();
+        }
+
+        private void Game_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "State")
+            {
+                BroadcastGame();
+            }
         }
 
         public void End()
@@ -82,7 +91,7 @@ namespace NefariusWebApp
 
         void BroadcastTable()
         {
-            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)) });
+            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0 });
             foreach (var player in PlayerList) //TODO remove! here for backward compability
             {
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected

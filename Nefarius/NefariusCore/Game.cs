@@ -1,24 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
 namespace NefariusCore
 {
-    public class Game
+    public class Game : INotifyPropertyChanged
     {
+        GameState _State = GameState.Init;
+
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
         protected List<Player> PlayerList { get; private set; }
         public decimal Move { get; set; } = 0;
-        public GameState State { get; private set; } = GameState.Init;
+        public GameState State
+        {
+            get
+            {
+                return _State;
+            }
+            private set
+            {
+                if (_State != value)
+                {
+                    _State = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         AutoResetEvent turnEvt = new AutoResetEvent(false);
         AutoResetEvent spyEvt = new AutoResetEvent(false);
         AutoResetEvent inventEvt = new AutoResetEvent(false);
         AutoResetEvent effectEvt = new AutoResetEvent(false);
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
         public Game(List<Player> pPlayers)
         {
@@ -189,7 +216,7 @@ namespace NefariusCore
                     return false;
                 }
 
-                inventEvt.Set();
+                effectEvt.Set();
 
                 return true;
             }
