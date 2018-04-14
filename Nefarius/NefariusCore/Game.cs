@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace NefariusCore
 {
@@ -11,53 +10,79 @@ namespace NefariusCore
     {
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
-        public List<Player> PlayerList { get; private set; }
+        protected List<Player> PlayerList { get; private set; }
         public decimal Move { get; set; } = 0;
+        public GameState State { get; private set; } = GameState.Init;
+
+        AutoResetEvent turnEvt = new AutoResetEvent(false);
+        AutoResetEvent spyEvt = new AutoResetEvent(false);
+        AutoResetEvent inventEvt = new AutoResetEvent(false);
+        AutoResetEvent effectEvt = new AutoResetEvent(false);
 
         public Game(List<Player> pPlayers)
         {
             if (pPlayers.Count < 2 || pPlayers.Count > 6)
-                ;// throw new Exception("Wrong Player count. Game for 2 - 6 players. Invite more players"); //TODO
+                throw new Exception("Wrong Player count. Game for 2 - 6 players. Invite more players"); //TODO
 
             PlayerList = pPlayers;
             DeckFiller.Fill(InventDeck);
             DeckFiller.FillColorDeck(ColorDeck);
         }
 
-        public void Run()
+        public bool Start()
         {
-            StartGame();
-
-            while (!HasWinner())
-            {
-                var TurnedPlayers = TurningAsync();
-
-                Spying();
-
-                foreach (var player in PlayerList.Where(p => p.Action == GameAction.Spy))
-                {
-                    //SetSpy(player, GameAction.None, GameAction.Spy); //TODO
-                    Thread.Sleep(2000);
-                }
-
-                foreach (var player in PlayerList.Where(p => p.Action == GameAction.Invent))
-                {
-                    //Invent(player, null); //TODO
-                    Thread.Sleep(2000);
-                }
-
-                Inventing();
-
-                Researching();
-
-                Working();
-            }
+            new Thread(Run).Start();
+            return true;
         }
 
-        public virtual bool StartGame()
+        public bool Stop()
+        {
+            //TODO
+            return false;
+        }
+
+        void Run()
+        {
+            InitGame();
+
+            do
+            {
+                State = GameState.Turn;
+                if (!CheckEverybodyDoAction())
+                    turnEvt.WaitOne(); // Wait for CheckEverybodyDoAction() == true and Set
+
+                State = GameState.Spying;
+                Spying();
+
+                State = GameState.Spy;
+                if (!CheckEverybodyDoSpy())
+                    spyEvt.WaitOne(); // 
+
+                State = GameState.Invent;
+                if (!CheckEverybodyDoInvent())
+                    inventEvt.WaitOne();
+
+                State = GameState.Inventing;
+                Inventing();
+
+                State = GameState.Researching;
+                Researching();
+
+                State = GameState.Working;
+                Working();
+
+                State = GameState.Scoring;
+            } while (!HasWinner());
+
+            State = GameState.Win;
+            GameOver();
+        }
+
+        protected virtual bool InitGame()
         {
             foreach (var player in PlayerList)
             {
+                player.Color = ColorDeck.Pop();
                 player.Coins = 10;
                 for (int i = 0; i < 3; i++) // Каждому по 3 карты
                 {
@@ -68,26 +93,26 @@ namespace NefariusCore
             return true;
         }
 
+        protected virtual bool GameOver()
+        {
+            return true;
+        }
+
         /// <summary>
         /// Выбирают действие на следующий ход
         /// </summary>
         /// <returns></returns>
-        public async Task TurningAsync()
+        public bool Turn(Player pPlayer, GameAction pAction)
         {
-            var getUserTasks = new List<Task>();
+            pPlayer.Action = pAction;
 
-            foreach (var player in PlayerList)
-            {
-                //getUserTasks.Add(Task.Run(() => player.Turn()));
-                //Turning(player, GameAction.None); //TODO
-                //Thread.Sleep(2000);
-            }
+            if (CheckEverybodyDoAction())
+                turnEvt.Set();
 
-            await Task.WhenAll(getUserTasks);
-            return;
+            return true;
         }
 
-        public virtual bool Spying()
+        protected virtual bool Spying()
         {
             // Если справа или слева от игрока со шпионом разыграли действия
             for (int i = 0; i < PlayerList.Count; i++)
@@ -109,16 +134,45 @@ namespace NefariusCore
             return true;
         }
 
+        public bool Spy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
+        {
+            var result = pPlayer.SetSpy(pDestSpyPosition);
+            if (result)
+            {
+                pPlayer.Action = GameAction.None;
+                pPlayer.CurrentSetSpy = GameAction.None;
+            }
+
+            if (CheckEverybodyDoSpy())
+                spyEvt.Set();
+
+            return result;
+        }
+
+        public bool Invent(Player pPlayer, Invention pInvention)
+        {
+            var result = pPlayer.PlayInvention(pInvention);
+
+            if (CheckEverybodyDoInvent())
+                inventEvt.Set();
+
+            return result;
+        }
+
         /// <summary>
         /// Собирает эффекты разыгранных изобретений и применяет их на игроках
         /// </summary>
-        public virtual bool Inventing()
+        protected virtual bool Inventing()
         {
             EffectManager.Assign(PlayerList);
-            return ApplyEffects();
+            while (!ApplyEffects())
+            {
+                effectEvt.WaitOne();
+            }
+            return true;
         }
 
-        public virtual bool Researching()
+        protected virtual bool Researching()
         {
             foreach (var player in PlayerList)
             {
@@ -132,7 +186,7 @@ namespace NefariusCore
             return true;
         }
 
-        public virtual bool Working()
+        protected virtual bool Working()
         {
             foreach (var player in PlayerList)
             {
@@ -145,7 +199,7 @@ namespace NefariusCore
             return true;
         }
 
-        public virtual bool Scoring() // True to win, false to continue game
+        protected virtual bool Scoring() // True to win, false to continue game
         {
             Player winner = null;
             foreach (var player in PlayerList)
@@ -176,6 +230,31 @@ namespace NefariusCore
         }
 
         #region Methods
+
+        public bool CheckEverybodyDoAction()
+        {
+            foreach (var player in PlayerList)
+            {
+                if (player.Action == GameAction.None)
+                    return false;
+            }
+            return true;
+        }
+
+        public bool CheckEverybodyDoSpy()
+        {
+            return !PlayerList.Where(player => player.Action == GameAction.Spy).Any();
+        }
+
+        public bool CheckEverybodyDoInvent()
+        {
+            return !PlayerList.Where(player => player.Action == GameAction.Invent).Any();
+        }
+
+        public bool CheckEverybodyApplyEffects()
+        {
+            return !PlayerList.Where(player => player.EffectQueue.Any()).Any(); // Есть ли игроки у которых остались неразыгранные эффекты
+        }
 
         bool IsWinner(Player pPlayer)
         {
