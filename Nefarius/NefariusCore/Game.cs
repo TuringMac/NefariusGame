@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -104,6 +105,12 @@ namespace NefariusCore
         /// <returns></returns>
         public bool Turn(Player pPlayer, GameAction pAction)
         {
+            if (State != GameState.Turn)
+            {
+                Debug.WriteLine("Turning after Working");
+                return false;
+            }
+
             pPlayer.Action = pAction;
 
             if (CheckEverybodyDoAction())
@@ -136,27 +143,90 @@ namespace NefariusCore
 
         public bool Spy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
-            var result = pPlayer.SetSpy(pDestSpyPosition);
-            if (result)
+            if (pDestSpyPosition == pSourceSpyPosition)
             {
-                pPlayer.Action = GameAction.None;
-                pPlayer.CurrentSetSpy = GameAction.None;
+                Debug.WriteLine("Исходная позиция шпиона совпадает с конечной");
+                return false;
+            }
+            if (pPlayer.Spies.Count(s => s == pSourceSpyPosition) == 0) // Если нет шпионов в исходной позиции
+            {
+                Debug.WriteLine("Нет шпиона в исходной позиции");
+                return false;
             }
 
-            if (CheckEverybodyDoSpy())
-                spyEvt.Set();
+            bool isDrop = pSourceSpyPosition != GameAction.None && pDestSpyPosition == GameAction.None;
+            bool isSet = pSourceSpyPosition == GameAction.None && pDestSpyPosition != GameAction.None;
 
-            return result;
+            if (State == GameState.Spy)
+            {
+                if (pPlayer.Action != GameAction.Spy)
+                {
+                    Debug.WriteLine("Шпионаж не в свой ход");
+                    return false;
+                }
+
+                var result = pPlayer.SetSpy(pDestSpyPosition);
+                if (result)
+                {
+                    pPlayer.Action = GameAction.None;
+                    pPlayer.CurrentSetSpy = GameAction.None;
+                    if (CheckEverybodyDoSpy())
+                        spyEvt.Set();
+                }
+
+                return result;
+            }
+            else if (State == GameState.Inventing)
+            {
+                //TODO Check top effect for drop spy requiring. Continue if not
+                if (isSet && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Get)
+                    pPlayer.SetSpy(pDestSpyPosition);
+                else if (isDrop && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Drop)
+                    pPlayer.DropSpy(pSourceSpyPosition);
+                else // Move (not set, not drop)
+                {
+                    Debug.WriteLine("Moving Spies not allowed");
+                    return false;
+                }
+
+                inventEvt.Set();
+
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine("Spy не в свой ход");
+                return false;
+            }
         }
 
         public bool Invent(Player pPlayer, Invention pInvention)
         {
-            var result = pPlayer.PlayInvention(pInvention);
+            if (State == GameState.Invent)
+            {
+                pPlayer.PlayInvention(pInvention);
 
-            if (CheckEverybodyDoInvent())
-                inventEvt.Set();
+                if (CheckEverybodyDoInvent())
+                    inventEvt.Set();
+            }
+            else if (State == GameState.Inventing)
+            {
+                //TODO Check top effect for drop card requiring. Continue if not
+                pPlayer.DropInvention(pInvention);
+                foreach (var player in PlayerList) // TODO Дублирует код из Inventing
+                {
+                    while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
+                }
 
-            return result;
+                effectEvt.Set();
+            }
+            else
+            {
+                Debug.WriteLine("Invent не в свой ход");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
