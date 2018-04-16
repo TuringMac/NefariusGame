@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Тест</title>
+    <script src="js/signalr.min.js"></script>
+    <script>
+        let hubUrl = localStorage.getItem('hubUrl') || '/game';
+
+        let hubConnection = new signalR.HubConnection(hubUrl);
+
+        hubConnection.start();
+
+        hubConnection.on("PlayerData", function (data) {
+            document.getElementById('player').innerHTML = JSON.stringify(data);
+            //document.getElementById('inv').innerHTML = JSON.stringify(data.inventions);
+        });
+
+        hubConnection.on("StateChanged", function (data) {
+            document.getElementById('game').innerHTML = JSON.stringify(data);
+        });
+    </script>
+</head>
+<body>
+    <input id="txt" type="text"><br />
+    <input type="button" value="Присоединиться" onclick="hubConnection.invoke('Join', document.getElementById('txt').value)"><br />
+    <input type="button" value="Покинуть" onclick="hubConnection.invoke('Leave')"><br />
+    <input type="button" value="Начать игру" onclick="hubConnection.invoke('Begin')"><br />
+    <input type="button" value="Сделать ход" onclick="hubConnection.invoke('Turn', document.getElementById('txt').value)"><br />
+    <input type="button" value="Выставить шпиона" onclick="hubConnection.invoke('Spy', document.getElementById('txt').value, 0)"><br />
+    <input type="button" value="Убрать шпиона" onclick="hubConnection.invoke('Spy', 0, document.getElementById('txt').value)"><br />
+    <input type="button" value="Изобретение" onclick="hubConnection.invoke('Invent', document.getElementById('txt').value)"><br />
+    <input type="button" value="Закончить игру" onclick="hubConnection.invoke('End')"><br />
+    <h3>Игра</h3><br />
+    <p id="game"></p><br />
+    <h3>Игрок</h3><br />
+    <p id="player"></p><br />
+</body>
+</html>
