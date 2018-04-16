@@ -48,18 +48,17 @@ namespace NefariusWebApp
                 _table.End();
         }
 
-        public void Turn(decimal? pAction) //TODO use Nullable<GameAction>
+        public void Turn(GameAction? pAction)
         {
-            decimal userAction = 0;
+            var action = GameAction.None;
             if (pAction.HasValue)
-                userAction = pAction.Value;
+                action = pAction.Value;
             else
             {
                 Debug.WriteLine("Wrong Action from client");
                 return;
             }
 
-            var action = (GameAction)userAction;
             var player = _table.GetPlayer(Context.ConnectionId);
             _table.Turn(player, action);
         }
