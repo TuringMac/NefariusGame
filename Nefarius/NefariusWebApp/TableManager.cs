@@ -10,14 +10,17 @@ namespace NefariusWebApp
         static List<Table> TableList { get; set; } = new List<Table>();
         public static Table GetTable(string pTableName)
         {
-            var table = TableList.SingleOrDefault(tbl => tbl.TableName == pTableName);
-            if (table == null)
+            lock (TableList)
             {
-                table = new Table(pTableName);
-                TableList.Add(table);
-            }
+                var table = TableList.SingleOrDefault(tbl => tbl.TableName == pTableName);
+                if (table == null)
+                {
+                    table = new Table(pTableName);
+                    TableList.Add(table);
+                }
 
-            return table;
+                return table;
+            }
         }
     }
 }
