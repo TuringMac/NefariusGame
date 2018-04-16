@@ -47,6 +47,9 @@ namespace NefariusCore
             }
         }
 
+        public delegate void EffectQueueChangedH();
+        public event EffectQueueChangedH EffectQueueChanged;
+
         public Game(List<Player> pPlayers)
         {
             if (pPlayers.Count < 2 || pPlayers.Count > 6)
@@ -264,6 +267,8 @@ namespace NefariusCore
             EffectManager.Assign(PlayerList);
             while (!ApplyEffects())
             {
+                if (EffectQueueChanged != null)
+                    EffectQueueChanged();
                 effectEvt.WaitOne();
             }
             return true;

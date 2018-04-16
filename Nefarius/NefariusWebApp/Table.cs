@@ -37,7 +37,13 @@ namespace NefariusWebApp
         {
             Game = new Game(PlayerList);
             Game.PropertyChanged += Game_PropertyChanged;
+            Game.EffectQueueChanged += Game_EffectQueueChanged;
             Game.Start();
+            BroadcastGame();
+        }
+
+        private void Game_EffectQueueChanged()
+        {
             BroadcastGame();
         }
 
