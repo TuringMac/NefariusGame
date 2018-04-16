@@ -24,13 +24,13 @@ namespace NefariusWebApp
         {
             if (Game == null)
                 PlayerList.Add(pPlayer);
-            BroadcastTable();
+            BroadcastGame();
         }
 
         public void Leave(Player pPlayer)
         {
             PlayerList.Remove(pPlayer);
-            BroadcastTable();
+            BroadcastGame();
         }
 
         public void Begin()
@@ -62,7 +62,7 @@ namespace NefariusWebApp
                 Game.Stop();
                 Game = null;
             }
-            BroadcastTable();
+            BroadcastGame();
         }
 
         public bool Turn(Player pPlayer, GameAction pAction)
@@ -88,17 +88,11 @@ namespace NefariusWebApp
 
         void BroadcastGame()
         {
-            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turn)), state = Game.State, move = Game.Move, table = TableName });
+            if (Game == null)
+                Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0, table = TableName });
+            else
+                Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turn)), state = Game.State, move = Game.Move, table = TableName });
             foreach (var player in PlayerList)
-            {
-                Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
-            }
-        }
-
-        void BroadcastTable()
-        {
-            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0, table = TableName });
-            foreach (var player in PlayerList) //TODO remove! here for backward compability
             {
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
