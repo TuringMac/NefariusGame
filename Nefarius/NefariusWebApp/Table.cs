@@ -9,7 +9,7 @@ namespace NefariusWebApp
     public class Table
     {
         public string TableName { get; private set; }
-        public List<Player> PlayerList { get; private set; } = new List<Player>();
+        protected List<Player> PlayerList { get; private set; } = new List<Player>();
 
         public Game Game { get; set; }
 
@@ -84,6 +84,16 @@ namespace NefariusWebApp
             var result = Game.Invent(pPlayer, pInvention);
             BroadcastGame();
             return result;
+        }
+
+        public Player GetPlayer(string id)
+        {
+            foreach (var player in PlayerList)
+            {
+                if (string.Equals(player.ID, id))
+                    return player;
+            }
+            return null;
         }
 
         void BroadcastGame()

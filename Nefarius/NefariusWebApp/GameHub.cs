@@ -30,20 +30,20 @@ namespace NefariusWebApp
 
         public void Leave()
         {
-            var player = GetPlayer(Context.ConnectionId);
+            var player = _table.GetPlayer(Context.ConnectionId);
             _table.Leave(player);
         }
 
         public void Begin()
         {
-            var player = GetPlayer(Context.ConnectionId);
+            var player = _table.GetPlayer(Context.ConnectionId);
             if (player != null)
                 _table.Begin();
         }
 
         public void End()
         {
-            var player = GetPlayer(Context.ConnectionId);
+            var player = _table.GetPlayer(Context.ConnectionId);
             if (player != null)
                 _table.End();
         }
@@ -60,38 +60,28 @@ namespace NefariusWebApp
             }
 
             var action = (GameAction)userAction;
-            var player = GetPlayer(Context.ConnectionId);
+            var player = _table.GetPlayer(Context.ConnectionId);
             _table.Turn(player, action);
         }
 
         public void Spy(decimal pTo, decimal pFrom = 0)
         {
-            var player = GetPlayer(Context.ConnectionId);
+            var player = _table.GetPlayer(Context.ConnectionId);
             _table.SetSpy(player, (GameAction)pTo, (GameAction)pFrom);
         }
 
         public void Invent(decimal pInventID)
         {
-            var player = GetPlayer(Context.ConnectionId);
+            var player = _table.GetPlayer(Context.ConnectionId);
             _table.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
-        }
-
-        Player GetPlayer(string id)
-        {
-            foreach (var player in _table.PlayerList)
-            {
-                if (string.Equals(player.ID, id))
-                    return player;
-            }
-            return null;
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (_table.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
+            Player p = _table.GetPlayer(Context.ConnectionId);
+            if (p != null)
             {
-                Player p = GetPlayer(Context.ConnectionId);
-                _table.PlayerList.Remove(p);
+                _table.Leave(p);
                 Debug.Write("Player " + p.Name + " ");
             }
             Debug.WriteLine(Context.ConnectionId + " Lived");
@@ -99,5 +89,3 @@ namespace NefariusWebApp
         }
     }
 }
-// await Clients.All.InvokeAsync("Send", message);
-// Clients.Client(Context.ConnectionId).addContosoChatMessageToPage(name, message);
