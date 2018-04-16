@@ -88,7 +88,7 @@ namespace NefariusWebApp
 
         void BroadcastGame()
         {
-            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turn)), state = Game.State, move = Game.Move });
+            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turn)), state = Game.State, move = Game.Move, table = TableName });
             foreach (var player in PlayerList)
             {
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
@@ -97,7 +97,7 @@ namespace NefariusWebApp
 
         void BroadcastTable()
         {
-            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0 });
+            Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0, table = TableName });
             foreach (var player in PlayerList) //TODO remove! here for backward compability
             {
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
