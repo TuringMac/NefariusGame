@@ -16,6 +16,7 @@ namespace NefariusCore
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
         protected List<Player> PlayerList { get; private set; }
+        internal EffectManager EM { get; set; } //TODO Create Custom replace with rules
         public decimal Move { get; set; } = 0;
         public GameState State
         {
@@ -28,6 +29,7 @@ namespace NefariusCore
                 if (_State != value)
                 {
                     _State = value;
+                    Debug.WriteLine($"State: {_State}");
                     NotifyPropertyChanged();
                 }
             }
@@ -142,7 +144,7 @@ namespace NefariusCore
             }
 
             pPlayer.Action = pAction;
-
+            Debug.WriteLine($"{pPlayer.Name} выбрал(а) карту действия");
             if (CheckEverybodyDoAction())
                 turnEvt.Set();
 
@@ -163,9 +165,15 @@ namespace NefariusCore
                 foreach (var spy in PlayerList[i].Spies)
                 {
                     if (spy == PlayerList[prev].Action)
+                    {
                         PlayerList[i].Coins++;
+                        Debug.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[prev].Name}");
+                    }
                     if (spy == PlayerList[next].Action)
+                    {
                         PlayerList[i].Coins++;
+                        Debug.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[next].Name}");
+                    }
                 }
             }
             return true;
@@ -191,7 +199,7 @@ namespace NefariusCore
             {
                 if (pPlayer.Action != GameAction.Spy)
                 {
-                    Debug.WriteLine("Шпионаж не в свой ход");
+                    Debug.WriteLine($"{pPlayer.Name} Шпионаж не в свой ход");
                     return false;
                 }
 
@@ -200,6 +208,7 @@ namespace NefariusCore
                 {
                     pPlayer.Action = GameAction.None;
                     pPlayer.CurrentSetSpy = GameAction.None;
+                    Debug.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
                     if (CheckEverybodyDoSpy())
                         spyEvt.Set();
                 }
@@ -210,9 +219,15 @@ namespace NefariusCore
             {
                 //TODO Check top effect for drop spy requiring. Continue if not
                 if (isSet && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Get)
+                {
                     pPlayer.SetSpy(pDestSpyPosition);
+                    Debug.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
+                }
                 else if (isDrop && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Drop)
+                {
                     pPlayer.DropSpy(pSourceSpyPosition);
+                    Debug.WriteLine($"{pPlayer.Name} убрал шпиона с {pSourceSpyPosition}");
+                }
                 else // Move (not set, not drop)
                 {
                     Debug.WriteLine("Moving Spies not allowed");
@@ -225,7 +240,7 @@ namespace NefariusCore
             }
             else
             {
-                Debug.WriteLine("Spy не в свой ход");
+                Debug.WriteLine($"{pPlayer.Name} Spy не в свой ход");
                 return false;
             }
         }
@@ -235,7 +250,7 @@ namespace NefariusCore
             if (State == GameState.Invent)
             {
                 pPlayer.PlayInvention(pInvention);
-
+                Debug.WriteLine($"{pPlayer.Name} изобрел {pInvention.Name}");
                 if (CheckEverybodyDoInvent())
                     inventEvt.Set();
             }
@@ -243,16 +258,13 @@ namespace NefariusCore
             {
                 //TODO Check top effect for drop card requiring. Continue if not
                 pPlayer.DropInvention(pInvention);
-                foreach (var player in PlayerList) // TODO Дублирует код из Inventing
-                {
-                    while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
-                }
+                Debug.WriteLine($"{pPlayer.Name} отказался от изобретения {pInvention.Name}");
 
                 effectEvt.Set();
             }
             else
             {
-                Debug.WriteLine("Invent не в свой ход");
+                Debug.WriteLine($"{pPlayer.Name} Invent не в свой ход");
                 return false;
             }
 
@@ -271,6 +283,8 @@ namespace NefariusCore
                     EffectQueueChanged();
                 effectEvt.WaitOne();
             }
+            if (EffectQueueChanged != null)
+                EffectQueueChanged();
             return true;
         }
 
@@ -284,6 +298,7 @@ namespace NefariusCore
                 player.Coins += 2;
                 player.Inventions.Add(InventDeck.Pop());
                 player.Action = GameAction.None;
+                Debug.WriteLine($"{player.Name} провёл исследование");
             }
             return true;
         }
@@ -297,6 +312,7 @@ namespace NefariusCore
 
                 player.Coins += 4;
                 player.Action = GameAction.None;
+                Debug.WriteLine($"{player.Name} отработал смену");
             }
             return true;
         }
