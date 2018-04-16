@@ -91,6 +91,7 @@ namespace NefariusWebApp
             if (_table.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
             {
                 Player p = GetPlayer(Context.ConnectionId);
+                _table.PlayerList.Remove(p);
                 Debug.Write("Player " + p.Name + " ");
             }
             Debug.WriteLine(Context.ConnectionId + " Lived");
