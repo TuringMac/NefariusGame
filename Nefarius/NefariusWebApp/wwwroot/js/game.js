@@ -110,8 +110,8 @@ app.controller("hub", function ($scope) {
             value: 4
         },
     ]
-    
-    function getPlayerActionByEffect(){
+
+    function getPlayerActionByEffect() {
         var effect = $scope.player.effectQueue[0];
         var action = "none";
 
@@ -132,7 +132,7 @@ app.controller("hub", function ($scope) {
                     break;
             }
         }
-        
+
         return action;
     }
 
@@ -183,8 +183,8 @@ app.controller("hub", function ($scope) {
                 break;
             case "Inventing":
                 var action = getPlayerActionByEffect();
-                
-                switch(action){
+
+                switch (action) {
                     case "getSpy":
                         msg = 'Поставь шпиона';
                         hintPosition = 'player';
@@ -230,7 +230,7 @@ app.controller("hub", function ($scope) {
                 hintPosition = 'player';
                 msg = "Роман что то не доделал";
         }
-        
+
         $scope.hintPosition = hintPosition;
         $scope.hintMsg = msg;
 
@@ -253,31 +253,31 @@ app.controller("hub", function ($scope) {
     $scope.player = {
         name: ""
     };
-    
-    function setDataValuesToDefault(){
+
+    function setDataValuesToDefault() {
         $scope.selectedZone = null;
         $scope.selectedCard = null;
         $scope.cardDropEvent = false;
         $scope.turnApllyed = false;
     }
-    
+
     setDataValuesToDefault();
-    
-    function cardCanBeSelected(card){
-        if(card.type && card.type == 'action'){
-            if($scope.currentGameState != 'Turning')
+
+    function cardCanBeSelected(card) {
+        if (card.type && card.type == 'action') {
+            if ($scope.currentGameState != 'Turning')
                 return false;
-        }else{
-            if($scope.currentGameState != 'Invent')
+        } else {
+            if ($scope.currentGameState != 'Invent')
                 return false;
         }
-        
+
         return true;
     }
 
     $scope.selectCard = function (card) {
-        if(cardCanBeSelected(card)){
-           $scope.selectedCard = card;
+        if (cardCanBeSelected(card)) {
+            $scope.selectedCard = card;
         }
     }
 
@@ -302,17 +302,17 @@ app.controller("hub", function ($scope) {
             return;
 
         hubConnection.invoke("Spy", zone, spy);
-        if(zone == 0)
+        if (zone == 0)
             $scope.spyToAdd--;
         else
             $scope.spyToDrop--;
-        
-        if($scope.spyToDrop == 0)
+
+        if ($scope.spyToDrop == 0)
             $scope.spyDropEvent = false;
-        
-        if($scope.spyToAdd == 0)
+
+        if ($scope.spyToAdd == 0)
             $scope.spyAddEvent = false;
-        
+
         $scope.draggedSpy = null;
         $scope.selectedZone = null;
     }
@@ -345,13 +345,13 @@ app.controller("hub", function ($scope) {
         $scope.dropedInvents = [];
         $scope.cardsToDrop = count;
     }
-    
+
     $scope.activateSpyDrop = function (count) {
         $scope.spyDropEvent = true;
         $scope.draggedSpy = null;
         $scope.spyToDrop = count;
     }
-    
+
     $scope.activateSpyAdd = function (count) {
         $scope.spyAddEvent = true;
         $scope.spyToAdd = count;
@@ -410,19 +410,23 @@ app.controller("hub", function ($scope) {
         $scope.$apply();
     });
 
+    hubConnection.onclose(e => {
+        alert(e);
+    });
+
     $scope.doTurn = function (card) {
-        if(cardCanBeSelected(card)){
-            if(card.type == 'action'){
+        if (cardCanBeSelected(card)) {
+            if (card.type == 'action') {
                 hubConnection.invoke("Turn", card.description);
-            }else{
+            } else {
                 hubConnection.invoke("Invent", card.id);
             }
-            
+
             $scope.turnApllyed = true;
         }
     };
-    
-    $scope.sendDropInvent = function(card){
+
+    $scope.sendDropInvent = function (card) {
         hubConnection.invoke("Invent", card.id);
     }
 
