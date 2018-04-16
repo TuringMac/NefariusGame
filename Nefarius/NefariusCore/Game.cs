@@ -13,10 +13,13 @@ namespace NefariusCore
     {
         GameState _State = GameState.Init;
 
+        public Stack<Rule> RuleDeck { get; private set; } = new Stack<Rule>();
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
-        protected List<Player> PlayerList { get; private set; }
-        internal EffectManager EM { get; set; } //TODO Create Custom replace with rules
+        internal List<Player> PlayerList { get; private set; }
+        internal DefaultEffectManager EM { get; set; } //TODO Create Custom replace with rules
+        public Rule FirstRule { get; set; }
+        public Rule SecondRule { get; set; }
         public decimal Move { get; set; } = 0;
         public GameState State
         {
@@ -60,6 +63,10 @@ namespace NefariusCore
             PlayerList = pPlayers;
             DeckFiller.Fill(InventDeck);
             DeckFiller.FillColorDeck(ColorDeck);
+            DeckFiller.FillRuleDeck(RuleDeck);
+            FirstRule = RuleDeck.Pop();
+            SecondRule = RuleDeck.Pop();
+            EM = new DefaultEffectManager(this);
         }
 
         public bool Start()
@@ -276,7 +283,7 @@ namespace NefariusCore
         /// </summary>
         protected virtual bool Inventing()
         {
-            EffectManager.Assign(PlayerList);
+            EM.Assign();
             while (!ApplyEffects())
             {
                 if (EffectQueueChanged != null)
@@ -408,7 +415,7 @@ namespace NefariusCore
         {
             foreach (var player in PlayerList)
             {
-                while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
+                while (player.EffectQueue.Any() && EM.Apply(player)) ;
             }
             return !PlayerList.Where(pl => pl.EffectQueue.Any()).Any(); // Есть ли у кого ещё эффекты
         }

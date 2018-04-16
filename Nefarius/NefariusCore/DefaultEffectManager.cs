@@ -6,12 +6,19 @@ using System.Text;
 
 namespace NefariusCore
 {
-    class EffectManager
+    class DefaultEffectManager : IEffectManager
     {
-        public static void Assign(List<Player> pPlayerList)
+        Game _Game;
+
+        public DefaultEffectManager(Game pGame)
+        {
+            _Game = pGame;
+        }
+
+        public void Assign()
         {
             // Self effects first
-            foreach (var player in pPlayerList)
+            foreach (var player in _Game.PlayerList)
             {
                 if (player.CurrentInvention == null) continue;
 
@@ -20,9 +27,9 @@ namespace NefariusCore
             }
 
             // Other effects second
-            foreach (var player in pPlayerList) // Эффекты по часовой стрелке
+            foreach (var player in _Game.PlayerList) // Эффекты по часовой стрелке
             {
-                foreach (var inventor in pPlayerList) //TODO Reverse?
+                foreach (var inventor in _Game.PlayerList) //TODO Reverse?
                 {
                     if (inventor.CurrentInvention == null) continue;
                     if (inventor == player) continue; // Self effect done before
@@ -35,14 +42,14 @@ namespace NefariusCore
             }
 
             // Clear current invention and work with queue
-            foreach (var inventor in pPlayerList)
+            foreach (var inventor in _Game.PlayerList)
             {
                 if (inventor.CurrentInvention != null)
                     inventor.CurrentInvention = null;
             }
         }
 
-        public static bool Apply(Player pPlayer, Game pGame, bool suspendUserActions = true) //TODO refactor! mb strategy // TODO for debug
+        public bool Apply(Player pPlayer) //TODO refactor! mb strategy // TODO for debug
         {
             if (pPlayer.EffectQueue.Count == 0) return true;
 
@@ -98,7 +105,7 @@ namespace NefariusCore
                 if (eff.Dir == EffectDirection.Get)
                 {
                     for (int i = 0; i < eff.Count; i++)
-                        pPlayer.Inventions.Add(pGame.InventDeck.Pop());
+                        pPlayer.Inventions.Add(_Game.InventDeck.Pop());
                 }
                 else if (eff.Dir == EffectDirection.Drop)
                 {

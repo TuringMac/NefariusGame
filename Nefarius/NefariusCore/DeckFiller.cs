@@ -41,6 +41,23 @@ namespace NefariusCore
             } while (colors.Count > 0);
         }
 
+        public static void FillRuleDeck(Stack<Rule> pDeck)
+        {
+            List<Rule> rules = new List<Rule>();
+            rules.Add(new Rule("Rule #1"));
+            rules.Add(new Rule("Rule #2"));
+            rules.Add(new Rule("Rule #3"));
+            rules.Add(new Rule("Rule #4"));
+            rules.Add(new Rule("Rule #5"));
+            rules.Add(new Rule("Rule #6"));
+
+            pDeck.Clear();
+            do
+            {
+                pDeck.Push(PickRandom(rules));
+            } while (rules.Count > 0);
+        }
+
         static T PickRandom<T>(List<T> pItemsList)
         {
             Random rnd = new Random();
