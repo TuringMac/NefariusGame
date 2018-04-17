@@ -1,133 +1,98 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using NefariusCore;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NefariusWebApp
 {
     public class Table
     {
-        private readonly static Lazy<Table> _instance = new Lazy<Table>(() => new Table());
+        public string TableName { get; private set; }
+        public List<Player> PlayerList { get; private set; } = new List<Player>();
 
-        GameStateCycle _Game;
+        public Game Game { get; set; }
 
-        public GameStateCycle Game { get { return _Game; } }
+        public IHubCallerClients Clients { get; set; }
 
-        private Table()
+        internal Table(string pTableName)
         {
-            Init();
-        }
-
-        void Init()
-        {
-            if (_Game != null)
-                _Game.StateChanged -= _Game_StateChanged;
-            _Game = new GameStateCycle();
-            _Game.StateChanged += _Game_StateChanged;
-        }
-
-        private void _Game_StateChanged(object sender, StateEventArgs e)
-        {
-            switch (e.State)
-            {
-                case GameState.Turning:
-                    BroadcastGame();
-                    break;
-                case GameState.Spying:
-                    BroadcastGame();
-                    _Game.Spying();
-                    break;
-                case GameState.Spy:
-                    BroadcastGame();
-                    if (_Game.CheckEverybodyDoSpy())
-                        _Game.State++;
-                    break;
-                case GameState.Invent:
-                    BroadcastGame();
-                    if (_Game.CheckEverybodyDoInvent())
-                        _Game.State++;
-                    break;
-                case GameState.Inventing:
-                    BroadcastGame();
-                    _Game.Inventing();
-                    break;
-                case GameState.Research:
-                    BroadcastGame();
-                    _Game.Researching();
-                    break;
-                case GameState.Work:
-                    BroadcastGame();
-                    _Game.Working();
-                    break;
-                case GameState.Scoring:
-                    BroadcastGame();
-                    _Game.Scoring();
-                    break;
-                case GameState.Win:
-                    BroadcastGame();
-                    break;
-            }
-        }
-
-        public static Table Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
-
-        public IHubCallerClients Clients
-        {
-            get;
-            set;
+            TableName = pTableName;
         }
 
         public void Join(Player pPlayer)
         {
-            _Game.AddPlayer(pPlayer);
+            if (Game == null)
+                PlayerList.Add(pPlayer);
+            BroadcastGame();
+        }
+
+        public void Leave(Player pPlayer)
+        {
+            PlayerList.Remove(pPlayer);
             BroadcastGame();
         }
 
         public void Begin()
         {
-            _Game.StartGame();
+            Game = new Game(PlayerList);
+            Game.PropertyChanged += Game_PropertyChanged;
+            Game.EffectQueueChanged += Game_EffectQueueChanged;
+            Game.Start();
+            BroadcastGame();
+        }
+
+        private void Game_EffectQueueChanged()
+        {
+            BroadcastGame();
+        }
+
+        private void Game_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "State")
+            {
+                BroadcastGame();
+            }
         }
 
         public void End()
         {
-            Init();
+            if (Game != null)
+            {
+                Game.Stop();
+                Game = null;
+            }
             BroadcastGame();
         }
 
         public bool Turn(Player pPlayer, GameAction pAction)
         {
-            var result = _Game.Turning(pPlayer, pAction);
+            var result = Game.Turn(pPlayer, pAction);
             BroadcastGame();
             return result;
         }
 
         public bool SetSpy(Player pPlayer, GameAction pDestSpyPosition, GameAction pSourceSpyPosition = GameAction.None)
         {
-            var result = _Game.SetSpy(pPlayer, pDestSpyPosition, pSourceSpyPosition);
+            var result = Game.Spy(pPlayer, pDestSpyPosition, pSourceSpyPosition);
             BroadcastGame();
             return result;
         }
 
         public bool Invent(Player pPlayer, Invention pInvention)
         {
-            var result = _Game.Invent(pPlayer, pInvention);
+            var result = Game.Invent(pPlayer, pInvention);
             BroadcastGame();
             return result;
         }
 
         void BroadcastGame()
         {
-            Clients.All.SendAsync("StateChanged", new { players = _Game.PlayerList.Select(p => p.GetPlayerShort(_Game.State > GameState.Turning)), state = _Game.State, move = _Game.Move });
-            foreach (var player in _Game.PlayerList)
+            if (Game == null)
+                Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0, table = TableName });
+            else
+                Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turn)), state = Game.State, move = Game.Move, table = TableName });
+            foreach (var player in PlayerList)
             {
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }

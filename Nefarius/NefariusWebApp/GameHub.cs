@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using NefariusCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ namespace NefariusWebApp
     {
         private readonly Table _table;
 
-        public GameHub() : this(Table.Instance) { }
+        public GameHub() : this(TableManager.GetTable("tbl1")) { }
 
         GameHub(Table pGameTicker)
         {
@@ -27,6 +26,12 @@ namespace NefariusWebApp
             };
             if (Clients != null) _table.Clients = Clients;
             _table.Join(player);
+        }
+
+        public void Leave()
+        {
+            var player = GetPlayer(Context.ConnectionId);
+            _table.Leave(player);
         }
 
         public void Begin()
@@ -73,7 +78,7 @@ namespace NefariusWebApp
 
         Player GetPlayer(string id)
         {
-            foreach (var player in _table.Game.PlayerList)
+            foreach (var player in _table.PlayerList)
             {
                 if (string.Equals(player.ID, id))
                     return player;
@@ -83,9 +88,10 @@ namespace NefariusWebApp
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (_table.Game.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
+            if (_table.PlayerList.Where(p => p.ID == Context.ConnectionId).Any())
             {
                 Player p = GetPlayer(Context.ConnectionId);
+                _table.PlayerList.Remove(p);
                 Debug.Write("Player " + p.Name + " ");
             }
             Debug.WriteLine(Context.ConnectionId + " Lived");
