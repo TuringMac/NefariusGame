@@ -95,19 +95,23 @@ app.controller("hub", function ($scope) {
     $scope.spyZones = [
         {
             bg: 'sprites/SPY.png',
-            value: 1
+            value: 1,
+            cost: 0
         },
         {
             bg: 'sprites/INVENT.png',
-            value: 2
+            value: 2,
+            cost: 2
         },
         {
             bg: 'sprites/STUDY.png',
-            value: 3
+            value: 3,
+            cost: 0
         },
         {
             bg: 'sprites/WORK.png',
-            value: 4
+            value: 4,
+            cost: 1
         },
     ]
     

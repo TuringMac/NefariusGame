@@ -234,7 +234,7 @@ footer {
     border: 1px solid black;
 }
 
-.action-card .cost {
+.action-card .cost{
     background-color: yellow;
     top: -10px;
     left: -10px;
@@ -306,6 +306,28 @@ footer {
 .spy-zone .enemy-spy-5 {
     top: 210px;
     left: 10px;
+}
+
+.spy-zone .zone-cost {
+    position: absolute;
+    right: 45%;
+    bottom: 53px;
+    width: 100px;
+}
+
+.spy-zone .cost {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+    position: absolute;
+    font-weight: bold;
+    border: 1px solid black;
+    background-color: yellow;
+    display: inline-block;
+    margin-left: 6px;
+    margin-top: -4px;
 }
 
 .player-actions {

@@ -6,4 +6,7 @@
     <div class="spy-player">
         <i class="fas fa-male spy" dnd-draggable="true" dnd-draggable-opts="{helper : 'clone'}" ng-style="{'color' : colors[player.color]}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: _zone.value track by $index"></i>
     </div>
+    <div class="zone-cost">
+        <i class="fas fa-male spy" ></i> = <div class="cost">{{_zone.cost}}</div>
+    </div>
 </div>
