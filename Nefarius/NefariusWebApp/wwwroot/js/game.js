@@ -293,8 +293,13 @@ app.controller("hub", function ($scope) {
         hubConnection.invoke("Join", name);
     };
 
-    $scope.selectZone = function (value) {
-        $scope.selectedZone = value;
+    $scope.selectZone = function (zone) {
+        if(zone.cost > $scope.player.coins){
+            $scope.canSpy = false;
+            return;
+        }else
+            $scope.canSpy = true;
+        $scope.selectedZone = zone.value;
     }
 
     $scope.selectSpyByDrag = function (spy) {
