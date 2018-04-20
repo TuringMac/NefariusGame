@@ -51,12 +51,12 @@ namespace NefariusCore
 
         public bool Apply(Player pPlayer) //TODO refactor! mb strategy // TODO for debug
         {
-            if (pPlayer.EffectQueue.Count == 0) return true;
+            if (pPlayer.CurrentEffect == null && pPlayer.EffectQueue.Count > 0)
+                pPlayer.PrepareEffect();
 
-            Effect eff = pPlayer.EffectQueue.Peek();
+            if (pPlayer.CurrentEffect == null) return true;
 
-            if (!eff.IsFormal)
-                FormalizeTop(pPlayer);
+            var eff = pPlayer.CurrentEffect;
 
             if (eff.It == EffectItem.Coin)
             {
@@ -127,54 +127,8 @@ namespace NefariusCore
                 Debug.WriteLine("Wrong item");
             }
 
-            pPlayer.EffectQueue.Dequeue();
-            FormalizeTop(pPlayer);
-            return true;
-        }
+            pPlayer.PrepareEffect();
 
-        /// <summary>
-        /// Очередной эффект заполняется конкретными значениями
-        /// </summary>
-        /// <param name="pPlayer">Игрок</param>
-        /// <returns></returns>
-        static bool FormalizeTop(Player pPlayer)
-        {
-            if (pPlayer.EffectQueue.Count == 0) return true;
-
-            Effect eff = pPlayer.EffectQueue.Peek();
-            switch (eff.direction)
-            {
-                case "get": eff.Dir = EffectDirection.Get; break;
-                case "drop": eff.Dir = EffectDirection.Drop; break;
-                default: Debug.WriteLine("Wrong effect direction"); break;
-            }
-            switch (eff.item)
-            {
-                case "coin": eff.It = EffectItem.Coin; break;
-                case "spy": eff.It = EffectItem.Spy; break;
-                case "invention": eff.It = EffectItem.Invention; break;
-                default: Debug.WriteLine("Wrong effect item"); break;
-            }
-            if (string.Equals(eff.count, "spy"))
-            {
-                eff.Count = pPlayer.GetSpyCount();
-            }
-            else if (string.Equals(eff.count, "invented"))
-            {
-                eff.Count = pPlayer.GetPlayedInventionsCount();
-            }
-            else if (string.Equals(eff.count, "inventions"))
-            {
-                eff.Count = pPlayer.GetInventionsCount();
-            }
-            else
-            {
-                decimal n = 0;
-                if (!decimal.TryParse(eff.count, out n))
-                    Debug.WriteLine("Wrong effect count");
-
-                eff.Count = (int)n;
-            }
             return true;
         }
     }
