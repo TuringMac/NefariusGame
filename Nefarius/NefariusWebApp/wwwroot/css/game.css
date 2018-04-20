@@ -30,13 +30,17 @@ body {
 }
 
 .turns,
-.inventions {
+.inventions-container {
     background: #fff38c;
     border: 5px solid #7f3300;
     border-radius: 20px;
     height: 240px;
     overflow-y: hidden;
     white-space: nowrap;
+}
+
+.inventions {
+    overflow-x: auto;
 }
 
 

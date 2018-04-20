@@ -36,8 +36,10 @@
         <footer ng-class="{'overlay-over' : cardDropEvent}">
             <div class="row">
                 <div class="col-xs-5">
-                    <div class="inventions" ng-class="{'msg' : hintPosition == 'inventions'}" dnd-on-drop="onInventDrop(inventSelectedForDrop)" dnd-droppable="cardDropEvent">
-                        <ng-repeat ng-repeat="_invent in player.inventions" dnd-draggable="cardDropEvent" ng-include="'templates/invention.html'" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-click="selectCard(_invent)"></ng-repeat>
+                    <div class="inventions-container" ng-class="{'msg' : hintPosition == 'inventions'}">
+                        <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop)" dnd-droppable="cardDropEvent">
+                            <ng-repeat ng-repeat="_invent in player.inventions" dnd-draggable="cardDropEvent" ng-include="'templates/invention.html'" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-click="selectCard(_invent)"></ng-repeat>
+                        </div>
                         <div class="msg-container" ng-show="hintPosition == 'inventions'">{{hintMsg}}</div>
                     </div>
                 </div>
@@ -62,7 +64,9 @@
                                 <li>Money: {{player.coins}}</li>
                                 <li>Cards: {{player.inventionCount}}</li>
                                 <li>Spy: <i class="fas fa-male spy" dnd-draggable="spyAddEvent" dnd-draggable-opts="{helper : 'clone'}" dnd-on-dragstart="selectSpyByDrag(_spy)" ng-repeat="_spy in player.spies | filter: 0 track by $index"></i></li>
-                                <li>State: {{getPlayerCurrentState()}} <div class="player-loader pull-rigth" nh-show="waiting"></div></li>
+                                <li>State: {{getPlayerCurrentState()}}
+                                    <div class="player-loader pull-rigth" nh-show="waiting"></div>
+                                </li>
                                 <li class="player-actions">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <a class="btn btn-default" ng-click="startGame()" ng-show="currentGameState == 'Init'">Начать игру</a>
