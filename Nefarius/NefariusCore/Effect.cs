@@ -54,14 +54,6 @@ namespace NefariusCore
                     break;
             }
         }
-
-        public bool IsFormal
-        {
-            get
-            {
-                return true; // TODO remove this property
-            }
-        }
     }
 }
 /*
