@@ -23,6 +23,7 @@ namespace NefariusCore
         public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
         public Queue<EffectDescription> EffectQueue { get; protected set; } = new Queue<EffectDescription>();
         public Effect CurrentEffect { get; protected set; }
+        public bool HasEffect { get { return EffectQueue.Count > 0 || CurrentEffect != null; } }
 
         #endregion Public
 

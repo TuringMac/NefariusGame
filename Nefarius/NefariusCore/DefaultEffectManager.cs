@@ -54,7 +54,11 @@ namespace NefariusCore
             if (pPlayer.CurrentEffect == null && pPlayer.EffectQueue.Count > 0)
                 pPlayer.PrepareEffect();
 
-            if (pPlayer.CurrentEffect == null) return true;
+            if (pPlayer.CurrentEffect == null)
+            {
+                Debug.WriteLine($"{pPlayer.Name} hasn't effects");
+                return true;
+            }
 
             var eff = pPlayer.CurrentEffect;
 

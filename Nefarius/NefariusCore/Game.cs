@@ -291,6 +291,7 @@ namespace NefariusCore
         protected virtual bool Inventing()
         {
             EM.Assign();
+            PrintEffects();
             while (!ApplyEffects())
             {
                 if (EffectQueueChanged != null)
@@ -422,9 +423,23 @@ namespace NefariusCore
         {
             foreach (var player in PlayerList)
             {
-                while (player.EffectQueue.Any() && EM.Apply(player)) ; //TODO Избавиться от EffectQueue.Any(), but CurrentEffect is null at the beggining
+                while (player.HasEffect && EM.Apply(player)) ;
             }
-            return !PlayerList.Where(pl => pl.EffectQueue.Any()).Any(); // Есть ли у кого ещё эффекты
+            return !PlayerList.Where(pl => pl.HasEffect).Any(); // false - эффекты не погашены
+        }
+
+        void PrintEffects()
+        {
+            Debug.WriteLine("--- Effect snapshot ---");
+            foreach (var player in PlayerList)
+            {
+                Debug.WriteLine(player.Name);
+                foreach (var eff in player.EffectQueue)
+                {
+                    Debug.WriteLine($"{eff.direction} {eff.count} {eff.item}");
+                }
+                Debug.WriteLine("----------------");
+            }
         }
 
         #endregion Methods
