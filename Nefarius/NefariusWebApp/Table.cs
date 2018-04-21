@@ -11,7 +11,7 @@ namespace NefariusWebApp
         public string TableName { get; private set; }
         protected List<Player> PlayerList { get; private set; } = new List<Player>();
 
-        public Game Game { get; set; }
+        protected Game Game { get; set; }
 
         public IHubCallerClients Clients { get; set; }
 
