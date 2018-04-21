@@ -9,6 +9,8 @@ namespace NefariusCore
     public class EffectDescription
     {
         [DataMember]
+        public string Inventor { get; set; }
+        [DataMember]
         public string direction { get; set; } // get/drop
         [DataMember]
         public string item { get; set; } // coin/spy/invention

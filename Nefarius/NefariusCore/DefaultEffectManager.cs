@@ -36,6 +36,7 @@ namespace NefariusCore
 
                     foreach (var effect in inventor.CurrentInvention.OtherEffectList)
                     {
+                        effect.Inventor = inventor.Name;
                         player.EffectQueue.Enqueue(effect);
                     }
                 }
@@ -51,7 +52,7 @@ namespace NefariusCore
 
         public bool Apply(Player pPlayer) //TODO refactor! mb strategy // TODO for debug
         {
-            if (pPlayer.CurrentEffect == null && pPlayer.EffectQueue.Count > 0)
+            if (pPlayer.CurrentEffect == null)
                 pPlayer.PrepareEffect();
 
             if (pPlayer.CurrentEffect == null)
