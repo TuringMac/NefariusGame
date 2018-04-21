@@ -14,20 +14,22 @@ namespace NefariusCore
 
         public string ID { get; set; } //TODO Model should not know about signalr ids
         public PlayerColor Color { get; set; }
-        public string Name { get; set; } = "";
+        public string Name { get; protected set; } = "";
         public decimal Coins { get; set; } = 0;
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
         public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
         public bool IsMoved { get { return Action != GameAction.None; } }
         public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
-        public Queue<Effect> EffectQueue { get; protected set; } = new Queue<Effect>();
+        public Queue<EffectDescription> EffectQueue { get; protected set; } = new Queue<EffectDescription>();
+        public Effect CurrentEffect { get; protected set; }
+        public bool HasEffect { get { return EffectQueue.Count > 0 || CurrentEffect != null; } }
 
         #endregion Public
 
         #region Private
 
-        public ICollection<Invention> Inventions { get; set; } = new List<Invention>(); // TODO internal + dataContract
+        public ICollection<Invention> Inventions { get; protected set; } = new List<Invention>(); // TODO internal + dataContract
         public GameAction Action { get; set; } // TODO internal + dataContract
         public Invention CurrentInvention { get; set; } // TODO internal + dataContract
         public GameAction CurrentSetSpy { get; set; }
@@ -181,6 +183,21 @@ namespace NefariusCore
         public int GetPlayedInventionsCount()
         {
             return PlayedInventions.Count();
+        }
+
+        public bool PrepareEffect()
+        {
+            CurrentEffect = null;
+
+            if (EffectQueue.Count > 0)
+            {
+                var effDesc = EffectQueue.Dequeue();
+                var eff = new Effect(effDesc, this);
+                CurrentEffect = eff;
+                Debug.WriteLine($"{Name} должен {effDesc.direction} {eff.Count} {effDesc.item}");
+            }
+
+            return true;
         }
     }
 }

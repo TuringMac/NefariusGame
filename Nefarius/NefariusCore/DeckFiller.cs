@@ -41,6 +41,20 @@ namespace NefariusCore
             } while (colors.Count > 0);
         }
 
+        public static void FillRuleDeck(Stack<Rule> pDeck)
+        {
+            string filename = "Data/rules.json";
+            string json = File.ReadAllText(filename);
+            List<Rule> rules = JsonConvert.DeserializeObject<List<Rule>>(json);
+            ValidateRules(rules);
+
+            pDeck.Clear();
+            do
+            {
+                pDeck.Push(PickRandom(rules));
+            } while (rules.Count > 0);
+        }
+
         static T PickRandom<T>(List<T> pItemsList)
         {
             Random rnd = new Random();
@@ -52,7 +66,7 @@ namespace NefariusCore
 
         static bool ValidateInventions(ICollection<Invention> pInventions)
         {
-            Debug.WriteLine("Start validating deck");
+            Debug.WriteLine("Start validating Inventions deck");
             bool result = true;
             for (int i = 1; i < pInventions.Count + 1; i++)
             {
@@ -87,6 +101,33 @@ namespace NefariusCore
                         result = false;
                     }
                 }
+            }
+            Debug.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
+            return result;
+        }
+
+        static bool ValidateRules(ICollection<Rule> pRules)
+        {
+            Debug.WriteLine("Start validating Rules deck");
+            bool result = true;
+            for (int i = 1; i < pRules.Count + 1; i++)
+            {
+                try
+                {
+                    pRules.Single(rule => rule.ID == i);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Rule ID:{i} {ex.Message}");
+                }
+            }
+            foreach (var rule in pRules)
+            {
+                if (string.IsNullOrWhiteSpace(rule.Description))
+                    Debug.WriteLine("Карта без описания ID:" + rule.ID);
+                if (string.IsNullOrWhiteSpace(rule.Title))
+                    Debug.WriteLine("Карта без названия ID:" + rule.ID);
+
             }
             Debug.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
             return result;

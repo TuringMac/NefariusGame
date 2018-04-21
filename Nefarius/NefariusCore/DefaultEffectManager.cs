@@ -6,12 +6,19 @@ using System.Text;
 
 namespace NefariusCore
 {
-    class EffectManager
+    class DefaultEffectManager : IEffectManager
     {
-        public static void Assign(List<Player> pPlayerList)
+        Game _Game;
+
+        public DefaultEffectManager(Game pGame)
+        {
+            _Game = pGame;
+        }
+
+        public void Assign()
         {
             // Self effects first
-            foreach (var player in pPlayerList)
+            foreach (var player in _Game.PlayerList)
             {
                 if (player.CurrentInvention == null) continue;
 
@@ -20,36 +27,41 @@ namespace NefariusCore
             }
 
             // Other effects second
-            foreach (var player in pPlayerList) // Эффекты по часовой стрелке
+            foreach (var player in _Game.PlayerList) // Эффекты по часовой стрелке
             {
-                foreach (var inventor in pPlayerList) //TODO Reverse?
+                foreach (var inventor in _Game.PlayerList) //TODO Reverse?
                 {
                     if (inventor.CurrentInvention == null) continue;
                     if (inventor == player) continue; // Self effect done before
 
                     foreach (var effect in inventor.CurrentInvention.OtherEffectList)
                     {
+                        effect.Inventor = inventor.Name;
                         player.EffectQueue.Enqueue(effect);
                     }
                 }
             }
 
             // Clear current invention and work with queue
-            foreach (var inventor in pPlayerList)
+            foreach (var inventor in _Game.PlayerList)
             {
                 if (inventor.CurrentInvention != null)
                     inventor.CurrentInvention = null;
             }
         }
 
-        public static bool Apply(Player pPlayer, Game pGame, bool suspendUserActions = true) //TODO refactor! mb strategy // TODO for debug
+        public bool Apply(Player pPlayer) //TODO refactor! mb strategy // TODO for debug
         {
-            if (pPlayer.EffectQueue.Count == 0) return true;
+            if (pPlayer.CurrentEffect == null)
+                pPlayer.PrepareEffect();
 
-            Effect eff = pPlayer.EffectQueue.Peek();
+            if (pPlayer.CurrentEffect == null)
+            {
+                Debug.WriteLine($"{pPlayer.Name} hasn't effects");
+                return true;
+            }
 
-            if (!eff.IsFormal)
-                FormalizeTop(pPlayer);
+            var eff = pPlayer.CurrentEffect;
 
             if (eff.It == EffectItem.Coin)
             {
@@ -98,7 +110,7 @@ namespace NefariusCore
                 if (eff.Dir == EffectDirection.Get)
                 {
                     for (int i = 0; i < eff.Count; i++)
-                        pPlayer.Inventions.Add(pGame.InventDeck.Pop());
+                        pPlayer.Inventions.Add(_Game.InventDeck.Pop());
                 }
                 else if (eff.Dir == EffectDirection.Drop)
                 {
@@ -120,54 +132,8 @@ namespace NefariusCore
                 Debug.WriteLine("Wrong item");
             }
 
-            pPlayer.EffectQueue.Dequeue();
-            FormalizeTop(pPlayer);
-            return true;
-        }
+            pPlayer.PrepareEffect();
 
-        /// <summary>
-        /// Очередной эффект заполняется конкретными значениями
-        /// </summary>
-        /// <param name="pPlayer">Игрок</param>
-        /// <returns></returns>
-        static bool FormalizeTop(Player pPlayer)
-        {
-            if (pPlayer.EffectQueue.Count == 0) return true;
-
-            Effect eff = pPlayer.EffectQueue.Peek();
-            switch (eff.direction)
-            {
-                case "get": eff.Dir = EffectDirection.Get; break;
-                case "drop": eff.Dir = EffectDirection.Drop; break;
-                default: Debug.WriteLine("Wrong effect direction"); break;
-            }
-            switch (eff.item)
-            {
-                case "coin": eff.It = EffectItem.Coin; break;
-                case "spy": eff.It = EffectItem.Spy; break;
-                case "invention": eff.It = EffectItem.Invention; break;
-                default: Debug.WriteLine("Wrong effect item"); break;
-            }
-            if (string.Equals(eff.count, "spy"))
-            {
-                eff.Count = pPlayer.GetSpyCount();
-            }
-            else if (string.Equals(eff.count, "invented"))
-            {
-                eff.Count = pPlayer.GetPlayedInventionsCount();
-            }
-            else if (string.Equals(eff.count, "inventions"))
-            {
-                eff.Count = pPlayer.GetInventionsCount();
-            }
-            else
-            {
-                decimal n = 0;
-                if (!decimal.TryParse(eff.count, out n))
-                    Debug.WriteLine("Wrong effect count");
-
-                eff.Count = (int)n;
-            }
             return true;
         }
     }

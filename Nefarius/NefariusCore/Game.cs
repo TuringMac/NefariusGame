@@ -13,10 +13,13 @@ namespace NefariusCore
     {
         GameState _State = GameState.Init;
 
+        public Stack<Rule> RuleDeck { get; private set; } = new Stack<Rule>();
         public Stack<Invention> InventDeck { get; private set; } = new Stack<Invention>();
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
-        protected List<Player> PlayerList { get; private set; }
-        internal EffectManager EM { get; set; } //TODO Create Custom replace with rules
+        internal List<Player> PlayerList { get; private set; }
+        internal DefaultEffectManager EM { get; set; } //TODO Create Custom replace with rules
+        public Rule FirstRule { get; set; }
+        public Rule SecondRule { get; set; }
         public decimal Move { get; set; } = 0;
         public GameState State
         {
@@ -60,6 +63,10 @@ namespace NefariusCore
             PlayerList = pPlayers;
             DeckFiller.Fill(InventDeck);
             DeckFiller.FillColorDeck(ColorDeck);
+            DeckFiller.FillRuleDeck(RuleDeck);
+            FirstRule = RuleDeck.Pop();
+            SecondRule = RuleDeck.Pop();
+            EM = new DefaultEffectManager(this);
         }
 
         public bool Start()
@@ -105,7 +112,7 @@ namespace NefariusCore
                 Working();
 
                 State = GameState.Scoring;
-            } while (!HasWinner());
+            } while (!HasWinner() && PlayerList.Count >= 2);
 
             State = GameState.Win;
             GameOver();
@@ -116,8 +123,15 @@ namespace NefariusCore
             foreach (var player in PlayerList)
             {
                 player.Color = ColorDeck.Pop();
+
+#if DEBUG
+                player.Coins = 1000;
+                for (int i = 0; i < 10; i++)
+#else
                 player.Coins = 10;
                 for (int i = 0; i < 3; i++) // Каждому по 3 карты
+#endif
+
                 {
                     player.Inventions.Add(InventDeck.Pop());
                 }
@@ -218,12 +232,12 @@ namespace NefariusCore
             else if (State == GameState.Inventing)
             {
                 //TODO Check top effect for drop spy requiring. Continue if not
-                if (isSet && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Get)
+                if (isSet && pPlayer.CurrentEffect != null && pPlayer.CurrentEffect.It == EffectItem.Spy && pPlayer.CurrentEffect.Dir == EffectDirection.Get)
                 {
                     pPlayer.SetSpy(pDestSpyPosition);
                     Debug.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
                 }
-                else if (isDrop && pPlayer.EffectQueue.Any() && pPlayer.EffectQueue.Peek().It == EffectItem.Spy && pPlayer.EffectQueue.Peek().Dir == EffectDirection.Drop)
+                else if (isDrop && pPlayer.CurrentEffect != null && pPlayer.CurrentEffect.It == EffectItem.Spy && pPlayer.CurrentEffect.Dir == EffectDirection.Drop)
                 {
                     pPlayer.DropSpy(pSourceSpyPosition);
                     Debug.WriteLine($"{pPlayer.Name} убрал шпиона с {pSourceSpyPosition}");
@@ -276,7 +290,8 @@ namespace NefariusCore
         /// </summary>
         protected virtual bool Inventing()
         {
-            EffectManager.Assign(PlayerList);
+            EM.Assign();
+            PrintEffects();
             while (!ApplyEffects())
             {
                 if (EffectQueueChanged != null)
@@ -371,7 +386,7 @@ namespace NefariusCore
 
         public bool CheckEverybodyApplyEffects()
         {
-            return !PlayerList.Where(player => player.EffectQueue.Any()).Any(); // Есть ли игроки у которых остались неразыгранные эффекты
+            return !PlayerList.Where(player => player.CurrentEffect != null).Any(); // Есть ли игроки у которых остались неразыгранные эффекты
         }
 
         bool IsWinner(Player pPlayer)
@@ -408,9 +423,23 @@ namespace NefariusCore
         {
             foreach (var player in PlayerList)
             {
-                while (player.EffectQueue.Any() && EffectManager.Apply(player, this)) ;
+                while (player.HasEffect && EM.Apply(player)) ;
             }
-            return !PlayerList.Where(pl => pl.EffectQueue.Any()).Any(); // Есть ли у кого ещё эффекты
+            return !PlayerList.Where(pl => pl.HasEffect).Any(); // false - эффекты не погашены
+        }
+
+        void PrintEffects()
+        {
+            Debug.WriteLine("--- Effect snapshot ---");
+            foreach (var player in PlayerList)
+            {
+                Debug.WriteLine(player.Name);
+                foreach (var eff in player.EffectQueue)
+                {
+                    Debug.WriteLine($"{eff.direction} {eff.count} {eff.item}");
+                }
+                Debug.WriteLine("----------------");
+            }
         }
 
         #endregion Methods
