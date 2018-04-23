@@ -41,6 +41,8 @@ body {
 
 .inventions {
     overflow-x: auto;
+    overflow-y: hidden;
+    height: 100%;
 }
 
 

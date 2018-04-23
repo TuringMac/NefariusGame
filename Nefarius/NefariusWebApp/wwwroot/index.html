@@ -95,8 +95,10 @@
         <h1 class="text-center text-uppercase card-drop-title">Выбери карты для сброса ({{ dropedInvents.length }} / {{cardsToDrop}})</h1>
         <br>
         <br>
-        <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop,cardsToDrop)" dnd-droppable="true">
-            <ng-repeat ng-repeat="_invent in dropedInvents" dnd-draggable="cardDropEvent" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-include="'templates/invention.html'"></ng-repeat>
+        <div class="inventions-container">
+            <div class="inventions" dnd-on-drop="onInventDrop(inventSelectedForDrop,cardsToDrop)" dnd-droppable="true">
+                <ng-repeat ng-repeat="_invent in dropedInvents" dnd-draggable="cardDropEvent" dnd-on-dragstart="selectInventByDrag(_invent,$dragged)" dnd-draggable-opts="{helper : 'clone'}" ng-include="'templates/invention.html'"></ng-repeat>
+            </div>
         </div>
         <br>
         <br>
