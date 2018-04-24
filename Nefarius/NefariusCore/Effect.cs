@@ -8,8 +8,14 @@ using System.Text;
 namespace NefariusCore
 {
     [DataContract]
-    public class Effect : EffectDescription
+    public class Effect
     {
+        [DataMember]
+        public string Direction { get; set; }
+        [DataMember]
+        public string Item { get; set; }
+        [DataMember]
+        public string Inventor { get; set; }
         [DataMember]
         public EffectDirection Dir { get; set; } = EffectDirection.None;
         [DataMember]
@@ -19,6 +25,10 @@ namespace NefariusCore
 
         public Effect(EffectDescription pDescription, Player pPlayer)
         {
+            Direction = pDescription.direction;
+            Item = pDescription.item;
+            Inventor = pDescription.Inventor;
+
             switch (pDescription.direction)
             {
                 case "get": Dir = EffectDirection.Get; break;
