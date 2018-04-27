@@ -12,57 +12,103 @@
         hubConnection.start();
 
         hubConnection.on("PlayerData", function (data) {
+            document.getElementById('name').innerHTML = JSON.stringify(data.name);
             document.getElementById('money').innerHTML = JSON.stringify(data.coins);
-            document.getElementById('score').innerHTML = JSON.stringify(data.Score);
-            document.getElementById('inventions').innerHTML = JSON.stringify(data.inventions);
+            document.getElementById('score').innerHTML = JSON.stringify(data.score);
+            renderInventions(data.inventions);
             document.getElementById('player').innerHTML = JSON.stringify(data);
             document.getElementById('currEff').innerHTML = (data.currentEffect) ? (data.currentEffect.direction + ' ' + data.currentEffect.count + ' ' + data.currentEffect.item) : 'none';
             //document.getElementById('inv').innerHTML = JSON.stringify(data.inventions);
-
         });
 
         hubConnection.on("StateChanged", function (data) {
             document.getElementById('game').innerHTML = JSON.stringify(data);
-            document.getElementById('gameState').innerHTML = data.state;
-            render(data);
+            renderState(data);
         });
 
-        function render(data) {
+        hubConnection.onclose(e => {
+            alert(e);
+        });
+
+        function renderState(data) {
             for (var i = 0; i < 10; i++) {
                 document.getElementById('state' + i).style = 'background-color:white';
             }
             document.getElementById('state' + data.state).style = 'background-color:yellow';
         }
+
+        function renderInventions(invArr) {
+            var cardsHtml = '<table><tr>';
+            for (var i = 0; i < invArr.length; i++) {
+                var id = invArr[i].id,
+                    cost = invArr[i].cost,
+                    score = invArr[i].score,
+                    self = invArr[i].selfEffectList,
+                    other = invArr[i].otherEffectList;
+
+                cardsHtml += '<td><table border="1"><tr><td>$' + cost + ' <b>' + score + '</b></td></tr><tr><td>' + self + '</td></tr><tr><td>' + other + '</td></tr><tr><td><input type="button" value="Play" onclick="hubConnection.invoke(\'Invent\',' + id + ')"></td></tr></table></td>';
+            }
+            cardsHtml += '</tr></table>';
+            document.getElementById('inventions').innerHTML = cardsHtml;
+
+            //<table>
+            //    <tr>
+            //        <td><div>Cost</div><div>Score</div></td>
+            //    </tr>
+            //    <tr>
+            //        <td>Self</td>
+            //    </tr>
+            //    <tr>
+            //        <td>Other</td>
+            //    </tr>
+            //    <tr>
+            //        <td><input type="button" value="Play" onclick="hubConnection.invoke('Invent',id)"></td>
+            //    </tr>
+            //</table>
+        }
     </script>
 </head>
 <body>
-    <table border="1">
+    <table>
+        <caption><b>Game</b></caption>
         <thead>
             <tr>
-                <td><b>Стадия</b></td>
-                <td colspan="9"><b>Действия</b></td>
+                <td><b>State</b></td>
+                <td colspan="9"><b>Actions</b></td>
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td><b>Game</b></td>
+                <td><input type="button" value="Begin" onclick="hubConnection.invoke('Begin')"></td>
+                <td><input type="button" value="End" onclick="hubConnection.invoke('End')"></td>
+            </tr>
+            <tr>
+                <td><b>Player</b></td>
+                <td>Name</td>
+                <td id="name"></td>
+                <td>Score</td>
+                <td id="score"></td>
+                <td>Coins</td>
+                <td id="money"></td>
+                <td><input type="button" value="Leave" onclick="hubConnection.invoke('Leave')"></td>
+            </tr>
             <tr id="state0">
                 <td>0 Join</td>
-                <td><input type="button" value="Покинуть" onclick="hubConnection.invoke('Leave')"></td>
                 <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', 'Player 1')"></td>
                 <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', 'Player 2')"></td>
                 <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', 'Player 3')"></td>
                 <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', 'Player 4')"></td>
                 <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', 'Player 5')"></td>
                 <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', 'Player 6')"></td>
-                <td><input type="button" value="Начать игру" onclick="hubConnection.invoke('Begin')"></td>
-                <td><input type="button" value="Закончить игру" onclick="hubConnection.invoke('End')"></td>
             </tr>
             <tr id="state1">
                 <td>1 Turn</td>
                 <td><input type="button" value="Отменить ход" onclick="hubConnection.invoke('Turn', 0)"></td>
-                <td><input type="button" value="Шпионаж" onclick="hubConnection.invoke('Turn', 1)"></td>
-                <td><input type="button" value="Изобретение" onclick="hubConnection.invoke('Turn', 2)"></td>
-                <td><input type="button" value="Исследование" onclick="hubConnection.invoke('Turn', 3)"></td>
-                <td><input type="button" value="Работа" onclick="hubConnection.invoke('Turn', 4)"></td>
+                <td><input type="button" value="Spy" onclick="hubConnection.invoke('Turn', 1)"></td>
+                <td><input type="button" value="Invent" onclick="hubConnection.invoke('Turn', 2)"></td>
+                <td><input type="button" value="Research" onclick="hubConnection.invoke('Turn', 3)"></td>
+                <td><input type="button" value="Work" onclick="hubConnection.invoke('Turn', 4)"></td>
             </tr>
             <tr id="state2">
                 <td>2 Spying</td>
@@ -89,7 +135,7 @@
             </tr>
             <tr id="state4">
                 <td>4 Invent</td>
-                <td colspan="9"><div id="invs">List of inventions with scroll</div></td>
+                <td id="inventions" colspan="9">List of inventions with scroll</td>
             </tr>
             <tr id="state5">
                 <td>5 Inventing</td>
@@ -113,17 +159,10 @@
             </tr>
         </tbody>
     </table>
-    <input id="txt" type="text"><br />
-    <input type="button" value="Убрать шпиона" onclick="hubConnection.invoke('Spy', 0, document.getElementById('txt').value)"><br />
-    <input type="button" value="Изобретение" onclick="hubConnection.invoke('Invent', document.getElementById('txt').value)"><br />
     <br />
     <h3>Игра</h3><br />
-    <p id="gameState"></p><br />
     <p id="game"></p><br />
     <h3>Игрок</h3><br />
-    <p id="money"></p><br />
-    <p id="score"></p><br />
-    <p id="inventions"></p><br />
     <p id="player"></p><br />
 </body>
 </html>
