@@ -16,29 +16,107 @@
             document.getElementById('score').innerHTML = JSON.stringify(data.Score);
             document.getElementById('inventions').innerHTML = JSON.stringify(data.inventions);
             document.getElementById('player').innerHTML = JSON.stringify(data);
+            document.getElementById('currEff').innerHTML = (data.currentEffect) ? (data.currentEffect.direction + ' ' + data.currentEffect.count + ' ' + data.currentEffect.item) : 'none';
             //document.getElementById('inv').innerHTML = JSON.stringify(data.inventions);
+
         });
 
         hubConnection.on("StateChanged", function (data) {
             document.getElementById('game').innerHTML = JSON.stringify(data);
             document.getElementById('gameState').innerHTML = data.state;
+            render(data);
         });
+
+        function render(data) {
+            for (var i = 0; i < 10; i++) {
+                document.getElementById('state' + i).style = 'background-color:white';
+            }
+            document.getElementById('state' + data.state).style = 'background-color:yellow';
+        }
     </script>
 </head>
 <body>
+    <table border="1">
+        <thead>
+            <tr>
+                <td><b>Стадия</b></td>
+                <td colspan="9"><b>Действия</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="state0">
+                <td>0 Join</td>
+                <td><input type="button" value="Покинуть" onclick="hubConnection.invoke('Leave')"></td>
+                <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', 'Player 1')"></td>
+                <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', 'Player 2')"></td>
+                <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', 'Player 3')"></td>
+                <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', 'Player 4')"></td>
+                <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', 'Player 5')"></td>
+                <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', 'Player 6')"></td>
+                <td><input type="button" value="Начать игру" onclick="hubConnection.invoke('Begin')"></td>
+                <td><input type="button" value="Закончить игру" onclick="hubConnection.invoke('End')"></td>
+            </tr>
+            <tr id="state1">
+                <td>1 Turn</td>
+                <td><input type="button" value="Отменить ход" onclick="hubConnection.invoke('Turn', 0)"></td>
+                <td><input type="button" value="Шпионаж" onclick="hubConnection.invoke('Turn', 1)"></td>
+                <td><input type="button" value="Изобретение" onclick="hubConnection.invoke('Turn', 2)"></td>
+                <td><input type="button" value="Исследование" onclick="hubConnection.invoke('Turn', 3)"></td>
+                <td><input type="button" value="Работа" onclick="hubConnection.invoke('Turn', 4)"></td>
+            </tr>
+            <tr id="state2">
+                <td>2 Spying</td>
+                <td colspan="9">Game count coins for spying</td>
+            </tr>
+            <tr id="state3">
+                <td>3 Spy</td>
+                <td>
+                    <input type="button" value="To Spy" onclick="hubConnection.invoke('Spy', 1, 0)"><br />
+                    <input type="button" value="From Spy" onclick="hubConnection.invoke('Spy', 0, 1)">
+                </td>
+                <td>
+                    <input type="button" value="To Invent $2" onclick="hubConnection.invoke('Spy', 2, 0)"><br />
+                    <input type="button" value="From Invent" onclick="hubConnection.invoke('Spy', 0, 2)">
+                </td>
+                <td>
+                    <input type="button" value="To Research" onclick="hubConnection.invoke('Spy', 3, 0)"><br />
+                    <input type="button" value="From Research" onclick="hubConnection.invoke('Spy', 0, 3)">
+                </td>
+                <td>
+                    <input type="button" value="To Work $1" onclick="hubConnection.invoke('Spy', 4, 0)"><br />
+                    <input type="button" value="From Work" onclick="hubConnection.invoke('Spy', 0, 4)">
+                </td>
+            </tr>
+            <tr id="state4">
+                <td>4 Invent</td>
+                <td colspan="9"><div id="invs">List of inventions with scroll</div></td>
+            </tr>
+            <tr id="state5">
+                <td>5 Inventing</td>
+                <td colspan="9"><div id="currEff">Current effect here</div></td>
+            </tr>
+            <tr id="state6">
+                <td>6 Researching</td>
+                <td colspan="9">Just get invention and coins</td>
+            </tr>
+            <tr id="state7">
+                <td>7 Working</td>
+                <td colspan="9">Get some coins</td>
+            </tr>
+            <tr id="state8">
+                <td>8 Scoring</td>
+                <td colspan="9">Check player's score</td>
+            </tr>
+            <tr id="state9">
+                <td>9 Win</td>
+                <td colspan="9">Winner is: hmmm...</td>
+            </tr>
+        </tbody>
+    </table>
     <input id="txt" type="text"><br />
-    <input type="button" value="Присоединиться" onclick="hubConnection.invoke('Join', document.getElementById('txt').value)"><br />
-    <input type="button" value="Покинуть" onclick="hubConnection.invoke('Leave')"><br />
-    <input type="button" value="Начать игру" onclick="hubConnection.invoke('Begin')"><br />
-    <input type="button" value="Шпионаж" onclick="hubConnection.invoke('Turn', 1)">
-    <input type="button" value="Изобретение" onclick="hubConnection.invoke('Turn', 2)">
-    <input type="button" value="Исследование" onclick="hubConnection.invoke('Turn', 3)">
-    <input type="button" value="Работа" onclick="hubConnection.invoke('Turn', 4)">
-    <input type="button" value="Отменить ход" onclick="hubConnection.invoke('Turn', 0)"><br />
-    <input type="button" value="Выставить шпиона" onclick="hubConnection.invoke('Spy', document.getElementById('txt').value, 0)"><br />
     <input type="button" value="Убрать шпиона" onclick="hubConnection.invoke('Spy', 0, document.getElementById('txt').value)"><br />
     <input type="button" value="Изобретение" onclick="hubConnection.invoke('Invent', document.getElementById('txt').value)"><br />
-    <input type="button" value="Закончить игру" onclick="hubConnection.invoke('End')"><br />
+    <br />
     <h3>Игра</h3><br />
     <p id="gameState"></p><br />
     <p id="game"></p><br />
