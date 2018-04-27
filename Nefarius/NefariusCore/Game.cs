@@ -334,32 +334,18 @@ namespace NefariusCore
 
         protected virtual bool Scoring() // True to win, false to continue game
         {
-            Player winner = null;
-            foreach (var player in PlayerList)
+            var maxScore = PlayerList.Max(p => p.Score);
+            if (maxScore > 20) // Any player has more than 20
             {
-                if (player.Score >= 20)
+                var playersWithMax = PlayerList.Where(p => p.Score == maxScore);
+                if (playersWithMax.Count() == 1) // Only one player with max score
                 {
-                    if (winner != null) // Когда более одного 
-                    {
-                        if (winner.Score == player.Score)
-                        {
-                            Move++;
-                            return false;
-                        }
-                        else if (winner.Score < player.Score)
-                            winner = player;
-                    }
-                    else
-                        winner = player;
+                    return true;
                 }
             }
-            if (winner == null) // Когда ниодного
-            {
-                Move++;
-                return false;
-            }
-            else
-                return true;
+            // Have not players with win score OR more than one winner
+            Move++;
+            return false;
         }
 
         #region Methods
