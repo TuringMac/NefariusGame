@@ -23,18 +23,19 @@
 
         hubConnection.on("StateChanged", function (data) {
             document.getElementById('game').innerHTML = JSON.stringify(data);
-            renderState(data);
+            renderState(data.state);
+            renderPlayers(data.players);
         });
 
         hubConnection.onclose(e => {
             alert(e);
         });
 
-        function renderState(data) {
+        function renderState(state) {
             for (var i = 0; i < 10; i++) {
                 document.getElementById('state' + i).style = 'background-color:white';
             }
-            document.getElementById('state' + data.state).style = 'background-color:yellow';
+            document.getElementById('state' + state).style = 'background-color:yellow';
         }
 
         function renderInventions(invArr) {
@@ -72,6 +73,30 @@
             //    </tr>
             //</table>
         }
+
+        function renderPlayers(playerArr) {
+            var playersHtml = '<table><tr>';
+            for (var i = 0; i < playerArr.length; i++) {
+                var name = playerArr[i].name,
+                    coins = playerArr[i].coins,
+                    score = playerArr[i].score,
+                    action = (playerArr[i].isMoved) ? playerArr[i].action : 'moving',
+                    color = 'yellow';
+
+                switch (action) {
+                    case 0: action = 'moved'; color = 'green'; break;
+                    case 1: action = 'Spy'; color = 'green'; break;
+                    case 2: action = 'Invent'; color = 'green'; break;
+                    case 3: action = 'Research'; color = 'green'; break;
+                    case 4: action = 'Work'; color = 'green'; break;
+                    default: action = 'moving'; color = 'yellow'; break;
+                }
+
+                playersHtml += '<td><table border="1"><tr><td><b>' + name + '</b>[' + score + ']</td></tr><tr><td>Coins: ' + coins + '</td></tr><tr><td style="background-color:' + color + '">' + action + '</td></tr></table></td>';
+            }
+            playersHtml += '</tr></table>';
+            document.getElementById('playerList').innerHTML = playersHtml;
+        }
     </script>
 </head>
 <body>
@@ -89,6 +114,19 @@
                 <td><input type="button" value="Begin" onclick="hubConnection.invoke('Begin')"></td>
                 <td><input type="button" value="End" onclick="hubConnection.invoke('End')"></td>
             </tr>
+            <tr id="state0">
+                <td>0 Join</td>
+                <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', 'Player 1')"></td>
+                <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', 'Player 2')"></td>
+                <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', 'Player 3')"></td>
+                <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', 'Player 4')"></td>
+                <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', 'Player 5')"></td>
+                <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', 'Player 6')"></td>
+            </tr>
+            <tr>
+                <td><b>Opponents</b></td>
+                <td id="playerList" colspan="9"></td>
+            </tr>
             <tr>
                 <td><b>Player</b></td>
                 <td>Name</td>
@@ -98,15 +136,6 @@
                 <td>Coins</td>
                 <td id="money"></td>
                 <td><input type="button" value="Leave" onclick="hubConnection.invoke('Leave')"></td>
-            </tr>
-            <tr id="state0">
-                <td>0 Join</td>
-                <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', 'Player 1')"></td>
-                <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', 'Player 2')"></td>
-                <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', 'Player 3')"></td>
-                <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', 'Player 4')"></td>
-                <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', 'Player 5')"></td>
-                <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', 'Player 6')"></td>
             </tr>
             <tr id="state1">
                 <td>1 Turn</td>
