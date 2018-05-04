@@ -98,12 +98,10 @@ namespace NefariusWebApp
 
         void BroadcastGame()
         {
-            if (Game == null)
-                Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(false)), state = 0, move = 0, table = TableName });
-            else
-                Clients.All.SendAsync("StateChanged", new { players = PlayerList.Select(p => p.GetPlayerShort(Game.State > GameState.Turn)), state = Game.State, move = Game.Move, table = TableName });
             foreach (var player in PlayerList)
             {
+                Clients.Client(player.ID).SendAsync("StateChanged", new { players = PlayerList.Where(p => p.ID != player.ID).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn)), state = Game?.State, move = Game?.Move, table = TableName });
+
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
         }
