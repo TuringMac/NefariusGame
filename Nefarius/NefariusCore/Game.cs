@@ -332,22 +332,6 @@ namespace NefariusCore
             return true;
         }
 
-        protected virtual bool Scoring() // True to win, false to continue game
-        {
-            var maxScore = PlayerList.Max(p => p.Score);
-            if (maxScore > 20) // Any player has more than 20
-            {
-                var playersWithMax = PlayerList.Where(p => p.Score == maxScore);
-                if (playersWithMax.Count() == 1) // Only one player with max score
-                {
-                    return true;
-                }
-            }
-            // Have not players with win score OR more than one winner
-            Move++;
-            return false;
-        }
-
         #region Methods
 
         public bool CheckEverybodyDoAction()
@@ -387,22 +371,20 @@ namespace NefariusCore
 
         bool HasWinner()
         {
-            bool winner = false;
-            foreach (var player in PlayerList)
+            var maxScore = PlayerList.Max(p => p.Score);
+            if (maxScore > 20) // Any player has more than 20
             {
-                if (IsWinner(player))
+                var playersWithMax = PlayerList.Where(p => p.Score == maxScore);
+                if (playersWithMax.Count() == 1) // Only one player with max score
                 {
-                    if (winner) // 2 or more winners
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        winner = true;
-                    }
+                    //var winner = playersWithMax.First();
+                    //Debug.WriteLine(winner.Name + " is Winner!!");
+                    return true;
                 }
             }
-            return winner;
+            // Have not players with win score OR more than one winner
+            Move++;
+            return false;
         }
 
         bool ApplyEffects()
