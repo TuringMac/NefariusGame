@@ -126,6 +126,9 @@ namespace NefariusCore
 
 #if DEBUG
                 player.Coins = 1000;
+                player.PlayedInventions.Add(InventDeck.Pop());
+                player.PlayedInventions.Add(InventDeck.Pop());
+                player.PlayedInventions.Add(InventDeck.Pop());
                 for (int i = 0; i < 10; i++)
 #else
                 player.Coins = 10;
