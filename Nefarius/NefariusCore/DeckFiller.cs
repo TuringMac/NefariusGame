@@ -20,6 +20,7 @@ namespace NefariusCore
             pDeck.Clear();
             do
             {
+                //Rule 7 inv.Cost = Math.Ceiling((inv.Cost/2.));
                 pDeck.Push(PickRandom(inventions));
             } while (inventions.Count > 0);
         }

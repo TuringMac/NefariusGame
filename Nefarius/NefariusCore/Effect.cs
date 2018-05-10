@@ -44,6 +44,7 @@ namespace NefariusCore
                     break;
                 case "inventions":
                     Count = pPlayer.GetInventionsCount();
+                    //Rule 33 Count = pPlayer.GetPlayedInventionsCount();
                     break;
                 default:
                     decimal n = 0;

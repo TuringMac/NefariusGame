@@ -17,13 +17,17 @@ namespace NefariusCore
 
         public void Assign()
         {
+            //Rule 15 if invent hasnt effect - use previous invent effects
             // Self effects first
             foreach (var player in _Game.PlayerList)
             {
                 if (player.CurrentInvention == null) continue;
 
                 foreach (var eff in player.CurrentInvention.SelfEffectList)
+                {
                     player.EffectQueue.Enqueue(eff);
+                    //Rule 9 +effect get invention +effect drop envention
+                }
             }
 
             // Other effects second
@@ -39,6 +43,7 @@ namespace NefariusCore
                         effect.Inventor = inventor.Name;
                         player.EffectQueue.Enqueue(effect);
                     }
+                    //Rule 30 other players drop 2 coins
                 }
             }
 

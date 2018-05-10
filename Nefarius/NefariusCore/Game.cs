@@ -87,6 +87,10 @@ namespace NefariusCore
 
             do
             {
+                //Rule 16 Wait for invent from everybody (invent should be rewrited)
+                //Rule 8 монеты кратные 5
+                //Rule 1 if(player.PlayedInventions.Count == 0) player.Coins += 2;
+                //Rule 18 player.Coins += 2
                 State = GameState.Turn;
                 if (!CheckEverybodyDoAction())
                     turnEvt.WaitOne(); // Wait for CheckEverybodyDoAction() == true and Set
@@ -110,6 +114,10 @@ namespace NefariusCore
 
                 State = GameState.Working;
                 Working();
+
+                //Rule 3 playerList.Where(GameAction==Invent){Drop all inventions, get same count inventions} mb in inventing effect
+                //Rule 19 Drop 1 coin for each player with the same action
+                //Rule 23 if(player.coin==0)player.Coin=2; if(player.Inventions.Count==0)player.Inventions.Add(InventionsDeck.Pop());
 
                 State = GameState.Scoring;
             } while (!HasWinner() && PlayerList.Count >= 2);
@@ -135,6 +143,8 @@ namespace NefariusCore
                 {
                     player.Inventions.Add(InventDeck.Pop());
                 }
+                //Rule 24 player.Coins += 10;
+                //Rule 33 +7 inventions
             }
             Move = 1;
             return true;
@@ -156,8 +166,11 @@ namespace NefariusCore
                 Debug.WriteLine("Turning after Working");
                 return false;
             }
+            //Rule 2 if(pPlayer.PrevAction == pAction) return false;
 
+            //Rule 22 pPlayer.Action1= ; pPlayer.Action2= ; two different actions per move
             pPlayer.Action = pAction;
+            //Rule 20 reward for more spies in action +2 coins
             Debug.WriteLine($"{pPlayer.Name} выбрал(а) карту действия");
             if (CheckEverybodyDoAction())
                 turnEvt.Set();
@@ -175,16 +188,19 @@ namespace NefariusCore
 
                 if (prev < 0) prev = PlayerList.Count - 1;
                 if (next > PlayerList.Count - 1) next = 0;
-
+                //Rule 35 if(player.PlayedInventions.Count==player.GetSpyCount())
                 foreach (var spy in PlayerList[i].Spies)
                 {
+                    //Rule 14 if(spy == PlayerList[i].Action) PlayerList[i].Coins++;
                     if (spy == PlayerList[prev].Action)
                     {
+                        //Rule 11 //Rule 21 if(player.Action ==Research) PlayerList[i].Coins++; Doubles profit
                         PlayerList[i].Coins++;
                         Debug.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[prev].Name}");
                     }
                     if (spy == PlayerList[next].Action)
                     {
+                        //Rule 11 //Rule 21 if(player.Action ==Research) PlayerList[i].Coins++; Doubles profit
                         PlayerList[i].Coins++;
                         Debug.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[next].Name}");
                     }
@@ -220,6 +236,8 @@ namespace NefariusCore
                 var result = pPlayer.SetSpy(pDestSpyPosition);
                 if (result)
                 {
+                    //Rule 29 player.Coin += GetSpyCount(player.Action); //TODO remember spy coint before anybody set spy
+                    //Rule 17 player get invention
                     pPlayer.Action = GameAction.None;
                     pPlayer.CurrentSetSpy = GameAction.None;
                     Debug.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
@@ -264,6 +282,9 @@ namespace NefariusCore
             if (State == GameState.Invent)
             {
                 pPlayer.PlayInvention(pInvention);
+                //Rule 10 drop invention
+                //Rule 27 get invention
+                //Rule 5 if(pInvention.Score>player.PlayedInvention.Max(inv=>inv.Score))player.Coin+=2;
                 Debug.WriteLine($"{pPlayer.Name} изобрел {pInvention.Name}");
                 if (CheckEverybodyDoInvent())
                     inventEvt.Set();
@@ -290,7 +311,9 @@ namespace NefariusCore
         /// </summary>
         protected virtual bool Inventing()
         {
+            //Rule 28 Disable effects
             EM.Assign();
+            //Rule 26 //Rule 21 effects playes twise. double assign
             PrintEffects();
             while (!ApplyEffects())
             {
@@ -310,8 +333,10 @@ namespace NefariusCore
                 if (player.Action != GameAction.Research)
                     continue;
 
+                //Rule 4 no coin income
                 player.Coins += 2;
                 player.Inventions.Add(InventDeck.Pop());
+                //Rule 10 player.Inventions.Add(InventDeck.Pop());
                 player.Action = GameAction.None;
                 Debug.WriteLine($"{player.Name} провёл исследование");
             }
@@ -334,10 +359,12 @@ namespace NefariusCore
 
         protected virtual bool Scoring() // True to win, false to continue game
         {
+            //Rule 12 win score == 30
+            decimal winScore = 20;
             Player winner = null;
             foreach (var player in PlayerList)
             {
-                if (player.Score >= 20)
+                if (player.Score >= winScore)
                 {
                     if (winner != null) // Когда более одного 
                     {
@@ -440,6 +467,20 @@ namespace NefariusCore
                 }
                 Debug.WriteLine("----------------");
             }
+        }
+
+        decimal GetSpyCount(GameAction pArea)
+        {
+            decimal result = 0;
+            foreach (var player in PlayerList)
+            {
+                foreach (var spy in player.Spies)
+                {
+                    if (spy == pArea)
+                        result++;
+                }
+            }
+            return result;
         }
 
         #endregion Methods

@@ -18,7 +18,18 @@ namespace NefariusCore
         public decimal Coins { get; set; } = 0;
         public GameAction[] Spies { get; protected set; }
         public decimal InventionCount { get { return Inventions.Count; } }
-        public decimal Score { get { return PlayedInventions.Sum(inv => inv.Score); } }
+
+        //Rule 36 if(GetSpyCount()==0) +3 score
+        public decimal Score
+        {
+            get
+            {
+                //Rule 32 +5 points in >=5 inventions
+                //Rule 25 each invention +1 score PlayedInventions.Sum(inv => inv.Score) + PlayedInvention.Count;
+                //Rule 31 Score += (int)player.Coins / 5
+                return PlayedInventions.Sum(inv => inv.Score);
+            }
+        }
         public bool IsMoved { get { return Action != GameAction.None; } }
         public ICollection<Invention> PlayedInventions { get; protected set; } = new List<Invention>();
         public Queue<EffectDescription> EffectQueue { get; protected set; } = new Queue<EffectDescription>();
@@ -163,8 +174,11 @@ namespace NefariusCore
                 return false;
             }
 
+            //Rule 34 +Effect drop spy/ if have not set spy to spy-zone and skip invention
             PlayedInventions.Add(pInvention);
             Coins -= CurrentInvention.Cost;
+            //Rule 13 Coins = 0;
+
             Action = GameAction.None;
 
             return true;
