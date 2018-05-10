@@ -31,6 +31,8 @@ namespace NefariusWebApp
         {
             PlayerList.Remove(pPlayer);
             BroadcastGame();
+            if (PlayerList.Count < 2)
+                End();
         }
 
         public void Begin()
