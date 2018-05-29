@@ -18,6 +18,7 @@ namespace NefariusCore
         public Stack<PlayerColor> ColorDeck { get; private set; } = new Stack<PlayerColor>();
         internal List<Player> PlayerList { get; private set; }
         internal DefaultEffectManager EM { get; set; } //TODO Create Custom replace with rules
+        Thread GameThread { get; set; }
         public Rule FirstRule { get; set; }
         public Rule SecondRule { get; set; }
         public decimal Move { get; set; } = 0;
@@ -71,13 +72,18 @@ namespace NefariusCore
 
         public bool Start()
         {
-            new Thread(Run).Start();
+            Stop();
+            GameThread = new Thread(Run);
+            GameThread.Start();
             return true;
         }
 
         public bool Stop()
         {
-            //TODO
+            if (GameThread != null)
+            {
+                //GameThread.Abort(); // Exception Abort not supported on this platform
+            }
             return false;
         }
 
@@ -87,6 +93,7 @@ namespace NefariusCore
 
             do
             {
+                Move++;
                 State = GameState.Turn;
                 if (!CheckEverybodyDoAction())
                     turnEvt.WaitOne(); // Wait for CheckEverybodyDoAction() == true and Set
@@ -139,7 +146,6 @@ namespace NefariusCore
                     player.Inventions.Add(InventDeck.Pop());
                 }
             }
-            Move = 1;
             return true;
         }
 
@@ -234,7 +240,6 @@ namespace NefariusCore
             }
             else if (State == GameState.Inventing)
             {
-                //TODO Check top effect for drop spy requiring. Continue if not
                 if (isSet && pPlayer.CurrentEffect != null && pPlayer.CurrentEffect.It == EffectItem.Spy && pPlayer.CurrentEffect.Dir == EffectDirection.Get)
                 {
                     pPlayer.SetSpy(pDestSpyPosition);
@@ -273,7 +278,11 @@ namespace NefariusCore
             }
             else if (State == GameState.Inventing)
             {
-                //TODO Check top effect for drop card requiring. Continue if not
+                if (pPlayer.CurrentEffect == null || pPlayer.CurrentEffect.Dir != EffectDirection.Drop || pPlayer.CurrentEffect.It != EffectItem.Invention)
+                {
+                    Console.WriteLine($"{pPlayer.Name} дропает изобретение не в тот ход");
+                    return false;
+                }
                 pPlayer.DropInvention(pInvention);
                 Console.WriteLine($"{pPlayer.Name} отказался от изобретения {pInvention.Name}");
 
@@ -386,7 +395,6 @@ namespace NefariusCore
                 }
             }
             // Have not players with win score OR more than one winner
-            Move++;
             return false;
         }
 
@@ -402,6 +410,7 @@ namespace NefariusCore
         void PrintEffects()
         {
             Console.WriteLine("--- Effect snapshot ---");
+            Console.WriteLine("-----------------------");
             foreach (var player in PlayerList)
             {
                 Console.WriteLine(player.Name);
