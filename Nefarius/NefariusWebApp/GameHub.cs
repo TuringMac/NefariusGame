@@ -55,7 +55,7 @@ namespace NefariusWebApp
                 action = pAction.Value;
             else
             {
-                Debug.WriteLine("Wrong Action from client");
+                Console.WriteLine("Wrong Action from client");
                 return;
             }
 
@@ -81,9 +81,9 @@ namespace NefariusWebApp
             if (p != null)
             {
                 _table.Leave(p);
-                Debug.Write("Player " + p.Name + " ");
+                Console.Write("Player " + p.Name + " ");
             }
-            Debug.WriteLine(Context.ConnectionId + " Lived");
+            Console.WriteLine(Context.ConnectionId + " Lived");
             return base.OnDisconnectedAsync(exception);
         }
     }

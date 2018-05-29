@@ -32,7 +32,7 @@ namespace NefariusCore
                 if (_State != value)
                 {
                     _State = value;
-                    Debug.WriteLine($"State: {_State}");
+                    Console.WriteLine($"State: {_State}");
                     NotifyPropertyChanged();
                 }
             }
@@ -156,12 +156,12 @@ namespace NefariusCore
         {
             if (State != GameState.Turn)
             {
-                Debug.WriteLine("Turning after Working");
+                Console.WriteLine("Turning after Working");
                 return false;
             }
 
             pPlayer.Action = pAction;
-            Debug.WriteLine($"{pPlayer.Name} выбрал(а) карту действия");
+            Console.WriteLine($"{pPlayer.Name} выбрал(а) карту действия");
             if (CheckEverybodyDoAction())
                 turnEvt.Set();
 
@@ -184,12 +184,12 @@ namespace NefariusCore
                     if (spy == PlayerList[prev].Action)
                     {
                         PlayerList[i].Coins++;
-                        Debug.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[prev].Name}");
+                        Console.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[prev].Name}");
                     }
                     if (spy == PlayerList[next].Action)
                     {
                         PlayerList[i].Coins++;
-                        Debug.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[next].Name}");
+                        Console.WriteLine($"{PlayerList[i].Name} получил монету за игрока {PlayerList[next].Name}");
                     }
                 }
             }
@@ -200,12 +200,12 @@ namespace NefariusCore
         {
             if (pDestSpyPosition == pSourceSpyPosition)
             {
-                Debug.WriteLine("Исходная позиция шпиона совпадает с конечной");
+                Console.WriteLine("Исходная позиция шпиона совпадает с конечной");
                 return false;
             }
             if (pPlayer.Spies.Count(s => s == pSourceSpyPosition) == 0) // Если нет шпионов в исходной позиции
             {
-                Debug.WriteLine("Нет шпиона в исходной позиции");
+                Console.WriteLine("Нет шпиона в исходной позиции");
                 return false;
             }
 
@@ -216,7 +216,7 @@ namespace NefariusCore
             {
                 if (pPlayer.Action != GameAction.Spy)
                 {
-                    Debug.WriteLine($"{pPlayer.Name} Шпионаж не в свой ход");
+                    Console.WriteLine($"{pPlayer.Name} Шпионаж не в свой ход");
                     return false;
                 }
 
@@ -225,7 +225,7 @@ namespace NefariusCore
                 {
                     pPlayer.Action = GameAction.None;
                     pPlayer.CurrentSetSpy = GameAction.None;
-                    Debug.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
+                    Console.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
                     if (CheckEverybodyDoSpy())
                         spyEvt.Set();
                 }
@@ -238,16 +238,16 @@ namespace NefariusCore
                 if (isSet && pPlayer.CurrentEffect != null && pPlayer.CurrentEffect.It == EffectItem.Spy && pPlayer.CurrentEffect.Dir == EffectDirection.Get)
                 {
                     pPlayer.SetSpy(pDestSpyPosition);
-                    Debug.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
+                    Console.WriteLine($"{pPlayer.Name} шпионит за {pDestSpyPosition}");
                 }
                 else if (isDrop && pPlayer.CurrentEffect != null && pPlayer.CurrentEffect.It == EffectItem.Spy && pPlayer.CurrentEffect.Dir == EffectDirection.Drop)
                 {
                     pPlayer.DropSpy(pSourceSpyPosition);
-                    Debug.WriteLine($"{pPlayer.Name} убрал шпиона с {pSourceSpyPosition}");
+                    Console.WriteLine($"{pPlayer.Name} убрал шпиона с {pSourceSpyPosition}");
                 }
                 else // Move (not set, not drop)
                 {
-                    Debug.WriteLine("Moving Spies not allowed");
+                    Console.WriteLine("Moving Spies not allowed");
                     return false;
                 }
 
@@ -257,7 +257,7 @@ namespace NefariusCore
             }
             else
             {
-                Debug.WriteLine($"{pPlayer.Name} Spy не в свой ход");
+                Console.WriteLine($"{pPlayer.Name} Spy не в свой ход");
                 return false;
             }
         }
@@ -267,7 +267,7 @@ namespace NefariusCore
             if (State == GameState.Invent)
             {
                 pPlayer.PlayInvention(pInvention);
-                Debug.WriteLine($"{pPlayer.Name} изобрел {pInvention.Name}");
+                Console.WriteLine($"{pPlayer.Name} изобрел {pInvention.Name}");
                 if (CheckEverybodyDoInvent())
                     inventEvt.Set();
             }
@@ -275,13 +275,13 @@ namespace NefariusCore
             {
                 //TODO Check top effect for drop card requiring. Continue if not
                 pPlayer.DropInvention(pInvention);
-                Debug.WriteLine($"{pPlayer.Name} отказался от изобретения {pInvention.Name}");
+                Console.WriteLine($"{pPlayer.Name} отказался от изобретения {pInvention.Name}");
 
                 effectEvt.Set();
             }
             else
             {
-                Debug.WriteLine($"{pPlayer.Name} Invent не в свой ход");
+                Console.WriteLine($"{pPlayer.Name} Invent не в свой ход");
                 return false;
             }
 
@@ -316,7 +316,7 @@ namespace NefariusCore
                 player.Coins += 2;
                 player.Inventions.Add(InventDeck.Pop());
                 player.Action = GameAction.None;
-                Debug.WriteLine($"{player.Name} провёл исследование");
+                Console.WriteLine($"{player.Name} провёл исследование");
             }
             return true;
         }
@@ -330,7 +330,7 @@ namespace NefariusCore
 
                 player.Coins += 4;
                 player.Action = GameAction.None;
-                Debug.WriteLine($"{player.Name} отработал смену");
+                Console.WriteLine($"{player.Name} отработал смену");
             }
             return true;
         }
@@ -381,7 +381,7 @@ namespace NefariusCore
                 if (playersWithMax.Count() == 1) // Only one player with max score
                 {
                     //var winner = playersWithMax.First();
-                    //Debug.WriteLine(winner.Name + " is Winner!!");
+                    //Console.WriteLine(winner.Name + " is Winner!!");
                     return true;
                 }
             }
@@ -401,15 +401,15 @@ namespace NefariusCore
 
         void PrintEffects()
         {
-            Debug.WriteLine("--- Effect snapshot ---");
+            Console.WriteLine("--- Effect snapshot ---");
             foreach (var player in PlayerList)
             {
-                Debug.WriteLine(player.Name);
+                Console.WriteLine(player.Name);
                 foreach (var eff in player.EffectQueue)
                 {
-                    Debug.WriteLine($"{eff.direction} {eff.count} {eff.item}");
+                    Console.WriteLine($"{eff.direction} {eff.count} {eff.item}");
                 }
-                Debug.WriteLine("----------------");
+                Console.WriteLine("----------------");
             }
         }
 

@@ -73,7 +73,7 @@ namespace NefariusCore
         {
             if (pDestSpyPosition == GameAction.None)
             {
-                Debug.WriteLine("In Spy state only set spy");
+                Console.WriteLine("In Spy state only set spy");
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace NefariusCore
                                 DropCoins(2);
                             else
                             {
-                                Debug.WriteLine("Not enought coins to spy");
+                                Console.WriteLine("Not enought coins to spy");
                                 return false;
                             }
                             break;
@@ -101,7 +101,7 @@ namespace NefariusCore
                                 DropCoins(1);
                             else
                             {
-                                Debug.WriteLine("Not enought coins to spy");
+                                Console.WriteLine("Not enought coins to spy");
                                 return false;
                             }
                             break;
@@ -111,7 +111,7 @@ namespace NefariusCore
                     return true;
                 }
             }
-            Debug.WriteLine("No spy in source location");
+            Console.WriteLine("No spy in source location");
             return false;
         }
 
@@ -133,7 +133,7 @@ namespace NefariusCore
         {
             if (!Inventions.Contains(pInvention))
             {
-                Debug.WriteLine("You haven't got this invention! Cheater?");
+                Console.WriteLine("You haven't got this invention! Cheater?");
                 return false;
             }
 
@@ -147,13 +147,13 @@ namespace NefariusCore
         {
             if (Action != GameAction.Invent)
             {
-                Debug.WriteLine("Изобретение не в свой ход");
+                Console.WriteLine("Изобретение не в свой ход");
                 return false;
             }
 
             if (Coins < pInvention.Cost)
             {
-                Debug.WriteLine("You haven't got enought coins");
+                Console.WriteLine("You haven't got enought coins");
                 Action = GameAction.None;
                 return true; //TODO true но карта не разыгрывается
             }
@@ -194,7 +194,7 @@ namespace NefariusCore
                 var effDesc = EffectQueue.Dequeue();
                 var eff = new Effect(effDesc, this);
                 CurrentEffect = eff;
-                Debug.WriteLine($"{Name} должен {effDesc.direction} {eff.Count} {effDesc.item}");
+                Console.WriteLine($"{Name} должен {effDesc.direction} {eff.Count} {effDesc.item}");
             }
 
             return true;

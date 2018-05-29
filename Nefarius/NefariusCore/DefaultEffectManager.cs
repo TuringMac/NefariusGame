@@ -57,7 +57,7 @@ namespace NefariusCore
 
             if (pPlayer.CurrentEffect == null)
             {
-                Debug.WriteLine($"{pPlayer.Name} hasn't effects");
+                Console.WriteLine($"{pPlayer.Name} hasn't effects");
                 return true;
             }
 
@@ -75,7 +75,7 @@ namespace NefariusCore
                 }
                 else
                 {
-                    Debug.WriteLine("Wrong direction");
+                    Console.WriteLine("Wrong direction");
                 }
             }
             else if (eff.It == EffectItem.Spy)
@@ -102,7 +102,7 @@ namespace NefariusCore
                 }
                 else
                 {
-                    Debug.WriteLine("Wrong direction");
+                    Console.WriteLine("Wrong direction");
                 }
             }
             else if (eff.It == EffectItem.Invention)
@@ -124,12 +124,12 @@ namespace NefariusCore
                 }
                 else
                 {
-                    Debug.WriteLine("Wrong direction");
+                    Console.WriteLine("Wrong direction");
                 }
             }
             else
             {
-                Debug.WriteLine("Wrong item");
+                Console.WriteLine("Wrong item");
             }
 
             pPlayer.PrepareEffect();
