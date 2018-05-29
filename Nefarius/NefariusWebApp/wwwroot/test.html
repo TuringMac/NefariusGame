@@ -15,9 +15,9 @@
             document.getElementById('name').innerHTML = JSON.stringify(data.name);
             document.getElementById('money').innerHTML = JSON.stringify(data.coins);
             document.getElementById('score').innerHTML = JSON.stringify(data.score);
-            renderInventions(data.inventions);
+            document.getElementById('inventions').innerHTML = renderInventions(data.inventions);
             document.getElementById('player').innerHTML = JSON.stringify(data);
-            document.getElementById('currEff').innerHTML = (data.currentEffect) ? (data.currentEffect.direction + ' ' + data.currentEffect.count + ' ' + data.currentEffect.item) : 'none';
+            document.getElementById('currEff').innerHTML = renderEffects(data.currentEffect, data.effectQueue);
             //document.getElementById('inv').innerHTML = JSON.stringify(data.inventions);
         });
 
@@ -58,7 +58,7 @@
                 cardsHtml += '<td><table border="1"><tr><td>$' + cost + ' <b>' + score + '</b></td></tr><tr><td height="25" style="background-color:green">' + self + '</td></tr><tr><td height="25" style="background-color:red">' + other + '</td></tr><tr><td><input type="button" value="Play" onclick="hubConnection.invoke(\'Invent\',' + id + ')">ID:' + id + '</td></tr></table></td>';
             }
             cardsHtml += '</tr></table>';
-            document.getElementById('inventions').innerHTML = cardsHtml;
+            return cardsHtml;
 
             //<table>
             //    <tr>
@@ -98,6 +98,20 @@
             }
             playersHtml += '</tr></table>';
             document.getElementById('playerList').innerHTML = playersHtml;
+        }
+
+        function renderEffects(currentEffect, effectQueue) {
+            var cur = (currentEffect) ? (currentEffect.direction + ' ' + currentEffect.count + ' ' + currentEffect.item) : 'none';
+            cur += ' (Next: ';
+            for (var i = 0; i < effectQueue.length; i++) {
+                var dir = effectQueue[i].direction,
+                    count = effectQueue[i].count,
+                    item = effectQueue[i].item;
+                cur += currentEffect.direction + ' ' + currentEffect.count + ' ' + currentEffect.item + '; ';
+            }
+            cur += ')';
+
+            return cur;
         }
     </script>
 </head>
