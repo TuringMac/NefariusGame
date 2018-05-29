@@ -33,7 +33,7 @@ namespace NefariusCore
             {
                 case "get": Dir = EffectDirection.Get; break;
                 case "drop": Dir = EffectDirection.Drop; break;
-                default: Debug.WriteLine("Wrong effect direction"); break;
+                default: Console.WriteLine("Wrong effect direction"); break;
             }
 
             switch (pDescription.item)
@@ -41,7 +41,7 @@ namespace NefariusCore
                 case "coin": It = EffectItem.Coin; break;
                 case "spy": It = EffectItem.Spy; break;
                 case "invention": It = EffectItem.Invention; break;
-                default: Debug.WriteLine("Wrong effect item"); break;
+                default: Console.WriteLine("Wrong effect item"); break;
             }
 
             switch (pDescription.count)
@@ -58,7 +58,7 @@ namespace NefariusCore
                 default:
                     decimal n = 0;
                     if (!decimal.TryParse(pDescription.count, out n))
-                        Debug.WriteLine("Wrong effect count");
+                        Console.WriteLine("Wrong effect count");
 
                     Count = (int)n;
                     break;

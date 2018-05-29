@@ -66,7 +66,7 @@ namespace NefariusCore
 
         static bool ValidateInventions(ICollection<Invention> pInventions)
         {
-            Debug.WriteLine("Start validating Inventions deck");
+            Console.WriteLine("Start validating Inventions deck");
             bool result = true;
             for (int i = 1; i < pInventions.Count + 1; i++)
             {
@@ -76,39 +76,39 @@ namespace NefariusCore
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Card ID:{i} {ex.Message}");
+                    Console.WriteLine($"Card ID:{i} {ex.Message}");
                 }
             }
             foreach (var inv in pInventions)
             {
                 if (string.IsNullOrWhiteSpace(inv.Description))
-                    Debug.WriteLine("Карта без описания ID:" + inv.ID);
+                    Console.WriteLine("Карта без описания ID:" + inv.ID);
                 foreach (var eff in inv.SelfEffectList)
                 {
                     if (string.IsNullOrWhiteSpace(eff.direction))
                     {
-                        Debug.WriteLine("Bad effect direction in card ID:" + inv.ID);
+                        Console.WriteLine("Bad effect direction in card ID:" + inv.ID);
                         result = false;
                     }
                     if (string.IsNullOrWhiteSpace(eff.item))
                     {
-                        Debug.WriteLine("Bad effect item in card ID:" + inv.ID);
+                        Console.WriteLine("Bad effect item in card ID:" + inv.ID);
                         result = false;
                     }
                     if (string.IsNullOrWhiteSpace(eff.count))
                     {
-                        Debug.WriteLine("Bad effect count in card ID:" + inv.ID);
+                        Console.WriteLine("Bad effect count in card ID:" + inv.ID);
                         result = false;
                     }
                 }
             }
-            Debug.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
+            Console.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
             return result;
         }
 
         static bool ValidateRules(ICollection<Rule> pRules)
         {
-            Debug.WriteLine("Start validating Rules deck");
+            Console.WriteLine("Start validating Rules deck");
             bool result = true;
             for (int i = 1; i < pRules.Count + 1; i++)
             {
@@ -118,18 +118,18 @@ namespace NefariusCore
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Rule ID:{i} {ex.Message}");
+                    Console.WriteLine($"Rule ID:{i} {ex.Message}");
                 }
             }
             foreach (var rule in pRules)
             {
                 if (string.IsNullOrWhiteSpace(rule.Description))
-                    Debug.WriteLine("Карта без описания ID:" + rule.ID);
+                    Console.WriteLine("Карта без описания ID:" + rule.ID);
                 if (string.IsNullOrWhiteSpace(rule.Title))
-                    Debug.WriteLine("Карта без названия ID:" + rule.ID);
+                    Console.WriteLine("Карта без названия ID:" + rule.ID);
 
             }
-            Debug.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
+            Console.WriteLine("Finish validating deck: Result:" + (result ? "OK" : "Fail"));
             return result;
         }
     }
