@@ -72,7 +72,10 @@ namespace NefariusWebApp
         public void Invent(decimal pInventID)
         {
             var player = _table.GetPlayer(Context.ConnectionId);
-            _table.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
+            if (player.Inventions.Select(inv => inv.ID == pInventID).Any())
+                _table.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
+            else
+                Console.WriteLine($"Player: {player.Name} tried to play invention: {pInventID} that doesn't have!");
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
