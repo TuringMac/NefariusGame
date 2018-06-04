@@ -129,6 +129,11 @@ namespace NefariusCore
             return true;
         }
 
+        public void SelectInvention(Invention pInvention)
+        {
+            CurrentInvention = pInvention;
+        }
+
         public bool DropInvention(Invention pInvention)
         {
             if (!Inventions.Contains(pInvention))
@@ -143,8 +148,9 @@ namespace NefariusCore
             return true;
         }
 
-        public bool PlayInvention(Invention pInvention)
+        public bool PlayInvention()
         {
+            var pInvention = CurrentInvention;
             if (Action != GameAction.Invent)
             {
                 Debug.WriteLine("Изобретение не в свой ход");
