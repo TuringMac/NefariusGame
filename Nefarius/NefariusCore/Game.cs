@@ -129,7 +129,10 @@ namespace NefariusCore
         {
             foreach (var player in PlayerList)
             {
-                player.Color = ColorDeck.Pop();
+                if (ColorDeck.Count > 0)
+                    player.Color = ColorDeck.Pop();
+                else
+                    Console.WriteLine("[WARN]Color deck is empty!");
 
 #if DEBUG
                 player.Coins = 1000;
@@ -143,7 +146,10 @@ namespace NefariusCore
 #endif
 
                 {
-                    player.Inventions.Add(InventDeck.Pop());
+                    if (InventDeck.Count > 0)
+                        player.Inventions.Add(InventDeck.Pop());
+                    else
+                        Console.WriteLine("[FAIL]Invent deck is empty! Can't Continue game");
                 }
             }
             return true;
