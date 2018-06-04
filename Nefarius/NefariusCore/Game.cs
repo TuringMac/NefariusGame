@@ -384,7 +384,7 @@ namespace NefariusCore
         bool HasWinner()
         {
             var maxScore = PlayerList.Max(p => p.Score);
-            if (maxScore > 20) // Any player has more than 20
+            if (maxScore >= 20) // Any player has more than 20
             {
                 var playersWithMax = PlayerList.Where(p => p.Score == maxScore);
                 if (playersWithMax.Count() == 1) // Only one player with max score
