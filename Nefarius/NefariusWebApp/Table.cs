@@ -102,20 +102,21 @@ namespace NefariusWebApp
 
         void BroadcastGame()
         {
+            var opponents = new List<Player>();
             lock (PlayerList)
             {
-                foreach (var player in PlayerList)
-                {
-                    // Выводим список так, чтобы левый и правый оппонент были слева и справа
-                    var opponents = new List<Player>(PlayerList);
-                    var opponents_left = opponents.Take(opponents.IndexOf(player));
-                    var opponents_right = opponents.TakeLast(opponents.Count - opponents.IndexOf(player) - 1);
-                    var players = opponents_right.Concat(opponents_left).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn));
+                opponents = new List<Player>(PlayerList);
+            }
+            foreach (var player in opponents)
+            {
+                // Выводим список так, чтобы левый и правый оппонент были слева и справа
+                var opponents_left = opponents.Take(opponents.IndexOf(player));
+                var opponents_right = opponents.TakeLast(opponents.Count - opponents.IndexOf(player) - 1);
+                var players = opponents_right.Concat(opponents_left).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn));
 
-                    Clients.Client(player.ID).SendAsync("StateChanged", new { players, state = Game?.State, move = Game?.Move, table = TableName });
+                Clients.Client(player.ID).SendAsync("StateChanged", new { players, state = Game?.State, move = Game?.Move, table = TableName });
 
-                    Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
-                }
+                Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
         }
     }
