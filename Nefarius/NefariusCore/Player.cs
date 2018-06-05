@@ -54,8 +54,9 @@ namespace NefariusCore
                 Spies,
                 Score,
                 InventionCount,
-                PlayedInventions,
-                EffectQueue,
+                PlayedInventions = new List<Invention>(PlayedInventions),
+                EffectQueue = new Queue<EffectDescription>(EffectQueue),
+                CurrentEffect,
                 IsMoved,
                 Action = pIsOpen ? Action : GameAction.None,
             };

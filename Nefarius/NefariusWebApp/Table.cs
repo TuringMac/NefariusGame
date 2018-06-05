@@ -104,7 +104,7 @@ namespace NefariusWebApp
         {
             foreach (var player in PlayerList)
             {
-                Clients.Client(player.ID).SendAsync("StateChanged", new { players = PlayerList.Where(p => p.ID != player.ID).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn)), state = Game?.State, move = Game?.Move, table = TableName });
+                Clients.Client(player.ID).SendAsync("StateChanged", new { players = new List<Player>(PlayerList).Where(p => p.ID != player.ID).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn)), state = Game?.State, move = Game?.Move, table = TableName });
 
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
