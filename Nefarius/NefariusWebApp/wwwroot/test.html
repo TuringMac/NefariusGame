@@ -56,7 +56,7 @@
                     other += invArr[i].otherEffectList[j].direction + ' ' + invArr[i].otherEffectList[j].item + '/' + invArr[i].otherEffectList[j].count + '<br />';
                 }
 
-                cardsHtml += '<td><table id="invention' + id + '" border="' + ((cost <= coins) ? 5 : 1) + '"><tr><td>$' + cost + ' <b>' + score + '</b></td></tr><tr><td height="25" style="background-color:green">' + self + '</td></tr><tr><td height="25" style="background-color:red">' + other + '</td></tr><tr><td><input type="button" value="Play" onclick="hubConnection.invoke(\'Invent\',' + id + ')">ID:' + id + '</td></tr></table></td>';
+                cardsHtml += '<td><table id="invention' + id + '" style="border:' + ((cost <= coins) ? '3px solid green' : '1px solid red') + ';"><tr><td>$' + cost + ' <b>' + score + '</b></td></tr><tr><td height="25" style="background-color:green">' + self + '</td></tr><tr><td height="25" style="background-color:red">' + other + '</td></tr><tr><td><input type="button" value="Play" onclick="hubConnection.invoke(\'Invent\',' + id + ')">ID:' + id + '</td></tr></table></td>';
             }
             cardsHtml += '</tr></table>';
             return cardsHtml;
