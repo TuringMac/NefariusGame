@@ -277,10 +277,8 @@ namespace NefariusCore
         {
             if (State == GameState.Invent)
             {
-                //pPlayer.PlayInvention(pInvention);
-                pPlayer.SelectInvention(pInvention);
+                pPlayer.PlayInvention(pInvention);
                 Console.WriteLine($"{pPlayer.Name} изобрел {pInvention.Name}");
-
                 if (CheckEverybodyDoInvent())
                     inventEvt.Set();
             }
@@ -310,11 +308,6 @@ namespace NefariusCore
         /// </summary>
         protected virtual bool Inventing()
         {
-            foreach (var player in PlayerList.Where(p => p.Action == GameAction.Invent))
-            {
-                player.PlayInvention();
-            }
-
             EM.Assign();
             PrintEffects();
             while (!ApplyEffects())
