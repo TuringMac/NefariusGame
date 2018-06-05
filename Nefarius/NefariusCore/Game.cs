@@ -278,7 +278,7 @@ namespace NefariusCore
             if (State == GameState.Invent)
             {
                 pPlayer.PlayInvention(pInvention);
-                Console.WriteLine($"{pPlayer.Name} изобрел {pInvention.Name}");
+                Console.WriteLine($"{pPlayer.Name} изобрел [{pInvention.ID}]{pInvention.Name}");
                 if (CheckEverybodyDoInvent())
                     inventEvt.Set();
             }
@@ -290,7 +290,7 @@ namespace NefariusCore
                     return false;
                 }
                 pPlayer.DropInvention(pInvention);
-                Console.WriteLine($"{pPlayer.Name} отказался от изобретения {pInvention.Name}");
+                Console.WriteLine($"{pPlayer.Name} отказался от изобретения [{pInvention.ID}]{pInvention.Name}");
 
                 effectEvt.Set();
             }
