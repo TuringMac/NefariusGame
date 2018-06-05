@@ -45,21 +45,27 @@ namespace NefariusCore
 
         public dynamic GetPlayerShort(bool pIsOpen = false)
         {
-            return new
+            lock (PlayedInventions)
             {
-                ID,
-                Color,
-                Name,
-                Coins,
-                Spies,
-                Score,
-                InventionCount,
-                PlayedInventions = new List<Invention>(PlayedInventions),
-                EffectQueue = new Queue<EffectDescription>(EffectQueue),
-                CurrentEffect,
-                IsMoved,
-                Action = pIsOpen ? Action : GameAction.None,
-            };
+                lock (EffectQueue)
+                {
+                    return new
+                    {
+                        ID,
+                        Color,
+                        Name,
+                        Coins,
+                        Spies,
+                        Score,
+                        InventionCount,
+                        PlayedInventions = new List<Invention>(PlayedInventions),
+                        EffectQueue = new Queue<EffectDescription>(EffectQueue),
+                        CurrentEffect,
+                        IsMoved,
+                        Action = pIsOpen ? Action : GameAction.None,
+                    };
+                }
+            }
         }
 
         public void DropCoins(decimal dropCount)
