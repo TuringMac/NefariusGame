@@ -15,6 +15,7 @@
             document.getElementById('name').innerHTML = JSON.stringify(data.name);
             document.getElementById('money').innerHTML = JSON.stringify(data.coins);
             document.getElementById('score').innerHTML = JSON.stringify(data.score);
+            renderTurn(data.action);
             document.getElementById('inventions').innerHTML = renderInventions(data.inventions);
             document.getElementById('player').innerHTML = JSON.stringify(data);
             document.getElementById('currEff').innerHTML = renderEffects(data.currentEffect, data.effectQueue);
@@ -113,6 +114,16 @@
 
             return cur;
         }
+
+        function renderTurn(action) {
+            document.getElementById('turn' + action).innerHTML
+            for (var i = 0; i < 5; i++) {
+                document.getElementById('turn' + i).style = 'background-color:inherit';
+            }
+            if (action) {
+                document.getElementById('turn' + action).style = 'background-color:green';
+            }
+        }
     </script>
 </head>
 <body>
@@ -155,11 +166,11 @@
             </tr>
             <tr id="state1">
                 <td>1 Turn</td>
-                <td><input type="button" value="Отменить ход" onclick="hubConnection.invoke('Turn', 0)"></td>
-                <td><input type="button" value="Spy" onclick="hubConnection.invoke('Turn', 1)"></td>
-                <td><input type="button" value="Invent" onclick="hubConnection.invoke('Turn', 2)"></td>
-                <td><input type="button" value="Research" onclick="hubConnection.invoke('Turn', 3)"></td>
-                <td><input type="button" value="Work" onclick="hubConnection.invoke('Turn', 4)"></td>
+                <td id="turn0"><input type="button" value="Отменить ход" onclick="hubConnection.invoke('Turn', 0)"></td>
+                <td id="turn1"><input type="button" value="Spy" onclick="hubConnection.invoke('Turn', 1)"></td>
+                <td id="turn2"><input type="button" value="Invent" onclick="hubConnection.invoke('Turn', 2)"></td>
+                <td id="turn3"><input type="button" value="Research" onclick="hubConnection.invoke('Turn', 3)"></td>
+                <td id="turn4"><input type="button" value="Work" onclick="hubConnection.invoke('Turn', 4)"></td>
             </tr>
             <tr id="state2">
                 <td>2 Spying</td>
