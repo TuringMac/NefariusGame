@@ -136,15 +136,11 @@ namespace NefariusCore
 
 #if DEBUG
                 player.Coins = 1000;
-                player.PlayedInventions.Add(InventDeck.Pop());
-                player.PlayedInventions.Add(InventDeck.Pop());
-                player.PlayedInventions.Add(InventDeck.Pop());
                 for (int i = 0; i < 10; i++)
 #else
                 player.Coins = 10;
                 for (int i = 0; i < 3; i++) // Каждому по 3 карты
 #endif
-
                 {
                     if (InventDeck.Count > 0)
                         player.Inventions.Add(InventDeck.Pop());
