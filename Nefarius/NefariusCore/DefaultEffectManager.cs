@@ -23,7 +23,12 @@ namespace NefariusCore
                 if (player.CurrentInvention == null) continue;
 
                 foreach (var eff in player.CurrentInvention.SelfEffectList)
-                    player.EffectQueue.Enqueue(eff);
+                {
+                    lock (player.EffectQueue)
+                    {
+                        player.EffectQueue.Enqueue(eff);
+                    }
+                }
             }
 
             // Other effects second
@@ -37,7 +42,10 @@ namespace NefariusCore
                     foreach (var effect in inventor.CurrentInvention.OtherEffectList)
                     {
                         effect.Inventor = inventor.Name;
-                        player.EffectQueue.Enqueue(effect);
+                        lock (player.EffectQueue)
+                        {
+                            player.EffectQueue.Enqueue(effect);
+                        }
                     }
                 }
             }

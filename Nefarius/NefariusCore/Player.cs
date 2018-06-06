@@ -198,7 +198,11 @@ namespace NefariusCore
 
             if (EffectQueue.Count > 0)
             {
-                var effDesc = EffectQueue.Dequeue();
+                EffectDescription effDesc = null;
+                lock (EffectQueue)
+                {
+                    effDesc = EffectQueue.Dequeue();
+                }
                 var eff = new Effect(effDesc, this);
                 CurrentEffect = eff;
                 Console.WriteLine($"{Name} должен {effDesc.direction} {eff.Count} {effDesc.item}");
