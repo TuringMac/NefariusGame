@@ -1,8 +1,9 @@
 var app = new angular.module("nefarius", ['dnd']);
 
-let hubUrl = localStorage.getItem('hubUrl') || '/game';
-
-let hubConnection = new signalR.HubConnection(hubUrl);
+let hubConnection = new signalR.HubConnectionBuilder()
+    .withUrl("/game")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
 //let hubConnection = new signalR.HubConnection(hubUrl, { transport: signalR.TransportType.LongPolling }); // For Win7 IIS
 //let hubConnection = new signalR.HubConnection(hubUrl, { transport: signalR.TransportType.WebSocket }); // For standalone
 
@@ -294,10 +295,10 @@ app.controller("hub", function ($scope) {
     };
 
     $scope.selectZone = function (zone) {
-        if(zone.cost > $scope.player.coins){
+        if (zone.cost > $scope.player.coins) {
             $scope.canSpy = false;
             return;
-        }else
+        } else
             $scope.canSpy = true;
         $scope.selectedZone = zone.value;
     }

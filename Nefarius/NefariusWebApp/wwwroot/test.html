@@ -5,9 +5,10 @@
     <title>Тест</title>
     <script src="js/signalr.min.js"></script>
     <script>
-        let hubUrl = localStorage.getItem('hubUrl') || '/game';
-
-        let hubConnection = new signalR.HubConnection(hubUrl);
+        let hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/game")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
         hubConnection.start();
 
