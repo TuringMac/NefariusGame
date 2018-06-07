@@ -144,13 +144,20 @@ namespace NefariusCore
                 return false;
             }
 
-            CurrentInvention = pInvention;
             Inventions.Remove(pInvention);
+            Console.WriteLine($"{Name} изобрёл [{pInvention.ID}]{pInvention.Name}");
 
             return true;
         }
 
-        public bool PlayInvention(Invention pInvention)
+        public bool SelectInvention(Invention pInvention)
+        {
+            CurrentInvention = pInvention;
+
+            return true;
+        }
+
+        public bool PlayInvention()
         {
             if (Action != GameAction.Invent)
             {
@@ -158,19 +165,19 @@ namespace NefariusCore
                 return false;
             }
 
-            if (Coins < pInvention.Cost)
+            if (Coins < CurrentInvention.Cost)
             {
                 Console.WriteLine("You haven't got enought coins");
                 Action = GameAction.None;
                 return true; //TODO true но карта не разыгрывается
             }
 
-            if (!DropInvention(pInvention))
+            if (!DropInvention(CurrentInvention))
             {
                 return false;
             }
 
-            PlayedInventions.Add(pInvention);
+            PlayedInventions.Add(CurrentInvention);
             Coins -= CurrentInvention.Cost;
             Action = GameAction.None;
 

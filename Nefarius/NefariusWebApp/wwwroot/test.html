@@ -17,7 +17,7 @@
             document.getElementById('money').innerHTML = JSON.stringify(data.coins);
             document.getElementById('score').innerHTML = JSON.stringify(data.score);
             renderTurn(data.action);
-            document.getElementById('inventions').innerHTML = renderInventions(data.inventions, data.coins);
+            document.getElementById('inventions').innerHTML = renderInventions(data.inventions, data.coins, data.currentInvention);
             document.getElementById('player').innerHTML = JSON.stringify(data);
             document.getElementById('currEff').innerHTML = renderEffects(data.currentEffect, data.effectQueue);
             //document.getElementById('inv').innerHTML = JSON.stringify(data.inventions);
@@ -42,7 +42,7 @@
             }
         }
 
-        function renderInventions(invArr, coins) {
+        function renderInventions(invArr, coins, currInv) {
             var cardsHtml = '<table><tr>';
             for (var i = 0; i < invArr.length; i++) {
                 var id = invArr[i].id,
@@ -50,6 +50,8 @@
                     score = invArr[i].score,
                     other = '',
                     self = '';
+                if (currInv && id == currInv.id) //Skip selected invention
+                    continue;
                 for (var j = 0; j < invArr[i].selfEffectList.length; j++) {
                     self += invArr[i].selfEffectList[j].direction + ' ' + invArr[i].selfEffectList[j].item + '/' + invArr[i].selfEffectList[j].count + '<br />';
                 }

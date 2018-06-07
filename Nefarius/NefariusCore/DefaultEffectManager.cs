@@ -125,6 +125,8 @@ namespace NefariusCore
                     if (pPlayer.CurrentInvention != null) // Уменьшаем эффект при скинутой карте
                     {
                         eff.Count--;
+                        pPlayer.DropInvention(pPlayer.CurrentInvention);
+                        Console.WriteLine($"{pPlayer.Name} отказался от изобретения [{pPlayer.CurrentInvention.ID}]{pPlayer.CurrentInvention.Name}");
                         pPlayer.CurrentInvention = null;
                     }
                     if (pPlayer.GetInventionsCount() != 0 && eff.Count != 0) // Пользователь скинул все требуемые карты. Можно гасить эффект

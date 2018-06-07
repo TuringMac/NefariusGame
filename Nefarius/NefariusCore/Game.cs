@@ -273,8 +273,8 @@ namespace NefariusCore
         {
             if (State == GameState.Invent)
             {
-                pPlayer.PlayInvention(pInvention);
-                Console.WriteLine($"{pPlayer.Name} изобрел [{pInvention.ID}]{pInvention.Name}");
+                //pPlayer.PlayInvention(pInvention);
+                pPlayer.SelectInvention(pInvention);
                 if (CheckEverybodyDoInvent())
                     inventEvt.Set();
             }
@@ -285,8 +285,7 @@ namespace NefariusCore
                     Console.WriteLine($"{pPlayer.Name} дропает изобретение не в тот ход");
                     return false;
                 }
-                pPlayer.DropInvention(pInvention);
-                Console.WriteLine($"{pPlayer.Name} отказался от изобретения [{pInvention.ID}]{pInvention.Name}");
+                pPlayer.SelectInvention(pInvention); //TODO union with invent state
 
                 effectEvt.Set();
             }
@@ -304,6 +303,11 @@ namespace NefariusCore
         /// </summary>
         protected virtual bool Inventing()
         {
+            foreach (var player in PlayerList.Where(p => p.Action == GameAction.Invent))
+            {
+                player.PlayInvention();
+            }
+
             EM.Assign();
             PrintEffects();
             while (!ApplyEffects())
@@ -365,7 +369,7 @@ namespace NefariusCore
 
         public bool CheckEverybodyDoInvent()
         {
-            return !PlayerList.Where(player => player.Action == GameAction.Invent).Any();
+            return !PlayerList.Where(player => player.Action == GameAction.Invent).Where(player => player.CurrentInvention == null).Any();
         }
 
         public bool CheckEverybodyApplyEffects()
