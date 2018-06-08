@@ -22,6 +22,7 @@ namespace NefariusWebApp
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 //.UseKestrel(options => { options.Listen(IPAddress.Loopback, 2047); }) // For Kestrel
+                .UseUrls("http://0.0.0.0:2047/")
                 .Build();
     }
 }
