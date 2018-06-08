@@ -9,43 +9,64 @@ namespace NefariusWebApp
 {
     public class GameHub : Hub
     {
-        private readonly Table _table;
-
-        public GameHub() : this(TableManager.GetTable("tbl1")) { }
-
-        GameHub(Table pGameTicker)
+        Table Table
         {
-            _table = pGameTicker;
+            get
+            {
+                foreach (var table in TableManager.GetTableList())
+                {
+                    foreach (var player in table.PlayerList)
+                    {
+                        if (player.ID == Context.ConnectionId)
+                            return table;
+                    }
+                }
+                return null;
+            }
         }
 
-        public void Join(string pName)
+        public GameHub()
+        {
+
+        }
+
+        public void GetTableList()
+        {
+            Clients.Client(Context.ConnectionId).SendAsync("TableList", new
+            {
+                tableList = TableManager.GetTableList()
+            });
+        }
+
+        public void Join(string pTableName, string pName)
         {
             var player = new Player(pName)
             {
                 ID = Context.ConnectionId
             };
-            if (Clients != null) _table.Clients = Clients;
-            _table.Join(player);
+            var table = TableManager.GetTable(pTableName);
+            if (Clients != null) table.Clients = Clients;
+            table.Join(player);
         }
 
         public void Leave()
         {
-            var player = _table.GetPlayer(Context.ConnectionId);
-            _table.Leave(player);
+            var player = Table.GetPlayer(Context.ConnectionId);
+            Table.Leave(player);
         }
 
         public void Begin()
         {
-            var player = _table.GetPlayer(Context.ConnectionId);
+            var player = Table.GetPlayer(Context.ConnectionId);
             if (player != null)
-                _table.Begin();
+                Table.Begin();
         }
 
         public void End()
         {
-            var player = _table.GetPlayer(Context.ConnectionId);
+            var player = Table.GetPlayer(Context.ConnectionId);
             if (player != null)
-                _table.End();
+                Table.End();
         }
 
         public void Turn(GameAction? pAction)
@@ -59,32 +80,40 @@ namespace NefariusWebApp
                 return;
             }
 
-            var player = _table.GetPlayer(Context.ConnectionId);
-            _table.Turn(player, action);
+            var player = Table.GetPlayer(Context.ConnectionId);
+            Table.Turn(player, action);
         }
 
         public void Spy(decimal pTo, decimal pFrom = 0)
         {
-            var player = _table.GetPlayer(Context.ConnectionId);
-            _table.SetSpy(player, (GameAction)pTo, (GameAction)pFrom);
+            var player = Table.GetPlayer(Context.ConnectionId);
+            Table.SetSpy(player, (GameAction)pTo, (GameAction)pFrom);
         }
 
         public void Invent(decimal pInventID)
         {
-            var player = _table.GetPlayer(Context.ConnectionId);
+            var player = Table.GetPlayer(Context.ConnectionId);
             if (player.Inventions.Select(inv => inv.ID == pInventID).Any())
-                _table.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
+                Table.Invent(player, player.Inventions.Single(inv => inv.ID == pInventID));
             else
                 Console.WriteLine($"Player: {player.Name} tried to play invention: {pInventID} that doesn't have!");
         }
 
+        public override Task OnConnectedAsync()
+        {
+            return base.OnConnectedAsync();
+        }
+
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            Player p = _table.GetPlayer(Context.ConnectionId);
-            if (p != null)
+            if (Table != null)
             {
-                _table.Leave(p);
-                Console.Write("Player " + p.Name + " ");
+                Player p = Table.GetPlayer(Context.ConnectionId);
+                if (p != null)
+                {
+                    Table.Leave(p);
+                    Console.Write("Player " + p.Name + " ");
+                }
             }
             Console.WriteLine(Context.ConnectionId + " Lived");
             return base.OnDisconnectedAsync(exception);

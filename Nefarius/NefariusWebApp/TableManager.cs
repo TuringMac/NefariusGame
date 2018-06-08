@@ -12,7 +12,7 @@ namespace NefariusWebApp
         {
             lock (TableList)
             {
-                var table = TableList.SingleOrDefault(tbl => tbl.TableName == pTableName);
+                var table = TableList.SingleOrDefault(tbl => tbl.Name == pTableName);
                 if (table == null)
                 {
                     table = new Table(pTableName);
@@ -21,6 +21,16 @@ namespace NefariusWebApp
 
                 return table;
             }
+        }
+
+        public static List<Table> GetTableList()
+        {
+            var result = new List<Table>();
+            lock (TableList)
+            {
+                result = new List<Table>(TableList);
+            }
+            return result;
         }
     }
 }

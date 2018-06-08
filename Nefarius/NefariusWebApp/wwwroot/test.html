@@ -10,9 +10,10 @@
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
-        hubConnection.start();
+        hubConnection.start().then(() => hubConnection.invoke('GetTableList'));
 
         hubConnection.on("PlayerData", function (data) {
+            document.getElementById('playerName').innerHTML = 'Player:' + data.name;
             document.getElementById('name').innerHTML = JSON.stringify(data.name);
             document.getElementById('money').innerHTML = JSON.stringify(data.coins);
             document.getElementById('score').innerHTML = JSON.stringify(data.score);
@@ -25,8 +26,13 @@
 
         hubConnection.on("StateChanged", function (data) {
             document.getElementById('game').innerHTML = JSON.stringify(data);
+            renderGame(data);
             renderState(data.state);
             renderPlayers(data.players);
+        });
+
+        hubConnection.on("TableList", function (data) {
+            document.getElementById('tableList').innerHTML = renderTables(data.tableList);
         });
 
         hubConnection.onclose(e => {
@@ -128,11 +134,51 @@
                 document.getElementById('turn' + action).style = 'background-color:green';
             }
         }
+
+        function renderTables(pTableArr) {
+            var tablesHtml = '<table><tr>';
+            tablesHtml += '<td><input type="radio" name="table" value="NewTable" checked>NewTable</td>';
+            for (var i = 0; i < pTableArr.length; i++) {
+                var name = pTableArr[i].name,
+                    playerCount = pTableArr[i].playerList.length;
+
+                tablesHtml += '<td><input type="radio" name="table" value="' + name + '" >' + name + '[' + playerCount + ']</td>';
+            }
+            tablesHtml += '</tr></table>';
+            return tablesHtml;
+        }
+
+        function renderGame(data) {
+            document.getElementById('tableName').innerHTML = 'Table:' + data.table + ';';
+        }
+
+        function getSelectedTableName() {
+            var tables = document.getElementsByName('table');
+            for (var i = 0; i < tables.length; i++) {
+                if (tables[i].checked)
+                    if (tables[i].value == 'NewTable') {
+                        return guid();
+                    }
+                    else {
+                        return tables[i].value;
+                    }
+            }
+            return null;
+        }
+
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        }
     </script>
 </head>
 <body>
     <table>
-        <caption><b>Game</b></caption>
+        <caption><span id="tableName">Game</span><span id="playerName">Player</span></caption>
         <thead>
             <tr>
                 <td><b>State</b></td>
@@ -141,18 +187,22 @@
         </thead>
         <tbody>
             <tr>
+                <td><b>Tables</b></td>
+                <td id="tableList" colspan="9"></td>
+            </tr>
+            <tr>
                 <td><b>Game</b></td>
                 <td><input type="button" value="Begin" onclick="hubConnection.invoke('Begin')"></td>
                 <td><input type="button" value="End" onclick="hubConnection.invoke('End')"></td>
             </tr>
             <tr id="state0">
                 <td>0 Join</td>
-                <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', 'Player 1')"></td>
-                <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', 'Player 2')"></td>
-                <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', 'Player 3')"></td>
-                <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', 'Player 4')"></td>
-                <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', 'Player 5')"></td>
-                <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', 'Player 6')"></td>
+                <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 1')"></td>
+                <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 2')"></td>
+                <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 3')"></td>
+                <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 4')"></td>
+                <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 5')"></td>
+                <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 6')"></td>
             </tr>
             <tr>
                 <td><b>Opponents</b></td>

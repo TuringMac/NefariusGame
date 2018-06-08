@@ -8,8 +8,8 @@ namespace NefariusWebApp
 {
     public class Table
     {
-        public string TableName { get; private set; }
-        protected List<Player> PlayerList { get; private set; } = new List<Player>();
+        public string Name { get; private set; }
+        public List<Player> PlayerList { get; private set; } = new List<Player>();
 
         protected Game Game { get; set; }
 
@@ -17,7 +17,7 @@ namespace NefariusWebApp
 
         internal Table(string pTableName)
         {
-            TableName = pTableName;
+            Name = pTableName;
         }
 
         public void Join(Player pPlayer)
@@ -114,7 +114,7 @@ namespace NefariusWebApp
                 var opponents_right = opponents.TakeLast(opponents.Count - opponents.IndexOf(player) - 1);
                 var players = opponents_right.Concat(opponents_left).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn));
 
-                Clients.Client(player.ID).SendAsync("StateChanged", new { players, state = Game?.State, move = Game?.Move, table = TableName });
+                Clients.Client(player.ID).SendAsync("StateChanged", new { players, state = Game?.State, move = Game?.Move, table = Name });
 
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
