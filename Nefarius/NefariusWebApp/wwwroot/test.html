@@ -194,6 +194,7 @@
                 <td><input type="button" value="Player 4" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 4')"></td>
                 <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 5')"></td>
                 <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 6')"></td>
+                <td><input type="text" id="newPlayerName" /><br /><input type="button" value="Custom join" onclick="hubConnection.invoke('Join', getSelectedTableName(), document.getElementById('newPlayerName').value)"></td>
             </tr>
             <tr>
                 <td><b>Opponents</b></td>
