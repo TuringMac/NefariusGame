@@ -137,7 +137,7 @@
 
         function renderTables(pTableArr) {
             var tablesHtml = '<table><tr>';
-            tablesHtml += '<td><input type="radio" name="table" value="NewTable" checked>NewTable</td>';
+            tablesHtml += '<td><input type="radio" name="table" value="NewTable" checked>NewTable<br /><input type="text" id="newTableName" /></td>';
             for (var i = 0; i < pTableArr.length; i++) {
                 var name = pTableArr[i].name,
                     playerCount = pTableArr[i].playerList.length;
@@ -157,22 +157,13 @@
             for (var i = 0; i < tables.length; i++) {
                 if (tables[i].checked)
                     if (tables[i].value == 'NewTable') {
-                        return guid();
+                        return document.getElementById("newTableName").value;
                     }
                     else {
                         return tables[i].value;
                     }
             }
             return null;
-        }
-
-        function guid() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         }
     </script>
 </head>

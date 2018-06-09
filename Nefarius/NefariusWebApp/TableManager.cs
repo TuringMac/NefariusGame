@@ -15,7 +15,12 @@ namespace NefariusWebApp
                 var table = TableList.SingleOrDefault(tbl => tbl.Name == pTableName);
                 if (table == null)
                 {
-                    table = new Table(pTableName);
+                    var name = pTableName;
+                    if (string.IsNullOrWhiteSpace(pTableName))
+                    {
+                        name = Guid.NewGuid().ToString();
+                    }
+                    table = new Table(name);
                     TableList.Add(table);
                 }
 
