@@ -16,7 +16,7 @@ namespace NefariusWebApp
                 if (table == null)
                 {
                     var name = pTableName;
-                    if (string.IsNullOrWhiteSpace(pTableName))
+                    if (string.IsNullOrWhiteSpace(name))
                     {
                         name = Guid.NewGuid().ToString();
                     }
