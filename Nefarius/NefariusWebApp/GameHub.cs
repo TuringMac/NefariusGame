@@ -32,7 +32,8 @@ namespace NefariusWebApp
 
         public void GetTableList()
         {
-            Clients.Client(Context.ConnectionId).SendAsync("TableList", new
+            // TODO create router. to check TableListChange and broadcast. layer over Table class
+            Clients.All.SendAsync("TableList", new
             {
                 tableList = TableManager.GetTableList()
             });
@@ -47,6 +48,8 @@ namespace NefariusWebApp
             var table = TableManager.GetTable(pTableName);
             if (Clients != null) table.Clients = Clients;
             table.Join(player);
+
+            GetTableList();
         }
 
         public void Leave()
