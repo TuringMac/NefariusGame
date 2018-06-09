@@ -181,13 +181,8 @@
                 <td><b>Tables</b></td>
                 <td id="tableList" colspan="9"></td>
             </tr>
-            <tr>
-                <td><b>Game</b></td>
-                <td><input type="button" value="Begin" onclick="hubConnection.invoke('Begin')"></td>
-                <td><input type="button" value="End" onclick="hubConnection.invoke('End')"></td>
-            </tr>
             <tr id="state0">
-                <td>0 Join</td>
+                <td>0.1 Join</td>
                 <td><input type="button" value="Player 1" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 1')"></td>
                 <td><input type="button" value="Player 2" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 2')"></td>
                 <td><input type="button" value="Player 3" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 3')"></td>
@@ -195,6 +190,11 @@
                 <td><input type="button" value="Player 5" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 5')"></td>
                 <td><input type="button" value="Player 6" onclick="hubConnection.invoke('Join', getSelectedTableName(), 'Player 6')"></td>
                 <td><input type="text" id="newPlayerName" /><br /><input type="button" value="Custom join" onclick="hubConnection.invoke('Join', getSelectedTableName(), document.getElementById('newPlayerName').value)"></td>
+            </tr>
+            <tr>
+                <td><b>0.2 Game</b></td>
+                <td><input type="button" value="Begin" onclick="hubConnection.invoke('Begin')"></td>
+                <td><input type="button" value="End" onclick="hubConnection.invoke('End')"></td>
             </tr>
             <tr>
                 <td><b>Opponents</b></td>
