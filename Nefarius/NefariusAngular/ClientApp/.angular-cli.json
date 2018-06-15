@@ -58,6 +58,10 @@
     "component": {},
     "build": {
       "progress": true
+    },
+    "serve": {
+      "port": 2047,
+      "host": "localhost"
     }
   }
 }
