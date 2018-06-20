@@ -1,8 +1,10 @@
 <h1>Nefarius table list</h1>
 <p>Input Name join table</p>
 
-<input type="text" [(ngModel)]="name" /><br />
+<input type="text" [(ngModel)]="name" />
+<button (click)="refresh()" [disabled]="!name">Refresh</button><br />
 <br />
 <div>
-  <span *ngFor="let table of tableList"><button (click)="join(table)" [disabled]="!name">{{table}}</button><br /></span>
+  <span><button (click)="join('')" [disabled]="!name">Create new table</button><br /></span>
+  <span *ngFor="let table of tableList"><button (click)="join(table.name)" [disabled]="!name">{{table.name}}</button><br /></span>
 </div>

@@ -26,8 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\game.model.ts" />
     <None Remove="ClientApp\src\app\game\game.component.ts" />
+    <None Remove="ClientApp\src\app\player.model.ts" />
     <None Remove="ClientApp\src\app\table-list\table-list.component.ts" />
+    <None Remove="ClientApp\src\app\table.model.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,8 +38,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\game.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game\game.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\table.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\player.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\table-list\table-list.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\shared\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

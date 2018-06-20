@@ -11,6 +11,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { GameComponent } from './game/game.component';
 import { TableListComponent } from './table-list/table-list.component';
 
+import { GameService } from './game.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +31,7 @@ import { TableListComponent } from './table-list/table-list.component';
       { path: 'game', component: GameComponent },
     ])
   ],
-  providers: [],
+  providers: [GameService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
