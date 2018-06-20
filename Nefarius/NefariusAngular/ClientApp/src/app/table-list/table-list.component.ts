@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./table-list.component.css']
 })
 export class TableListComponent {
-  public tableList;
+  public name = 'Player';
+  public tableList = ["RU table", "Friends game", "SPb table", "Fluxbit emloyee are wellcome"];
+
+  public join(tableName) {
+    console.debug('table:' + tableName + ' player:' + this.name);
+    hubConnection.Send();
+  }
 }

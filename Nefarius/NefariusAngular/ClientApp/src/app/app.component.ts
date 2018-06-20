@@ -8,13 +8,13 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
 })
 export class AppComponent {
   title = 'app';
-  private hubConnection: HubConnection;
-  nick = '';
-  message = '';
-  messages: string[] = [];
+  public hubConnection: HubConnection;
+  //nick = '';
+  //message = '';
+  //messages: string[] = [];
 
   ngOnInit() {
-    this.nick = window.prompt('Your name:', 'John');
+    //this.nick = window.prompt('Your name:', 'John');
 
     this.hubConnection = new HubConnectionBuilder()
       .withUrl("/game")
