@@ -29,8 +29,8 @@ export class GameService {
       console.log('Game data recieved');
     });
     this.connection.on("TableList", (data) => {
-      this.tableList = data.tableList;
-      console.log('Table list recieved');
+      //this.tableList.length = 0;
+      this.tableList = Object.assign(this.tableList, data.tableList);
     });
     this.connection.onclose(e => {
       alert(e);
