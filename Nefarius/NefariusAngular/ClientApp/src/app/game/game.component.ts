@@ -1,27 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { PlayerComponent } from './player/player.component';
+import { OpponentComponent } from './opponent/opponent.component';
+import { InventionComponent } from './invention/invention.component';
+import { GameService } from '../game.service';
+import { Game } from '../game.model';
+import { Player } from '../player.model';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent {
-  public gameState = 0;
-  public action = 0;
+export class GameComponent implements OnInit {
+  public game: Game;
+  public player: Player;
 
-  public turnSpy() {
-    this.action = 1;
+  constructor(private gameService: GameService) { }
+
+  public gameTurn(action: number) {
+    this.player.action = action;
   }
 
-  public turnInvent() {
-    this.action = 2;
-  }
-
-  public turnResearch() {
-    this.action = 3;
-  }
-
-  public turnWork() {
-    this.action = 4;
+  ngOnInit(): void {
+    this.game = this.gameService.game;
+    this.player = this.gameService.player;
   }
 }

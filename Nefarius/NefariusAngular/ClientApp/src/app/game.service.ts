@@ -11,8 +11,8 @@ export class GameService {
 
   private connection: HubConnection;
   private tableList: Table[] = [];
-  private player: Player;
-  private game: Game;
+  public player: Player = new Player();
+  public game: Game = new Game();
 
   constructor() {
     this.connection = new HubConnectionBuilder()
@@ -21,11 +21,11 @@ export class GameService {
       .build();
 
     this.connection.on("PlayerData", (data) => {
-      this.player = data;
+      this.player = Object.assign(this.player, data);
       console.log('Player data recieved');
     });
     this.connection.on("StateChanged", (data) => {
-      this.game = data;
+      this.game = Object.assign(this.game, data);
       console.log('Game data recieved');
     });
     this.connection.on("TableList", (data) => {

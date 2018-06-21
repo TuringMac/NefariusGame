@@ -28,6 +28,9 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\game.model.ts" />
     <None Remove="ClientApp\src\app\game\game.component.ts" />
+    <None Remove="ClientApp\src\app\game\invention\invention.component.ts" />
+    <None Remove="ClientApp\src\app\game\opponent\opponent.component.ts" />
+    <None Remove="ClientApp\src\app\game\player\player.component.ts" />
     <None Remove="ClientApp\src\app\player.model.ts" />
     <None Remove="ClientApp\src\app\table-list\table-list.component.ts" />
     <None Remove="ClientApp\src\app\table.model.ts" />
@@ -41,6 +44,9 @@
     <TypeScriptCompile Include="ClientApp\src\app\game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game\game.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game\invention\invention.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game\opponent\opponent.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game\player\player.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\table.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\player.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\table-list\table-list.component.ts" />
@@ -48,6 +54,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\shared\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

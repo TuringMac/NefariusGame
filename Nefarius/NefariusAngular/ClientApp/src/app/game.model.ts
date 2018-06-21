@@ -1,3 +1,8 @@
+import { Player } from "./player.model";
+
 export class Game {
-  constructor(public name: string, public price: number) { }
+  public players: Player[];
+  public state: number;
+  public move: number;
+  public table: string;
 }

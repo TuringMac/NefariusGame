@@ -1,3 +1,5 @@
 export class Player {
-  constructor(public name: string, public price: number) { }
+  public name: string;
+  public score: number;
+  public action: number;
 }

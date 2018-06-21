@@ -2,10 +2,103 @@
 
 <p>Game playes here!!!</p>
 
-<p>Game state: <strong>{{ gameState }}</strong></p>
-<p>Player action: <strong>{{ action }}</strong></p>
+<p>Game state: <strong>{{ game.state }}</strong></p>
+<p>Player action: <strong>{{ player.action }}</strong></p>
 
-<button (click)="turnSpy()">Spy</button>
-<button (click)="turnInvent()">Invent</button>
-<button (click)="turnResearch()">Research</button>
-<button (click)="turnWork()">Work</button>
+<table>
+  <caption><span>Table:{{game.table}}</span><span>Player:{{player.name}}</span></caption>
+  <thead>
+    <tr>
+      <td><b>State</b></td>
+      <td colspan="9"><b>Actions</b></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Game</b></td>
+      <td><button (click)="gameBegin()">Begin</button></td>
+      <td><button (click)="gameEnd()">End</button></td>
+    </tr>
+    <tr>
+      <td><b>Opponents</b></td>
+      <td colspan="9">
+        <table>
+          <tr>
+            <td *ngFor="let opponent of game.players"><app-opponent [opponent]="opponent"></app-opponent></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Player</b></td>
+      <td>Name</td>
+      <td>{{player.name}}</td>
+      <td>Score</td>
+      <td>{{player.score}}</td>
+      <td>Coins</td>
+      <td>{{player.coins}}</td>
+      <td><input type="button" value="Leave" onclick="hubConnection.invoke('Leave')"></td>
+    </tr>
+    <tr id="state1">
+      <td>1 Turn</td>
+      <td><button (click)="gameTurn(0)">UnTurn</button></td>
+      <td><button (click)="gameTurn(1)">Spy</button></td>
+      <td><button (click)="gameTurn(2)">Invent</button></td>
+      <td><button (click)="gameTurn(3)">Research</button></td>
+      <td><button (click)="gameTurn(4)">Work</button></td>
+    </tr>
+    <tr id="state2">
+      <td>2 Spying</td>
+      <td colspan="9">Game count coins for spying</td>
+    </tr>
+    <tr id="state3">
+      <td>3 Spy</td>
+      <td>
+        <input type="button" value="To Spy" onclick="hubConnection.invoke('Spy', 1, 0)"><br />
+        <input type="button" value="From Spy" onclick="hubConnection.invoke('Spy', 0, 1)">
+      </td>
+      <td>
+        <input type="button" value="To Invent $2" onclick="hubConnection.invoke('Spy', 2, 0)"><br />
+        <input type="button" value="From Invent" onclick="hubConnection.invoke('Spy', 0, 2)">
+      </td>
+      <td>
+        <input type="button" value="To Research" onclick="hubConnection.invoke('Spy', 3, 0)"><br />
+        <input type="button" value="From Research" onclick="hubConnection.invoke('Spy', 0, 3)">
+      </td>
+      <td>
+        <input type="button" value="To Work $1" onclick="hubConnection.invoke('Spy', 4, 0)"><br />
+        <input type="button" value="From Work" onclick="hubConnection.invoke('Spy', 0, 4)">
+      </td>
+    </tr>
+    <tr id="state4">
+      <td>4 Invent</td>
+      <td id="inventions" colspan="9">
+        <table>
+          <tr>
+            <td *ngFor="let invention of inventionList"><app-invention>{{invention.name}}</app-invention></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr id="state5">
+      <td>5 Inventing</td>
+      <td colspan="9"><div id="currEff">Current effect here</div></td>
+    </tr>
+    <tr id="state6">
+      <td>6 Researching</td>
+      <td colspan="9">Just get invention and coins</td>
+    </tr>
+    <tr id="state7">
+      <td>7 Working</td>
+      <td colspan="9">Get some coins</td>
+    </tr>
+    <tr id="state8">
+      <td>8 Scoring</td>
+      <td colspan="9">Check player's score</td>
+    </tr>
+    <tr id="state9">
+      <td>9 Win</td>
+      <td colspan="9">{{winner}}</td>
+    </tr>
+  </tbody>
+</table>
