@@ -1,0 +1,184 @@
+﻿[
+  {
+    "ID": 1,
+    "Name": "Палка-тыкалка",
+    "Description": "Дотянется везде.",
+    "Cost": 6,
+    "Score": 2,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "invented"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 2,
+    "Name": "Ботинки прыгуны",
+    "Description": "Перед прыжком запросить взлет у диспетчера.",
+    "Cost": 0,
+    "Score": 1,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 3,
+    "Name": "Яд со вкусом жизни",
+    "Description": "Подавать с лимоном.",
+    "Cost": 1,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "Name": "Монета счастливчика",
+    "Description": "Падает всегда на ребро.",
+    "Cost": 7,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "spy"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 5,
+    "Name": "Луч сытости",
+    "Description": "Устраняет чувство голода.",
+    "Cost": 7,
+    "Score": 3,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "2"
+      }
+    ]
+  },
+  {
+    "ID": 6,
+    "Name": "Беспроводной кабель",
+    "Description": "Прост в использовании и не занимает места.",
+    "Cost": 16,
+    "Score": 6,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 7,
+    "Name": "Сжатый вакуум",
+    "Description": "Осторожно! Высокое давление.",
+    "Cost": 15,
+    "Score": 5,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "invented"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 8,
+    "Name": "Троллейбус из хлеба",
+    "Description": "Красиво, но зачем?!",
+    "Cost": 14,
+    "Score": 4,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 9,
+    "Name": "Чернила для карандаша",
+    "Description": "Все недостатки карандаша и ручки в одном устройстве",
+    "Cost": 13,
+    "Score": 5,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 10,
+    "Name": "Удобрение",
+    "Description": "Растёт всё чего оно касается!",
+    "Cost": 5,
+    "Score": 5,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "2"
+      }
+    ]
+  }
+]
