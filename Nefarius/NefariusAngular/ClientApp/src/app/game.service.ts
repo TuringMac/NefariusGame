@@ -10,8 +10,8 @@ export class GameService {
   }
 
   private connection: HubConnection;
-  private tableList: Table[] = [];
-  public player: Player = new Player();
+  public tableList: Table[] = [];
+  //public player: Player;
   public game: Game = new Game();
 
   constructor() {
@@ -20,17 +20,24 @@ export class GameService {
       .configureLogging(LogLevel.Information)
       .build();
 
+    this.connection.on("GameData", (data) => {
+      this.game = Object.assign(this.game, data);
+      console.log('Game data recieved');
+    });
     this.connection.on("PlayerData", (data) => {
-      this.player = Object.assign(this.player, data);
+      //this.game.player = Object.assign(this.game.player, data);
+      //this.player = data;
       console.log('Player data recieved');
     });
     this.connection.on("StateChanged", (data) => {
-      this.game = Object.assign(this.game, data);
+      //this.game = Object.assign(this.game, data);
+      //this.game = data;
       console.log('Game data recieved');
     });
     this.connection.on("TableList", (data) => {
       //this.tableList.length = 0;
       this.tableList = Object.assign(this.tableList, data.tableList);
+      //this.tableList = data.tableList;
     });
     this.connection.onclose(e => {
       alert(e);

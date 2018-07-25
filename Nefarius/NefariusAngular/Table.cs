@@ -114,8 +114,10 @@ namespace NefariusAngular
                 var opponents_right = opponents.TakeLast(opponents.Count - opponents.IndexOf(player) - 1);
                 var players = opponents_right.Concat(opponents_left).Select(p => p.GetPlayerShort(Game?.State > GameState.Turn));
 
-                Clients.Client(player.ID).SendAsync("StateChanged", new { players, state = Game?.State, move = Game?.Move, table = Name });
+                Clients.Client(player.ID).SendAsync("GameData", new { player, players, state = Game?.State, move = Game?.Move, table = Name });
 
+                //TODO deprecated
+                Clients.Client(player.ID).SendAsync("StateChanged", new { players, state = Game?.State, move = Game?.Move, table = Name });
                 Clients.Client(player.ID).SendAsync("PlayerData", player); //TODO may be exception if player disconnected
             }
         }

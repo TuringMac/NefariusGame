@@ -3,10 +3,10 @@
 <p>Game playes here!!!</p>
 
 <p>Game state: <strong>{{ game.state }}</strong></p>
-<p>Player action: <strong>{{ player.action }}</strong></p>
+<p>Player action: <strong>{{ game.player.action }}</strong></p>
 
 <table>
-  <caption><span>Table:{{game.table}}</span><span>Player:{{player.name}}</span></caption>
+  <caption><span>Table:{{game.table}}</span><span>Player:{{game.player.name}}</span></caption>
   <thead>
     <tr>
       <td><b>State</b></td>
@@ -32,11 +32,11 @@
     <tr>
       <td><b>Player</b></td>
       <td>Name</td>
-      <td>{{player.name}}</td>
+      <td>{{game.player.name}}</td>
       <td>Score</td>
-      <td>{{player.score}}</td>
+      <td>{{game.player.score}}</td>
       <td>Coins</td>
-      <td>{{player.coins}}</td>
+      <td>{{game.player.coins}}</td>
       <td><button (click)="gameLeave()">Leave</button></td>
     </tr>
     <tr id="state1">
@@ -54,7 +54,7 @@
     <tr id="state3">
       <td>3 Spy</td>
       <td colspan="9">
-        <app-field [player]="player" [opponentList]="game.players"></app-field>
+        <app-field [player]="game.player" [opponentList]="game.players"></app-field>
       </td>
     </tr>
     <tr id="state4">
@@ -62,7 +62,7 @@
       <td id="inventions" colspan="9">
         <table>
           <tr>
-            <td *ngFor="let invention of player.inventions"><app-invention [invention]="invention"></app-invention></td>
+            <td *ngFor="let invention of game.player.inventions"><app-invention [invention]="invention"></app-invention></td>
           </tr>
         </table>
       </td>

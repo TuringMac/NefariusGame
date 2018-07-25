@@ -268,3 +268,15 @@ Nefarius/NefariusWebApp/Data/rules.json
 /Nefarius/NefariusAngular/ClientApp/src/app/invention.model.js.map
 /Nefarius/NefariusAngular/ClientApp/src/app/player.model.js
 /Nefarius/NefariusAngular/ClientApp/src/app/player.model.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/game/field/area/area.component.js
+/Nefarius/NefariusAngular/ClientApp/src/app/game/field/area/area.component.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/game/field/field.component.js
+/Nefarius/NefariusAngular/ClientApp/src/app/game/field/field.component.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/game/opponent/opponent.component.js
+/Nefarius/NefariusAngular/ClientApp/src/app/game/opponent/opponent.component.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/game/game.component.js
+/Nefarius/NefariusAngular/ClientApp/src/app/game/game.component.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/table-list/table-list.component.js
+/Nefarius/NefariusAngular/ClientApp/src/app/table-list/table-list.component.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/game.service.js
+/Nefarius/NefariusAngular/ClientApp/src/app/game.service.js.map

@@ -14,7 +14,6 @@ import { Player } from '../player.model';
 })
 export class GameComponent implements OnInit {
   public game: Game;
-  public player: Player;
 
   constructor(private gameService: GameService) { }
 
@@ -27,7 +26,7 @@ export class GameComponent implements OnInit {
   }
 
   public gameTurn(action: number) {
-    this.player.action = action;
+    this.game.player.action = action;
   }
 
   public gameLeave() {
@@ -36,6 +35,5 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.game = this.gameService.game;
-    this.player = this.gameService.player;
   }
 }
