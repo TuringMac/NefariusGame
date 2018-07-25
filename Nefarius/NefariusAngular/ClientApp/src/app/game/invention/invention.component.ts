@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Invention } from '../../invention.model';
 
 @Component({
   selector: 'app-invention',
@@ -6,22 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./invention.component.css']
 })
 export class InventionComponent {
-  public gameState = 0;
-  public action = 0;
+  @Input() invention: Invention = new Invention();
 
-  public turnSpy() {
-    this.action = 1;
-  }
+  public invPlay() {
 
-  public turnInvent() {
-    this.action = 2;
-  }
-
-  public turnResearch() {
-    this.action = 3;
-  }
-
-  public turnWork() {
-    this.action = 4;
   }
 }

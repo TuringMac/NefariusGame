@@ -262,3 +262,9 @@ __pycache__/
 
 Nefarius/NefariusWebApp/Data/inventions.json
 Nefarius/NefariusWebApp/Data/rules.json
+/Nefarius/NefariusAngular/ClientApp/src/app/game.model.js
+/Nefarius/NefariusAngular/ClientApp/src/app/game.model.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/invention.model.js
+/Nefarius/NefariusAngular/ClientApp/src/app/invention.model.js.map
+/Nefarius/NefariusAngular/ClientApp/src/app/player.model.js
+/Nefarius/NefariusAngular/ClientApp/src/app/player.model.js.map

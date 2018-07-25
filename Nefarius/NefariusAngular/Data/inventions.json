@@ -1,8 +1,8 @@
 ﻿[
   {
-    "ID": 1,
-    "Name": "Палка-тыкалка",
-    "Description": "Дотянется везде.",
+    "ID": 17,
+    "Name": "Робот-помощник",
+    "Description": "\"У меня миллион идей, но все они ведут к неминуемой гибели\"(Марвин).",
     "Cost": 6,
     "Score": 2,
     "SelfEffectList": [
@@ -15,9 +15,9 @@
     "OtherEffectList": []
   },
   {
-    "ID": 2,
-    "Name": "Ботинки прыгуны",
-    "Description": "Перед прыжком запросить взлет у диспетчера.",
+    "ID": 13,
+    "Name": "Робокот",
+    "Description": "Погладь кота.",
     "Cost": 0,
     "Score": 1,
     "SelfEffectList": [
@@ -35,9 +35,9 @@
     "OtherEffectList": []
   },
   {
-    "ID": 3,
-    "Name": "Яд со вкусом жизни",
-    "Description": "Подавать с лимоном.",
+    "ID": 36,
+    "Name": "Старящий луч",
+    "Description": "Из детсада на пенсию!",
     "Cost": 1,
     "Score": 4,
     "SelfEffectList": [
@@ -56,9 +56,9 @@
     ]
   },
   {
-    "ID": 4,
-    "Name": "Монета счастливчика",
-    "Description": "Падает всегда на ребро.",
+    "ID": 20,
+    "Name": "Временной зонд",
+    "Description": "Наконец-то я узнаю, чем заканчиваются вечеринки!",
     "Cost": 7,
     "Score": 3,
     "SelfEffectList": [
@@ -71,9 +71,9 @@
     "OtherEffectList": []
   },
   {
-    "ID": 5,
-    "Name": "Луч сытости",
-    "Description": "Устраняет чувство голода.",
+    "ID": 39,
+    "Name": "Луч невидимости",
+    "Description": "Всегда хотел посмотреть внутрь кошки.",
     "Cost": 7,
     "Score": 3,
     "SelfEffectList": [],
@@ -91,18 +91,18 @@
     ]
   },
   {
-    "ID": 6,
-    "Name": "Беспроводной кабель",
-    "Description": "Прост в использовании и не занимает места.",
+    "ID": 59,
+    "Name": "Уничтожитель озона",
+    "Description": "Ну вот, а вы боялись холодильников.",
     "Cost": 16,
     "Score": 6,
     "SelfEffectList": [],
     "OtherEffectList": []
   },
   {
-    "ID": 7,
-    "Name": "Сжатый вакуум",
-    "Description": "Осторожно! Высокое давление.",
+    "ID": 60,
+    "Name": "Пяни",
+    "Description": "Вроде ядерный синтез, но ведь вкусно!",
     "Cost": 15,
     "Score": 5,
     "SelfEffectList": [
@@ -115,9 +115,9 @@
     "OtherEffectList": []
   },
   {
-    "ID": 8,
-    "Name": "Троллейбус из хлеба",
-    "Description": "Красиво, но зачем?!",
+    "ID": 35,
+    "Name": "Универсальный растворитель",
+    "Description": "В чём его хранить?",
     "Cost": 14,
     "Score": 4,
     "SelfEffectList": [],
@@ -140,9 +140,9 @@
     ]
   },
   {
-    "ID": 9,
-    "Name": "Чернила для карандаша",
-    "Description": "Все недостатки карандаша и ручки в одном устройстве",
+    "ID": 52,
+    "Name": "Уменьшающий луч",
+    "Description": "Старая восточная технология. Берём учёного, кладём в бутылку.",
     "Cost": 13,
     "Score": 5,
     "SelfEffectList": [
@@ -161,9 +161,9 @@
     ]
   },
   {
-    "ID": 10,
-    "Name": "Удобрение",
-    "Description": "Растёт всё чего оно касается!",
+    "ID": 6,
+    "Name": "Нанороботы",
+    "Description": "Мы уже потратили миллиард, а их ещё не видно.",
     "Cost": 5,
     "Score": 5,
     "SelfEffectList": [
@@ -180,5 +180,856 @@
         "count": "2"
       }
     ]
+  },
+  {
+    "ID": 1,
+    "Name": "Мозгосок",
+    "Description": "Первого отжима с мякотью",
+    "Cost": 4,
+    "Score": 2,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 7,
+    "Name": "Миелофон",
+    "Description": "Алиса, миелофон у меня!",
+    "Cost": 6,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 23,
+    "Name": "Рентгеновские очки",
+    "Description": "\"Дорогая, зачем вы стали надевать свинец под блузку?\"",
+    "Cost": 7,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "inventions"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 28,
+    "Name": "Заражённая саранча",
+    "Description": "Лучшее средство от сорняков.",
+    "Cost": 8,
+    "Score": 4,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 25,
+    "Name": "Генномодифицированный вирус",
+    "Description": "Теперь Гренландия будет заражена!",
+    "Cost": 8,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 12,
+    "Name": "Захватывающая игра",
+    "Description": "\"Сейчас-сейчас, ещё уровень!\"",
+    "Cost": 0,
+    "Score": 1,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "4"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 51,
+    "Name": "Активатор роста",
+    "Description": "Мииииилый щенок!",
+    "Cost": 9,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "2"
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "Name": "Телепорт",
+    "Description": "Никогда не верьте тем, кто вышел из телепорта.",
+    "Cost": 5,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 61,
+    "Name": "Оживитель",
+    "Description": "Награждается премией Урфина Джюса.",
+    "Cost": 19,
+    "Score": 7,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "2"
+      }
+    ]
+  },
+  {
+    "ID": 56,
+    "Name": "Магнитный монополь",
+    "Description": "Я нашел один!",
+    "Cost": 16,
+    "Score": 6,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 43,
+    "Name": "Управление погодой",
+    "Description": "Тепло, солнечно, ветер до 100 метров в секунду.",
+    "Cost": 12,
+    "Score": 5,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 11,
+    "Name": "Шокер Тесла",
+    "Description": "Бзззт!",
+    "Cost": 0,
+    "Score": 1,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 37,
+    "Name": "Машина времени",
+    "Description": "К чёрту детали. Какой год?",
+    "Cost": 11,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 40,
+    "Name": "Панацея",
+    "Description": "Лечит даже безумие.",
+    "Cost": 11,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 38,
+    "Name": "Фрэнки",
+    "Description": "Мы сшили его из кусочков.",
+    "Cost": 11,
+    "Score": 5,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 19,
+    "Name": "Афродизиаки",
+    "Description": "\"У тебя очень красивые... глаза\".",
+    "Cost": 7,
+    "Score": 2,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "8"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 50,
+    "Name": "Ослепляющий луч",
+    "Description": "Теперь никто на Земле не сможет видеть ультрафиолет!",
+    "Cost": 13,
+    "Score": 5,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "3"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "3"
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "Name": "Летающая машина",
+    "Description": "Ваша лицензия пилота подтверждена.",
+    "Cost": 4,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "2"
+      }
+    ]
+  },
+  {
+    "ID": 22,
+    "Name": "Вьюнок-мутант",
+    "Description": "Его видел один японец-мультипликатор.",
+    "Cost": 8,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "2"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "2"
+      }
+    ]
+  },
+  {
+    "ID": 63,
+    "Name": "Космический лифт",
+    "Description": "Понадобилось много алмазов.",
+    "Cost": 24,
+    "Score": 8,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 46,
+    "Name": "Лунная база",
+    "Description": "Главная проблема - солнечная радиация.",
+    "Cost": 13,
+    "Score": 5,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "inventions"
+      },
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "inventions"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 15,
+    "Name": "Гипнолуч",
+    "Description": "Некоторые видят в нём жабу.",
+    "Cost": 1,
+    "Score": 1,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 32,
+    "Name": "Соплепушка",
+    "Description": "Стреляет полимерной слизью, но мало кто это понимает.",
+    "Cost": 10,
+    "Score": 4,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 58,
+    "Name": "Кракен",
+    "Description": "Я помню его ещё золотой рыбкой.",
+    "Cost": 16,
+    "Score": 6,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 31,
+    "Name": "Замораживающий луч",
+    "Description": "Они просили чего-нибудь холодненького.",
+    "Cost": 10,
+    "Score": 4,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "3"
+      }
+    ]
+  },
+  {
+    "ID": 10,
+    "Name": "Домашний Йети",
+    "Description": "Умнее, чем кажется.",
+    "Cost": 6,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "3"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 8,
+    "Name": "Криокамера",
+    "Description": "Ну ничего себе доброе утро!",
+    "Cost": 4,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 26,
+    "Name": "Генманипулятор",
+    "Description": "Так, а что такое ацефалия?",
+    "Cost": 8,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 44,
+    "Name": "Плавитель льдов",
+    "Description": "Арктика или Антарктика",
+    "Cost": 12,
+    "Score": 5,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 30,
+    "Name": "Ядовитые цветы",
+    "Description": "Ужасно красивые.",
+    "Cost": 9,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "4"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "2"
+      }
+    ]
+  },
+  {
+    "ID": 55,
+    "Name": "Астероид на орбите",
+    "Description": "По рассчетам упадёт где-то в районе Тунгуски, так?",
+    "Cost": 16,
+    "Score": 6,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 53,
+    "Name": "Гипертуннель",
+    "Description": "Эээ... Практическое применение?",
+    "Cost": 14,
+    "Score": 6,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "coin",
+        "count": "1"
+      },
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 21,
+    "Name": "Зверолюд",
+    "Description": "Улыбка в 60 зубов, и может найти вас по запаху.",
+    "Cost": 7,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 9,
+    "Name": "Чувствующий ИИ",
+    "Description": "- Ой! Ошибка.\n- Какая?\n- Не скажу, бе-бе-бе!",
+    "Cost": 10,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "inventions"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 33,
+    "Name": "Клонирующее устройство",
+    "Description": "Назову тебя Иван v1.4.",
+    "Cost": 10,
+    "Score": 5,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 47,
+    "Name": "Генератор цунами",
+    "Description": "Эврика!",
+    "Cost": 12,
+    "Score": 5,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 64,
+    "Name": "Машина Судного дня",
+    "Description": "Знаете, когда я перестал беспокоиться?",
+    "Cost": 22,
+    "Score": 8,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "1"
+      },
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 54,
+    "Name": "Снежная машина",
+    "Description": "Мягкий, белый, пушистый. Уррр.",
+    "Cost": 16,
+    "Score": 6,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 62,
+    "Name": "Андроид",
+    "Description": "Почти всегда на зарядке.",
+    "Cost": 19,
+    "Score": 7,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 14,
+    "Name": "Котобутербродный вал",
+    "Description": "Квантовая неопределенность в действии.",
+    "Cost": 0,
+    "Score": 2,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 18,
+    "Name": "Маскирующее устройство",
+    "Description": "Эх, жалко у нас раньше не было такой штуки!",
+    "Cost": 4,
+    "Score": 3,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 2,
+    "Name": "Вирус",
+    "Description": "Нет, это не вирус, а просто червь!",
+    "Cost": 5,
+    "Score": 2,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 48,
+    "Name": "Вулканоактиватор",
+    "Description": "Красиво, правда?",
+    "Cost": 12,
+    "Score": 5,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 42,
+    "Name": "Сейсмогенератор",
+    "Description": "Да ладно, не такой уж большой был городишко.",
+    "Cost": 12,
+    "Score": 5,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 27,
+    "Name": "Пчёлы-убийцы",
+    "Description": "Если я возьму синий шарик...",
+    "Cost": 8,
+    "Score": 4,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 45,
+    "Name": "Секретное убежище",
+    "Description": "Они никогда не будут здесь искать!",
+    "Cost": 12,
+    "Score": 1,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 34,
+    "Name": "Обмениватель мозгов",
+    "Description": "Не повторяйте это дома.",
+    "Cost": 9,
+    "Score": 4,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "invented"
+      },
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "invented"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 24,
+    "Name": "Солнцегаситель",
+    "Description": "Никогда не любил сильный загар.",
+    "Cost": 10,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 57,
+    "Name": "Луч смерти",
+    "Description": "Я просто хотел вывести всех тараканов.",
+    "Cost": 16,
+    "Score": 6,
+    "SelfEffectList": [],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 49,
+    "Name": "Спутник контроля за разумом",
+    "Description": "Это не паранойя.\nГде моя шапочка?",
+    "Cost": 8,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 16,
+    "Name": "Синхрофазатрон",
+    "Description": "Мы запускаем такой раз в 5000 лет.",
+    "Cost": 2,
+    "Score": 2,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "invention",
+        "count": "1"
+      }
+    ],
+    "OtherEffectList": []
+  },
+  {
+    "ID": 29,
+    "Name": "Антигравитационный костюм",
+    "Description": "О, это не пятно на потолке, а мой ассистент!",
+    "Cost": 9,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "coin",
+        "count": "4"
+      }
+    ],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "invention",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 41,
+    "Name": "Парализующий луч",
+    "Description": "Мы играли в \"Замри\" во дворе.",
+    "Cost": 12,
+    "Score": 4,
+    "SelfEffectList": [],
+    "OtherEffectList": [
+      {
+        "direction": "drop",
+        "item": "spy",
+        "count": "1"
+      }
+    ]
+  },
+  {
+    "ID": 5,
+    "Name": "Роботы-двойники",
+    "Description": "У правого светодиод ярче.",
+    "Cost": 12,
+    "Score": 3,
+    "SelfEffectList": [
+      {
+        "direction": "get",
+        "item": "spy",
+        "count": "invented"
+      }
+    ],
+    "OtherEffectList": []
   }
 ]

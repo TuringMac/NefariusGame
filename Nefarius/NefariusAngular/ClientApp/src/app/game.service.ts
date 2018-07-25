@@ -68,4 +68,24 @@ export class GameService {
     this.connection.send('Join', tableName, playerName);
     console.log('Join req sended');
   }
+
+  public leave() {
+    this.connection.send('Leave');
+  }
+
+  public begin() {
+    this.connection.send('Begin');
+  }
+
+  public end() {
+    this.connection.send('End');
+  }
+
+  public setSpy(area: number) {
+    this.connection.send('Spy', area);
+  }
+
+  public dropSpy(area: number) {
+    this.connection.send('Spy', 0, area);
+  }
 }

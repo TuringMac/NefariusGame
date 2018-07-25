@@ -18,8 +18,20 @@ export class GameComponent implements OnInit {
 
   constructor(private gameService: GameService) { }
 
+  public gameBegin() {
+    this.gameService.begin();
+  }
+
+  public gameEnd(action: number) {
+    this.gameService.end();
+  }
+
   public gameTurn(action: number) {
     this.player.action = action;
+  }
+
+  public gameLeave() {
+    this.gameService.leave();
   }
 
   ngOnInit(): void {

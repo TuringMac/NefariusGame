@@ -37,7 +37,7 @@
       <td>{{player.score}}</td>
       <td>Coins</td>
       <td>{{player.coins}}</td>
-      <td><input type="button" value="Leave" onclick="hubConnection.invoke('Leave')"></td>
+      <td><button (click)="gameLeave()">Leave</button></td>
     </tr>
     <tr id="state1">
       <td>1 Turn</td>
@@ -53,21 +53,8 @@
     </tr>
     <tr id="state3">
       <td>3 Spy</td>
-      <td>
-        <input type="button" value="To Spy" onclick="hubConnection.invoke('Spy', 1, 0)"><br />
-        <input type="button" value="From Spy" onclick="hubConnection.invoke('Spy', 0, 1)">
-      </td>
-      <td>
-        <input type="button" value="To Invent $2" onclick="hubConnection.invoke('Spy', 2, 0)"><br />
-        <input type="button" value="From Invent" onclick="hubConnection.invoke('Spy', 0, 2)">
-      </td>
-      <td>
-        <input type="button" value="To Research" onclick="hubConnection.invoke('Spy', 3, 0)"><br />
-        <input type="button" value="From Research" onclick="hubConnection.invoke('Spy', 0, 3)">
-      </td>
-      <td>
-        <input type="button" value="To Work $1" onclick="hubConnection.invoke('Spy', 4, 0)"><br />
-        <input type="button" value="From Work" onclick="hubConnection.invoke('Spy', 0, 4)">
+      <td colspan="9">
+        <app-field [player]="player" [opponentList]="game.players"></app-field>
       </td>
     </tr>
     <tr id="state4">
@@ -75,7 +62,7 @@
       <td id="inventions" colspan="9">
         <table>
           <tr>
-            <td *ngFor="let invention of inventionList"><app-invention>{{invention.name}}</app-invention></td>
+            <td *ngFor="let invention of player.inventions"><app-invention [invention]="invention"></app-invention></td>
           </tr>
         </table>
       </td>

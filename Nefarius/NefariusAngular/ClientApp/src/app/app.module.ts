@@ -11,6 +11,8 @@ import { PlayerComponent } from './game/player/player.component';
 import { OpponentComponent } from './game/opponent/opponent.component';
 import { InventionComponent } from './game/invention/invention.component';
 import { TableListComponent } from './table-list/table-list.component';
+import { FieldComponent } from './game/field/field.component';
+import { AreaComponent } from './game/field/area/area.component';
 
 import { GameService } from './game.service';
 
@@ -23,6 +25,8 @@ import { GameService } from './game.service';
     PlayerComponent,
     OpponentComponent,
     InventionComponent,
+    FieldComponent,
+    AreaComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

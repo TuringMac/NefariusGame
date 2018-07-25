@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
@@ -26,11 +27,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Data\inventions.json" />
+    <Content Remove="Data\rules.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\app\game.model.ts" />
+    <None Remove="ClientApp\src\app\game\field\area\area.component.ts" />
+    <None Remove="ClientApp\src\app\game\field\field.component.ts" />
     <None Remove="ClientApp\src\app\game\game.component.ts" />
     <None Remove="ClientApp\src\app\game\invention\invention.component.ts" />
     <None Remove="ClientApp\src\app\game\opponent\opponent.component.ts" />
     <None Remove="ClientApp\src\app\game\player\player.component.ts" />
+    <None Remove="ClientApp\src\app\invention.model.ts" />
     <None Remove="ClientApp\src\app\player.model.ts" />
     <None Remove="ClientApp\src\app\table-list\table-list.component.ts" />
     <None Remove="ClientApp\src\app\table.model.ts" />
@@ -43,10 +52,13 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game\field\area\area.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game\field\field.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game\game.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game\invention\invention.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game\opponent\opponent.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game\player\player.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\invention.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\table.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\player.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\table-list\table-list.component.ts" />
@@ -55,6 +67,15 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\app\shared\" />
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Data\inventions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\rules.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

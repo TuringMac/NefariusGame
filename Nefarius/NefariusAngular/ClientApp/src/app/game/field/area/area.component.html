@@ -1,0 +1,7 @@
+<div>
+  {{getAction()}} ${{cost}}<br />
+  <span *ngFor="let opponent of opponentList">{{opponent.name}}:0<br /></span>
+  <span>You:{{player.getSpies(action)}}<br /></span>
+  <button (click)="drop()">Drop[-]</button>
+  <button (click)="set()">Set[+]</button>
+</div>
