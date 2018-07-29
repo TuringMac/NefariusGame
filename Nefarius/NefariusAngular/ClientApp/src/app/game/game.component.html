@@ -39,7 +39,7 @@
       <td>{{game.player.coins}}</td>
       <td><button (click)="gameLeave()">Leave</button></td>
     </tr>
-    <tr id="state1">
+    <tr id="state1" [class.active]="game.state == 1">
       <td>1 Turn</td>
       <td><button (click)="gameTurn(0)">UnTurn</button></td>
       <td><button (click)="gameTurn(1)">Spy</button></td>
@@ -47,17 +47,17 @@
       <td><button (click)="gameTurn(3)">Research</button></td>
       <td><button (click)="gameTurn(4)">Work</button></td>
     </tr>
-    <tr id="state2">
+    <tr id="state2" [class.active]="game.state == 2">
       <td>2 Spying</td>
       <td colspan="9">Game count coins for spying</td>
     </tr>
-    <tr id="state3">
+    <tr id="state3" [class.active]="game.state == 3">
       <td>3 Spy</td>
       <td colspan="9">
         <app-field [player]="game.player" [opponentList]="game.players"></app-field>
       </td>
     </tr>
-    <tr id="state4">
+    <tr id="state4" [class.active]="game.state == 4">
       <td>4 Invent</td>
       <td id="inventions" colspan="9">
         <table>
@@ -67,23 +67,23 @@
         </table>
       </td>
     </tr>
-    <tr id="state5">
+    <tr id="state5" [class.active]="game.state == 5">
       <td>5 Inventing</td>
       <td colspan="9"><div id="currEff">Current effect here</div></td>
     </tr>
-    <tr id="state6">
+    <tr id="state6" [class.active]="game.state == 6">
       <td>6 Researching</td>
       <td colspan="9">Just get invention and coins</td>
     </tr>
-    <tr id="state7">
+    <tr id="state7" [class.active]="game.state == 7">
       <td>7 Working</td>
       <td colspan="9">Get some coins</td>
     </tr>
-    <tr id="state8">
+    <tr id="state8" [class.active]="game.state == 8">
       <td>8 Scoring</td>
       <td colspan="9">Check player's score</td>
     </tr>
-    <tr id="state9">
+    <tr id="state9" [class.active]="game.state == 9">
       <td>9 Win</td>
       <td colspan="9">{{winner}}</td>
     </tr>
