@@ -88,6 +88,10 @@ export class GameService {
     this.connection.send('End');
   }
 
+  public turn(action: number) {
+    this.connection.send('Turn', action);
+  }
+
   public setSpy(area: number) {
     this.connection.send('Spy', area);
   }

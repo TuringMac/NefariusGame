@@ -26,7 +26,7 @@ export class GameComponent implements OnInit {
   }
 
   public gameTurn(action: number) {
-    this.game.player.action = action;
+    this.gameService.turn(action);
   }
 
   public gameLeave() {
