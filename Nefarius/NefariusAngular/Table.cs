@@ -22,7 +22,7 @@ namespace NefariusAngular
 
         public void Join(Player pPlayer)
         {
-            if (Game == null)
+            if (Game == null && !PlayerList.Contains(pPlayer))
                 PlayerList.Add(pPlayer);
             BroadcastGame();
         }

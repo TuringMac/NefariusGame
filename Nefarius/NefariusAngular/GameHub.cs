@@ -41,10 +41,14 @@ namespace NefariusAngular
 
         public void Join(string pTableName, string pName)
         {
-            var player = new Player(pName)
+            Player player = Table?.GetPlayer(Context.ConnectionId);
+            if (player == null)
             {
-                ID = Context.ConnectionId
-            };
+                player = new Player(pName)
+                {
+                    ID = Context.ConnectionId
+                };
+            }
             var table = TableManager.GetTable(pTableName);
             if (Clients != null) table.Clients = Clients;
             table.Join(player);
