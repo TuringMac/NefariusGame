@@ -24,16 +24,6 @@ export class GameService {
       this.game = Object.assign(this.game, data);
       console.log('Game data recieved');
     });
-    this.connection.on("PlayerData", (data) => {
-      //this.game.player = Object.assign(this.game.player, data);
-      //this.player = data;
-      console.log('Player data recieved');
-    });
-    this.connection.on("StateChanged", (data) => {
-      //this.game = Object.assign(this.game, data);
-      //this.game = data;
-      console.log('Game data recieved');
-    });
     this.connection.on("TableList", (data) => {
       //this.tableList.length = 0;
       this.tableList = Object.assign(this.tableList, data.tableList);
@@ -98,5 +88,9 @@ export class GameService {
 
   public dropSpy(area: number) {
     this.connection.send('Spy', 0, area);
+  }
+
+  public invent(id: number) {
+    this.connection.send('Invent', id);
   }
 }

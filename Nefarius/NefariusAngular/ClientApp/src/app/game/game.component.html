@@ -62,7 +62,7 @@
       <td id="inventions" colspan="9">
         <table>
           <tr>
-            <td *ngFor="let invention of game.player.inventions"><app-invention [invention]="invention"></app-invention></td>
+            <td *ngFor="let invention of game.player.inventions"><app-invention (onPlayed)="onPlayed($event)" [invention]="invention"></app-invention></td>
           </tr>
         </table>
       </td>

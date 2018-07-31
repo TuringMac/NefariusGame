@@ -33,6 +33,10 @@ export class GameComponent implements OnInit {
     this.gameService.leave();
   }
 
+  onPlayed(id: number) {
+    this.gameService.invent(id);
+  }
+
   ngOnInit(): void {
     this.game = this.gameService.game;
   }
