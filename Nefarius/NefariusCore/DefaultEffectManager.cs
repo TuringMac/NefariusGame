@@ -8,6 +8,8 @@ namespace NefariusCore
 {
     class DefaultEffectManager : IEffectManager
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         Game _Game;
 
         public DefaultEffectManager(Game pGame)
@@ -65,7 +67,7 @@ namespace NefariusCore
 
             if (pPlayer.CurrentEffect == null)
             {
-                Console.WriteLine($"{pPlayer.Name} hasn't effects");
+                Logger.Debug($"{pPlayer.Name} hasn't effects");
                 return true;
             }
 
@@ -83,7 +85,7 @@ namespace NefariusCore
                 }
                 else
                 {
-                    Console.WriteLine("Wrong direction");
+                    Logger.Warn("Wrong direction");
                 }
             }
             else if (eff.It == EffectItem.Spy)
@@ -110,7 +112,7 @@ namespace NefariusCore
                 }
                 else
                 {
-                    Console.WriteLine("Wrong direction");
+                    Logger.Warn("Wrong direction");
                 }
             }
             else if (eff.It == EffectItem.Invention)
@@ -126,7 +128,7 @@ namespace NefariusCore
                     {
                         eff.Count--;
                         pPlayer.DropInvention(pPlayer.CurrentInvention);
-                        Console.WriteLine($"{pPlayer.Name} отказался от изобретения [{pPlayer.CurrentInvention.ID}]{pPlayer.CurrentInvention.Name}");
+                        Logger.Debug($"Player:{pPlayer.Name} drop invention [{pPlayer.CurrentInvention.ID}]{pPlayer.CurrentInvention.Name}");
                         pPlayer.CurrentInvention = null;
                     }
                     if (pPlayer.GetInventionsCount() != 0 && eff.Count != 0) // Пользователь скинул все требуемые карты. Можно гасить эффект
@@ -134,12 +136,12 @@ namespace NefariusCore
                 }
                 else
                 {
-                    Console.WriteLine("Wrong direction");
+                    Logger.Warn("Wrong direction");
                 }
             }
             else
             {
-                Console.WriteLine("Wrong item");
+                Logger.Warn("Wrong item");
             }
 
             pPlayer.PrepareEffect();

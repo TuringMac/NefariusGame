@@ -10,6 +10,8 @@ namespace NefariusCore
     [DataContract]
     public class Effect
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         [DataMember]
         public string Direction { get; set; }
         [DataMember]
@@ -33,7 +35,7 @@ namespace NefariusCore
             {
                 case "get": Dir = EffectDirection.Get; break;
                 case "drop": Dir = EffectDirection.Drop; break;
-                default: Console.WriteLine("Wrong effect direction"); break;
+                default: Logger.Warn("Wrong effect direction"); break;
             }
 
             switch (pDescription.item)
@@ -41,7 +43,7 @@ namespace NefariusCore
                 case "coin": It = EffectItem.Coin; break;
                 case "spy": It = EffectItem.Spy; break;
                 case "invention": It = EffectItem.Invention; break;
-                default: Console.WriteLine("Wrong effect item"); break;
+                default: Logger.Warn("Wrong effect item"); break;
             }
 
             switch (pDescription.count)
@@ -58,7 +60,7 @@ namespace NefariusCore
                 default:
                     decimal n = 0;
                     if (!decimal.TryParse(pDescription.count, out n))
-                        Console.WriteLine("Wrong effect count");
+                        Logger.Warn("Wrong effect count");
 
                     Count = (int)n;
                     break;
