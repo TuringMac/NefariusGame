@@ -94,6 +94,9 @@ namespace NefariusCore
             do
             {
                 Move++;
+                State = GameState.MoveBeginning;
+                MoveBeginning();
+
                 State = GameState.Turn;
                 if (!CheckEverybodyDoAction())
                     turnEvt.WaitOne(); // Wait for CheckEverybodyDoAction() == true and Set
@@ -117,6 +120,9 @@ namespace NefariusCore
 
                 State = GameState.Working;
                 Working();
+
+                State = GameState.MoveEnding;
+                MoveEnding();
 
                 State = GameState.Scoring;
             } while (!HasWinner() && PlayerList.Count >= 2);
@@ -160,7 +166,7 @@ namespace NefariusCore
         /// Выбирают действие на следующий ход
         /// </summary>
         /// <returns></returns>
-        public bool Turn(Player pPlayer, GameAction pAction)
+        public virtual bool Turn(Player pPlayer, GameAction pAction)
         {
             if (State != GameState.Turn)
             {
@@ -173,6 +179,11 @@ namespace NefariusCore
             if (CheckEverybodyDoAction())
                 turnEvt.Set();
 
+            return true;
+        }
+
+        protected virtual bool MoveBeginning()
+        {
             return true;
         }
 
@@ -330,7 +341,6 @@ namespace NefariusCore
 
                 player.Coins += 2;
                 player.Inventions.Add(InventDeck.Pop());
-                player.Action = GameAction.None;
                 Console.WriteLine($"{player.Name} провёл исследование");
             }
             return true;
@@ -344,9 +354,15 @@ namespace NefariusCore
                     continue;
 
                 player.Coins += 4;
-                player.Action = GameAction.None;
                 Console.WriteLine($"{player.Name} отработал смену");
             }
+            return true;
+        }
+
+        protected virtual bool MoveEnding()
+        {
+            foreach (var player in PlayerList)
+                player.Action = GameAction.None;
             return true;
         }
 

@@ -3,6 +3,7 @@
     public enum GameState
     {
         Init,
+        MoveBeginning,
         Turn,
         Spying,
         Spy,
@@ -10,6 +11,7 @@
         Inventing,
         Researching,
         Working,
+        MoveEnding,
         Scoring,
         Win
     }

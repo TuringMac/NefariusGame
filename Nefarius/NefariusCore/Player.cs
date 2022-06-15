@@ -179,7 +179,6 @@ namespace NefariusCore
 
             PlayedInventions.Add(CurrentInvention);
             Coins -= CurrentInvention.Cost;
-            Action = GameAction.None;
 
             return true;
         }
